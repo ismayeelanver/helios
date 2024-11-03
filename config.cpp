@@ -1,4 +1,17 @@
 #include "include/config.hpp"
+/**
+ * The function `loadConfig` reads a TOML configuration file and extracts
+ * specific settings related to startup applications, border settings, window
+ * settings, and keybindings into a structured data object.
+ *
+ * @param filename The `filename` parameter is a `std::string` type that
+ * represents the name or path of the TOML configuration file that needs to be
+ * loaded and parsed in the `loadConfig` function.
+ *
+ * @return The function `loadConfig` is returning an object of type
+ * `WMConfig::General`, which contains various configurations loaded from a TOML
+ * file.
+ */
 Config loadConfig(const std::string &filename) {
   // Load the TOML file
   toml::table config;
@@ -65,6 +78,14 @@ Config loadConfig(const std::string &filename) {
   return generalConfig;
 }
 
+/**
+ * The debugConfig function outputs the configuration details of a window
+ * manager to the console.
+ *
+ * @param config The `debugConfig` function is used to print out the
+ * configuration settings stored in the `config` object of type
+ * `WMConfig::General`.
+ */
 void WMConfig::debugConfig(const WMConfig::General &config) {
   std::cout << "Startup applications:\n";
   for (const auto &app : config.startup) {
