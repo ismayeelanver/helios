@@ -1,4 +1,4 @@
-#include "include/helios.h"
+#include "include/helios.hpp"
 
 WindowManager::WindowManager()
     : values(std::make_unique<uint32_t[]>(1)),

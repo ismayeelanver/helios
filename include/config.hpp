@@ -1,5 +1,5 @@
-#ifndef CONFIG_H
-#define CONFIG_H
+#ifndef CONFIG_HPP
+#define CONFIG_HPP
 
 #include <cstdint>
 #include <string>
@@ -56,4 +56,4 @@ using Config = WMConfig::General;
 // Function prototype to load configuration from a file
 Config loadConfig(const std::string &filename);
 
-#endif // CONFIG_H
+#endif // CONFIG_HPP

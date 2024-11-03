@@ -1,4 +1,4 @@
-#include "include/config.h"
+#include "include/config.hpp"
 Config loadConfig(const std::string &filename) {
   // Load the TOML file
   toml::table config;
@@ -6,7 +6,7 @@ Config loadConfig(const std::string &filename) {
     config = toml::parse_file(filename);
   } catch (const std::exception &e) {
     std::cerr << "Error loading config file: " << e.what() << std::endl;
-    throw; // Rethrow the exception for higher-level handling
+    throw;
   }
 
   WMConfig::General generalConfig;

@@ -1,5 +1,5 @@
-#ifndef helios_h
-#define helios_h
+#ifndef HELIOS_HPP
+#define HELIOS_HPP
 
 #include <cerrno>
 #include <cstdint>
@@ -12,8 +12,9 @@
 #include <xcb/xcb_ewmh.h>
 #include <xcb/xproto.h>
 
-#include "include/config.h"
-#include "spawn.h"
+#include "config.hpp"
+#include "spawn.hpp"
+#include "error.hpp"
 
 class WindowManager {
 private:
