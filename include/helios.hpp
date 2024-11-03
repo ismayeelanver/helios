@@ -14,7 +14,6 @@
 
 #include "config.hpp"
 #include "spawn.hpp"
-#include "error.hpp"
 
 class WindowManager {
 private:
