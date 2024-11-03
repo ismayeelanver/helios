@@ -1,9 +1,9 @@
 #include "include/helios.h"
-#include <xcb/xproto.h>
 
 WindowManager::WindowManager()
     : values(std::make_unique<uint32_t[]>(1)),
       atoms(std::make_unique<xcb_atom_t[]>(supported_atoms.size())) {
+  logger->flush_on(spdlog::level::info);
   if (!(conn = xcb_connect(nullptr, nullptr))) {
     logger->error("Could not connect to the X server");
     throw std::runtime_error("X server connection failed");
@@ -188,4 +188,5 @@ WindowManager::~WindowManager() {
   if (cursor_context) {
     xcb_cursor_context_free(cursor_context); // only free if initialized
   }
+  logger->info("WM stopped");
 }
