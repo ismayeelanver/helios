@@ -1,0 +1,5 @@
+/build/
+/.cache/
+/logs.txt
+/meson.build
+/preview.sh
