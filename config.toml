@@ -1,0 +1,30 @@
+
+[general]
+startup = [
+    "lemonbar"
+]
+
+bindings = [
+    { mod = 0x85, keysym = 0xFF0D, action = { type = "run", target = "kitty" } },  # Mod+Return
+    { mod = 0x85, keysym = 0xFF0D, action = { type = "run", target = "dmenu_run" } },  # Mod+d
+    { mod = 0x85, keysym = 0xFF09, action = { type = "ch", target = "next_workspace" } },  # Mod+Tab
+    { mod = 0x85, keysym = 0xFF09, action = { type = "move", target = "next_workspace" } },  # Mod+Shift+Tab
+    { mod = 0x85, keysym = 0x31, action = { type = "ch", target = "workspace_1" } },  # Mod+1
+    { mod = 0x85, keysym = 0x32, action = { type = "ch", target = "workspace_2" } },  # Mod+2
+    { mod = 0x85, keysym = 0x31, action = { type = "move", target = "workspace_1" } },  # Mod+Shift+1
+    { mod = 0x85, keysym = 0x32, action = { type = "move", target = "workspace_2" } },  # Mod+Shift+2
+    { mod = 0x85, keysym = 0xFF52, action = { type = "focus", target = "up" } },  # Mod+up
+    { mod = 0x85, keysym = 0xFF54, action = { type = "focus", target = "down" } },  # Mod+down
+    { mod = 0x85, keysym = 0xFF13, action = { type = "close", target = "" } },  # Mod+q
+    { mod = 0x85, keysym = 0xFF100, action = { type = "toggle", target = "fullscreen" } }  # Mod+f
+]
+
+
+
+[general.border]
+width = 2 # 2 pixels
+color = 0x04a5e5
+radius = 20 # 20 pixels
+
+[general.window]
+gap = 20 # 20 pixels
