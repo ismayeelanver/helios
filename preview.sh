@@ -1,10 +1,17 @@
 #!/bin/bash
 
+
 # Set display variable for Xephyr
 DISPLAY_NUM=":1"
 SCREEN_SIZE="1280x720"
 XE_SERVER="Xephyr $DISPLAY_NUM -screen $SCREEN_SIZE -ac &"
-WM_EXEC="./build/bin/helios"  # Replace with the path to your compiled WM binary
+BUILD="./build/bin"
+WM_EXEC="$BUILD/helios"  # Replace with the path to your compiled WM binary
+
+
+# Build
+ninja -C "$BUILD"
+
 
 # Kill any existing Xephyr and X sessions on DISPLAY_NUM
 killall Xephyr

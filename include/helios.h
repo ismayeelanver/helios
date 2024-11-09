@@ -1,5 +1,5 @@
-#ifndef HELIOS_HPP
-#define HELIOS_HPP
+#ifndef HELIOS_H
+#define HELIOS_H
 
 #include <cerrno>
 #include <cstdint>
@@ -12,13 +12,13 @@
 #include <xcb/xcb_ewmh.h>
 #include <xcb/xproto.h>
 
-#include "config.hpp"
-#include "spawn.hpp"
+#include "config.h"
+#include "spawn.h"
 
 class WindowManager {
 private:
   xcb_connection_t *conn;
-  xcb_screen_t *screen;
+  xcb_screen_t* screen;
   xcb_window_t root;
   std::vector<xcb_window_t> windows;
   Config config;
@@ -50,4 +50,4 @@ private:
   void set_focus(xcb_window_t window);
 };
 
-#endif
+#endif  

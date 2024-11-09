@@ -1,13 +1,5 @@
-#include "include/helios.hpp"
+#include "include/helios.h"
 
-
-/* `WindowManager::WindowManager()` is the constructor of the `WindowManager`
-class in C++. It initializes the window manager by connecting to the X server,
-setting up the EWMH (Extended Window Manager Hints) atoms, creating a cursor
-context, loading a cursor, setting window attributes, and initializing event
-masks. It also sets up the supported atoms, creates a cursor, and sets the WM
-name. Finally, it logs the initialization status and prepares the window manager
-for operation. */
 WindowManager::WindowManager()
     : values(std::make_unique<uint32_t[]>(1)),
       atoms(std::make_unique<xcb_atom_t[]>(supported_atoms.size())) {
@@ -61,9 +53,6 @@ WindowManager::WindowManager()
   xcb_ewmh_set_supporting_wm_check(&ewmh, root, root);
   xcb_ewmh_set_wm_name(&ewmh, root, strlen("Helios"), "Helios");
 
-  /* `windows = {};` is initializing the `windows` vector to an empty state
-  using list initialization in C++. This statement effectively clears any
-  existing elements in the `windows` vector, making it an empty container. */
   windows = {};
   current_window = 0;
 
@@ -90,10 +79,6 @@ WindowManager::WindowManager()
   }
   xcb_flush(conn);
 
-  /* In the line `*values.get() = event_mask;`, the `values` is a smart pointer
-  that is being dereferenced using the `get()` method to access the raw pointer
-  it holds. The value of `event_mask` is then assigned to the memory location
-  pointed to by this raw pointer. */
   *values.get() = event_mask;
   xcb_void_cookie_t event_mask_cookie =
       xcb_change_window_attributes(conn, root, XCB_CW_EVENT_MASK, values.get());
@@ -109,10 +94,6 @@ WindowManager::WindowManager()
   logger->info("WM initialized, ready to go!");
 }
 
-/**
- * This function is a member function of the WindowManager class in C++ that is
- * used to run the window manager.
- */
 void WindowManager::run() {
   for (;;) {
     xcb_generic_event_t *event = xcb_wait_for_event(conn);
@@ -139,10 +120,6 @@ void WindowManager::run() {
   }
 }
 
-/**
- * This function is responsible for arranging windows in a tiled layout within
- * the WindowManager class.
- */
 void WindowManager::tile_windows() {
   int num_windows = windows.size();
   if (num_windows == 0)
@@ -168,27 +145,12 @@ void WindowManager::tile_windows() {
   xcb_flush(conn); // Apply all changes
 }
 
-/**
- * This function sets the focus to the specified window in the XCB window
- * manager.
- *
- * @param window The `window` parameter in the `set_focus` function is of type
- * `xcb_window_t`, which is a data type used in the X Window System to represent
- * a window. It is a unique identifier for a window within the X server.
- */
 void WindowManager::set_focus(xcb_window_t window) {
   xcb_set_input_focus(conn, XCB_INPUT_FOCUS_POINTER_ROOT, window,
                       XCB_CURRENT_TIME);
   xcb_flush(conn);
 }
 
-/**
- * This function in the WindowManager class handles a map request for a
- * specified window.
- *
- * @param window A variable representing the XCB window ID for which a map
- * request event needs to be handled.
- */
 void WindowManager::handle_map_request(xcb_window_t window) {
   windows.push_back(window);
   xcb_map_window(conn, window);
@@ -199,13 +161,6 @@ void WindowManager::handle_map_request(xcb_window_t window) {
   tile_windows();
 }
 
-/**
- * This function in C++ handles an unmap request for a specified XCB window.
- *
- * @param window The `window` parameter in the `handle_unmap_request` function
- * is of type `xcb_window_t`, which represents a window ID in the X Window
- * System. This parameter is used to identify the window that is being unmapped.
- */
 void WindowManager::handle_unmap_request(xcb_window_t window) {
   windows.erase(std::remove(windows.begin(), windows.end(), window),
                 windows.end());
@@ -223,9 +178,6 @@ void WindowManager::handle_unmap_request(xcb_window_t window) {
   tile_windows();
 }
 
-/**
- * This is the destructor for the WindowManager class in C++.
- */
 WindowManager::~WindowManager() {
   supported_atoms.clear();
   windows.clear();

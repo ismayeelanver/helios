@@ -1,17 +1,6 @@
-#include "include/config.hpp"
-/**
- * The function `loadConfig` reads a TOML configuration file and extracts
- * specific settings related to startup applications, border settings, window
- * settings, and keybindings into a structured data object.
- *
- * @param filename The `filename` parameter is a `std::string` type that
- * represents the name or path of the TOML configuration file that needs to be
- * loaded and parsed in the `loadConfig` function.
- *
- * @return The function `loadConfig` is returning an object of type
- * `WMConfig::General`, which contains various configurations loaded from a TOML
- * file.
- */
+#include "include/config.h"
+#include <iostream>
+
 Config loadConfig(const std::string &filename) {
   // Load the TOML file
   toml::table config;
