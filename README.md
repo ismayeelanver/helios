@@ -48,19 +48,20 @@
 ##  Project Structure
 
 ```sh
-├── config.cpp
 ├── config.toml
-├── helios.cpp
-├── include
-│   ├── config.hpp
-│   ├── helios.hpp
-│   ├── key.hpp
-│   └── spawn.hpp
 ├── LICENSE
-├── main.cpp
 ├── meson.build
 ├── preview.sh
-└── README.md
+├── README.md
+└── src
+    ├── config.cpp
+    ├── helios.cpp
+    ├── include
+    │   ├── config.h
+    │   ├── helios.h
+    │   ├── key.h
+    │   └── spawn.h
+    └── main.cpp
 ```
 
 ---
@@ -70,27 +71,19 @@
 
 ###  Prerequisites
 
-Before getting started with readme-ai, ensure your runtime environment meets the following requirements:
-
-- **Programming Language:** Python
-- **Package Manager:** Poetry, Pip, Conda
-- **Container Runtime:** Docker
+- **Building enviroment**
 
 
 ###  Installation
 
-Install readme-ai using one of the following methods:
-
-**Build from source:**
-
-1. Clone the readme-ai repository:
+1. Clone the helios repository:
 ```sh
-❯ git clone https://github.com/eli64s/readme-ai
+❯ git clone https://github.com/ismayeelanver/helios
 ```
 
 2. Navigate to the project directory:
 ```sh
-❯ cd readme-ai
+❯ cd helios
 ```
 
 3. Build and Install it using the install.sh (**Coming soon**)
@@ -117,7 +110,7 @@ Join The Discord server or email me <ismayeelanver@gmail.com>
 
 ##  License
 
-This project is protected under the MIT License.
+This project is protected under the <a href="https://github.com/ismayeelanver/helios/blob/main/LICENSE">MIT license.</a>
 
 ---
 

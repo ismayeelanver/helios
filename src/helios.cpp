@@ -94,32 +94,6 @@ WindowManager::WindowManager()
   logger->info("WM initialized, ready to go!");
 }
 
-void WindowManager::run() {
-  for (;;) {
-    xcb_generic_event_t *event = xcb_wait_for_event(conn);
-
-    if (!event) {
-      logger->error("Event is invalid");
-      break;
-    }
-
-    switch (event->response_type & ~0x80) {
-    case XCB_MAP_REQUEST: {
-      auto *map_request = (xcb_map_request_event_t *)event;
-      handle_map_request(map_request->window);
-      break;
-    }
-    case XCB_UNMAP_NOTIFY: {
-      auto *unmap_notify = (xcb_unmap_notify_event_t *)event;
-      handle_unmap_request(unmap_notify->window);
-      break;
-    }
-    }
-
-    free(event);
-  }
-}
-
 void WindowManager::tile_windows() {
   int num_windows = windows.size();
   if (num_windows == 0)
@@ -153,6 +127,17 @@ void WindowManager::set_focus(xcb_window_t window) {
 
 void WindowManager::handle_map_request(xcb_window_t window) {
   windows.push_back(window);
+
+  auto cookie = xcb_get_window_attributes(conn, window);
+  xcb_generic_error_t **e = nullptr;
+  auto _attr_reply = xcb_get_window_attributes_reply(conn, cookie, e);
+
+  if (_attr_reply->override_redirect) {
+    return;
+  }
+
+  delete e;
+
   xcb_map_window(conn, window);
 
   xcb_set_input_focus(conn, XCB_INPUT_FOCUS_POINTER_ROOT, window,
@@ -164,6 +149,7 @@ void WindowManager::handle_map_request(xcb_window_t window) {
 void WindowManager::handle_unmap_request(xcb_window_t window) {
   windows.erase(std::remove(windows.begin(), windows.end(), window),
                 windows.end());
+  xcb_destroy_window(conn, window);
   if (!windows.empty()) {
     // Select the next window to focus
     auto next_window =
@@ -180,6 +166,9 @@ void WindowManager::handle_unmap_request(xcb_window_t window) {
 
 WindowManager::~WindowManager() {
   supported_atoms.clear();
+  for (auto wdow : windows) {
+    xcb_destroy_window(conn, wdow);
+  }
   windows.clear();
   xcb_free_cursor(conn, cursor);
   xcb_destroy_window(conn, root);
@@ -189,4 +178,32 @@ WindowManager::~WindowManager() {
     xcb_cursor_context_free(cursor_context); // only free if initialized
   }
   logger->info("WM stopped");
+}
+
+void WindowManager::run() {
+  for (;;) {
+    xcb_generic_event_t *event = xcb_wait_for_event(conn);
+
+    if (!event) {
+      logger->error("Event is invalid");
+      break;
+    }
+
+    switch (event->response_type & ~0x80) {
+    case XCB_MAP_REQUEST: {
+      auto *map_request = (xcb_map_request_event_t *)event;
+      handle_map_request(map_request->window);
+      break;
+    }
+    case XCB_UNMAP_NOTIFY: {
+      auto *unmap_notify = (xcb_unmap_notify_event_t *)event;
+      handle_unmap_request(unmap_notify->window);
+      break;
+    }
+    
+    }
+
+    free(event);
+    xcb_flush(conn);
+  }
 }

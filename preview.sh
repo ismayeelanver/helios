@@ -9,10 +9,6 @@ BUILD="./build/bin"
 WM_EXEC="$BUILD/helios"  # Replace with the path to your compiled WM binary
 
 
-# Build
-ninja -C "$BUILD"
-
-
 # Kill any existing Xephyr and X sessions on DISPLAY_NUM
 killall Xephyr
 killall "$WM_EXEC"
@@ -24,6 +20,7 @@ sleep 1
 
 echo "Running Helios on display $DISPLAY_NUM..."
 DISPLAY="$DISPLAY_NUM" "$WM_EXEC" &
+
 
 # Wait for user to press Ctrl+C to stop
 echo "Press Ctrl+C to stop the window manager and Xephyr."
