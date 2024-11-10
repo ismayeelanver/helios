@@ -71,7 +71,7 @@
 
 ###  Prerequisites
 
-- **Building enviroment**
+- **Building enviroment:** ninja
 
 
 ###  Installation
