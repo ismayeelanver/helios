@@ -4,6 +4,8 @@
 #include <cmath>
 #include <cstdint>
 #include <cstdio>
+#include <cstdlib>
+#include <xcb/shape.h>
 #include <xcb/xcb.h>
 #include <xcb/xcb_ewmh.h>
 #include <xcb/xproto.h>
@@ -33,12 +35,12 @@ WindowManager::WindowManager()
   }
 
   xcb_flush(conn);
-  root = screen->root; // Ensure root is assigned
+  root = screen->root; 
 
   xcb_intern_atom_cookie_t *ewmh_cookie = new xcb_intern_atom_cookie_t;
 
   ewmh_cookie = xcb_ewmh_init_atoms(conn, &ewmh);
-  if (!ewmh_cookie) { // Check if the cookie itself is valid
+  if (!ewmh_cookie) { 
     logger->error("EWMH cookie initialization failed");
     throw std::runtime_error("EWMH cookie initialization failed");
   }
@@ -47,7 +49,7 @@ WindowManager::WindowManager()
   if (!xcb_ewmh_init_atoms_replies(&ewmh, ewmh_cookie, &error)) {
     if (error) {
       logger->error("EWMH initialization failed: {}", error->major_code);
-      free(error); // Free the error structure if it's allocated
+      free(error); 
     } else {
       logger->error(
           "EWMH initialization failed with no error details available");
@@ -134,6 +136,7 @@ WindowManager::WindowManager()
 
   logger->info("WM initialized, ready to go!");
 }
+
 void WindowManager::tile_windows() {
   int num_windows = windows.size();
   if (num_windows == 0)
@@ -141,45 +144,84 @@ void WindowManager::tile_windows() {
 
   int screen_width = screen->width_in_pixels;
   int screen_height = screen->height_in_pixels;
-
-  int border_width = config.border.width;
   int gap = config.window.gap;
+  int border_width = config.border.width;
 
-  // Calculate the number of columns and rows based on the number of windows
-  int columns =
-      static_cast<int>(sqrt(num_windows)); // Approximate square layout
-  int rows =
-      (num_windows + columns - 1) / columns; // Calculate rows based on columns
+  if (num_windows == 1) {
+    uint32_t values[4] = {static_cast<uint32_t>(gap),
+                          static_cast<uint32_t>(gap),
+                          static_cast<uint32_t>(screen_width - 2 * gap),
+                          static_cast<uint32_t>(screen_height - 2 * gap)};
 
-  int window_width = (screen_width - (columns + 1) * gap) / columns;
-  int window_height = (screen_height - (rows + 1) * gap) / rows;
+    uint32_t border_values[1] = {static_cast<uint32_t>(border_width)};
+    xcb_configure_window(conn, windows[0], XCB_CONFIG_WINDOW_BORDER_WIDTH,
+                         border_values);
+    xcb_configure_window(conn, windows[0],
+                         XCB_CONFIG_WINDOW_X | XCB_CONFIG_WINDOW_Y |
+                             XCB_CONFIG_WINDOW_WIDTH | XCB_CONFIG_WINDOW_HEIGHT,
+                         values);
+    set_window_border_color(windows[0], config.border.color);
+    xcb_flush(conn);
+    return;
+  }
 
-  for (int i = 0; i < num_windows; ++i) {
-    int row = i / columns;
-    int col = i % columns;
+  struct WindowRect {
+    int x, y, width, height;
+  };
+  std::vector<WindowRect> window_rects(num_windows);
 
-    uint32_t values[4];
-    values[0] = col * (window_width + gap) + gap;  // X position with gap
-    values[1] = row * (window_height + gap) + gap; // Y position with gap
-    values[2] = window_width;                      // Window width
-    values[3] = window_height;                     // Window height
+  window_rects[0] = {gap, gap, screen_width - 2 * gap, screen_height - 2 * gap};
 
-    // Set the border width
+  bool split_horizontal = true; 
+  for (int i = 1; i < num_windows; i++) {
+
+    int largest_idx = i - 1;
+    int largest_area = 0;
+    for (int j = 0; j < i; j++) {
+      int area = window_rects[j].width * window_rects[j].height;
+      if (area > largest_area) {
+        largest_area = area;
+        largest_idx = j;
+      }
+    }
+
+    WindowRect &to_split = window_rects[largest_idx];
+    WindowRect &new_window = window_rects[i];
+
+    if (split_horizontal) {
+
+      int new_height = (to_split.height - gap) / 2;
+      new_window = {to_split.x, to_split.y + new_height + gap, to_split.width,
+                    to_split.height - new_height - gap};
+      to_split.height = new_height;
+    } else {
+
+      int new_width = (to_split.width - gap) / 2;
+      new_window = {to_split.x + new_width + gap, to_split.y,
+                    to_split.width - new_width - gap, to_split.height};
+      to_split.width = new_width;
+    }
+
+    split_horizontal = !split_horizontal; 
+  }
+
+  for (int i = 0; i < num_windows; i++) {
+    const auto &rect = window_rects[i];
+    uint32_t values[4] = {
+        static_cast<uint32_t>(rect.x), static_cast<uint32_t>(rect.y),
+        static_cast<uint32_t>(rect.width), static_cast<uint32_t>(rect.height)};
+
     uint32_t border_values[1] = {static_cast<uint32_t>(border_width)};
     xcb_configure_window(conn, windows[i], XCB_CONFIG_WINDOW_BORDER_WIDTH,
                          border_values);
-
-    // Set window position and size
     xcb_configure_window(conn, windows[i],
                          XCB_CONFIG_WINDOW_X | XCB_CONFIG_WINDOW_Y |
                              XCB_CONFIG_WINDOW_WIDTH | XCB_CONFIG_WINDOW_HEIGHT,
                          values);
-
-    // Set border color
     set_window_border_color(windows[i], config.border.color);
   }
 
-  xcb_flush(conn); // Apply all changes
+  xcb_flush(conn);
 }
 
 void WindowManager::set_window_border_color(xcb_window_t window,
@@ -203,16 +245,43 @@ void WindowManager::switch_workspace(uint32_t i) {
 }
 
 void WindowManager::handle_enter_notify(xcb_window_t window) {
+  xcb_get_input_focus_cookie_t focus_cookie = xcb_get_input_focus(conn);
+  xcb_get_input_focus_reply_t *focus_reply =
+      xcb_get_input_focus_reply(conn, focus_cookie, nullptr);
+  xcb_window_t old_focus = focus_reply ? focus_reply->focus : XCB_NONE;
+  free(focus_reply);
+
+  if (old_focus != XCB_NONE && old_focus != window) {
+    xcb_focus_out_event_t focus_out = {.response_type = XCB_FOCUS_OUT,
+                                       .detail = XCB_NOTIFY_DETAIL_NONLINEAR,
+                                       .event = old_focus,
+                                       .mode = XCB_NOTIFY_MODE_NORMAL};
+    xcb_send_event(conn, false, old_focus, XCB_EVENT_MASK_FOCUS_CHANGE,
+                   (char *)&focus_out);
+  }
+
+  xcb_focus_in_event_t focus_in = {
+      .response_type = XCB_FOCUS_IN,
+      .detail = XCB_NOTIFY_DETAIL_NONLINEAR,
+      .event = window,
+      .mode = XCB_NOTIFY_MODE_NORMAL,
+  };
+
   xcb_set_input_focus(conn, XCB_INPUT_FOCUS_POINTER_ROOT, window,
                       XCB_CURRENT_TIME);
+
+  xcb_send_event(conn, false, window, XCB_EVENT_MASK_FOCUS_CHANGE,
+                 (char *)&focus_in);
+
+  xcb_ewmh_set_active_window(&ewmh, 0, window);
+
   xcb_flush(conn);
-  set_focus(window);
 }
 
 void WindowManager::handle_key_press(xcb_key_press_event_t *key_press) {
   for (int i = 0; i <= 9; ++i) {
     if (key_press->state == 0xffe9 && key_press->detail == XK_0 + i) {
-      switch_workspace(i); // Switch to workspace i (0-9)
+      switch_workspace(i); 
       return;
     }
   }
@@ -230,11 +299,6 @@ void WindowManager::handle_map_request(xcb_window_t window) {
   }
 
   delete e;
-
-  uint32_t values[] = {XCB_NONE, XCB_NONE};
-  xcb_change_window_attributes(conn, window,
-                               XCB_CW_BACK_PIXEL | XCB_CW_BORDER_PIXEL, values);
-  xcb_flush(conn);
 
   xcb_map_window(conn, window);
 
@@ -280,7 +344,7 @@ WindowManager::~WindowManager() {
   xcb_disconnect(conn);
 
   if (cursor_context) {
-    xcb_cursor_context_free(cursor_context); // only free if initialized
+    xcb_cursor_context_free(cursor_context); 
   }
   logger->info("WM stopped");
 }

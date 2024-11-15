@@ -11,6 +11,7 @@
 #include <xcb/xcb_cursor.h>
 #include <xcb/xcb_ewmh.h>
 #include <xcb/xproto.h>
+#include <xcb/shape.h>
 
 #include <X11/keysym.h>
 

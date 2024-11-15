@@ -1,8 +1,7 @@
 #!/bin/bash
 
-cd build/
-ninja -j8
-cd -
+ninja -j8 -C build
+pwd
 
 DISPLAY_NUM=":1"
 SCREEN_SIZE="1280x720"

@@ -1,6 +1,6 @@
-
 [general]
 startup = [
+    "kitty",
     "kitty",
     "kitty",
     "google-chrome",
@@ -8,14 +8,13 @@ startup = [
 ]
 
 bindings = [
-    { mod = 0xffeb, keysym = 0xFF0D, action = { type = "run", target = "kitty" } },  # Mod+Return
+    { mod = 0xffeb, keysym = 0xFF0D, action = { type = "run", target = "kitty" } },  
 ]
 
-
 [general.border]
-width = 2 # 2 pixels
+width = 2 
 color = 0x880808
-radius = 20 # 20 pixels
+radius = 20 
 
 [general.window]
-gap = 30 # 20 pixels
+gap = 30 
