@@ -2,11 +2,11 @@
     <img src="./doc/icon.png" align="center" width="30%" height="10%">
 </p>
 <p align="center">
-	<img src="https://img.shields.io/badge/-MIT license-white?logo=opensourceinitiative&logoColor=FFA500" alt="last-commit">
-	<img src="https://img.shields.io/badge/-Lightweight-white?logo=sunrise&logoColor=FFA500" alt="last-commit">
-	<img src="https://img.shields.io/badge/-Linux Supported-white?logo=linux&logoColor=FFA500" alt="last-commit">
+	<img src="https://img.shields.io/badge/-MIT license-white?logo=opensourceinitiative&logoColor=FFA500" alt="">
+	<img src="https://img.shields.io/badge/-Lightweight-white?logo=sunrise&logoColor=FFA500" alt="">
+	<img src="https://img.shields.io/badge/-Linux Supported-white?logo=linux&logoColor=FFA500" alt="">
     <br>
-	<img src="https://img.shields.io/badge/-Made in C++-white?logo=cplusplus&logoColor=FFA500" alt="last-commit">
+	<img src="https://img.shields.io/badge/-Made in C++-white?logo=cplusplus&logoColor=FFA500" alt="">
 </p>
 <p align="center"><!-- default option, no dependency badges. -->
 </p>

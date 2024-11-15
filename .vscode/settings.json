@@ -1,3 +1,4 @@
 {
-    "docwriter.style": "Doxygen"
+    "docwriter.style": "Doxygen",
+    "mesonbuild.configureOnOpen": false
 }
