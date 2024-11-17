@@ -1,3 +1,7 @@
 logs.txt
 build/
+builddir/
 .cache/
+doc/xml
+doc/warnings.log
+Doxyfile

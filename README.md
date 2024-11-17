@@ -26,6 +26,7 @@
   - [Testing](#testing)
 - [Contributing](#contributing)
 - [License](#license)
+- [Configuration](#configuration)
 - [Acknowledgments](#acknowledgments)
 
 </details>
@@ -113,6 +114,11 @@ Join The Discord server or email me <ismayeelanver@gmail.com>
 This project is protected under the <a href="https://github.com/ismayeelanver/helios/blob/main/LICENSE">MIT license.</a>
 
 ---
+
+## Configuration
+
+You can get the hex codes of colors from wm.def.h and if you want keysym/modifier('s) hex code you can find anything ![here](https://www.cl.cam.ac.uk/~mgk25/ucs/X11.keysyms.pdf)
+
 
 ##  Acknowledgments
 

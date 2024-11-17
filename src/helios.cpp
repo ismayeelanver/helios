@@ -1,15 +1,21 @@
 #include "include/helios.h"
-#include "src/include/config.h"
-#include <algorithm>
-#include <cmath>
-#include <cstdint>
-#include <cstdio>
-#include <cstdlib>
-#include <xcb/shape.h>
+#include <sys/types.h>
 #include <xcb/xcb.h>
-#include <xcb/xcb_ewmh.h>
 #include <xcb/xproto.h>
 
+/**
+ * @brief Construct a new WindowManager object
+ *
+ * This function initializes a window manager, setting up the necessary
+ * XCB connections, loading the configuration, and preparing the window
+ * manager for use.
+ *
+ * @throw std::runtime_error if unable to connect to the X server
+ * @throw std::runtime_error if unable to initialize ewmh cookie for connection
+ * @throw std::runtime_error if unable to initialize ewmh connection with cookie
+ * @throw std::runtime_error if cursor context initialization fails
+ * @throw srd::runtime_error if cursor context creation fails
+ */
 WindowManager::WindowManager()
     : values(std::make_unique<uint32_t[]>(1)), atoms(nullptr) {
   logger->flush_on(spdlog::level::info);
@@ -35,12 +41,12 @@ WindowManager::WindowManager()
   }
 
   xcb_flush(conn);
-  root = screen->root; 
+  root = screen->root;
 
   xcb_intern_atom_cookie_t *ewmh_cookie = new xcb_intern_atom_cookie_t;
 
   ewmh_cookie = xcb_ewmh_init_atoms(conn, &ewmh);
-  if (!ewmh_cookie) { 
+  if (!ewmh_cookie) {
     logger->error("EWMH cookie initialization failed");
     throw std::runtime_error("EWMH cookie initialization failed");
   }
@@ -49,7 +55,7 @@ WindowManager::WindowManager()
   if (!xcb_ewmh_init_atoms_replies(&ewmh, ewmh_cookie, &error)) {
     if (error) {
       logger->error("EWMH initialization failed: {}", error->major_code);
-      free(error); 
+      free(error);
     } else {
       logger->error(
           "EWMH initialization failed with no error details available");
@@ -57,13 +63,20 @@ WindowManager::WindowManager()
     throw std::runtime_error("EWMH connection initialization failed");
   }
 
-  supported_atoms = {
-      ewmh._NET_SUPPORTED,          ewmh._NET_SUPPORTING_WM_CHECK,
-      ewmh._NET_ACTIVE_WINDOW,      ewmh._NET_CLIENT_LIST,
-      ewmh._NET_CURRENT_DESKTOP,    ewmh._NET_DESKTOP_NAMES,
-      ewmh._NET_NUMBER_OF_DESKTOPS, ewmh._NET_WM_NAME,
-      ewmh._NET_WM_STATE,           ewmh._NET_WM_STATE_FULLSCREEN,
-      ewmh._NET_WM_WINDOW_TYPE,     ewmh._NET_WM_WINDOW_TYPE_DIALOG};
+  supported_atoms = {ewmh._NET_SUPPORTED,
+                     ewmh._NET_SUPPORTING_WM_CHECK,
+                     ewmh._NET_ACTIVE_WINDOW,
+                     ewmh._NET_CLIENT_LIST,
+                     ewmh._NET_CURRENT_DESKTOP,
+                     ewmh._NET_DESKTOP_NAMES,
+                     ewmh._NET_NUMBER_OF_DESKTOPS,
+                     ewmh._NET_WM_NAME,
+                     ewmh._NET_WM_STATE,
+                     ewmh._NET_WM_STATE_FULLSCREEN,
+                     ewmh._NET_WM_WINDOW_TYPE,
+                     ewmh._NET_WM_WINDOW_TYPE_DIALOG,
+                     ewmh._NET_WM_WINDOW_TYPE_DOCK,
+                     ewmh._NET_WM_WINDOW_TYPE_DESKTOP};
 
   atoms = std::make_unique<xcb_atom_t[]>(supported_atoms.size());
 
@@ -77,7 +90,7 @@ WindowManager::WindowManager()
 
   xcb_ewmh_set_supported(&ewmh, 0, supported_atoms.size(), atoms.get());
   xcb_ewmh_set_supporting_wm_check(&ewmh, root, window);
-  xcb_ewmh_set_wm_name(&ewmh, root, strlen("Helios"), "Helios");
+  xcb_ewmh_set_wm_name(&ewmh, root, strlen(WM_NAME), "" WM_NAME);
   xcb_ewmh_set_supporting_wm_check(&ewmh, root, root);
   xcb_ewmh_set_number_of_desktops(&ewmh, 0, 9);
   xcb_ewmh_set_current_desktop(&ewmh, 0, 1);
@@ -137,6 +150,19 @@ WindowManager::WindowManager()
   logger->info("WM initialized, ready to go!");
 }
 
+/**
+ * @brief  Tile all windows in the list in a non-overlapping manner across the
+ * screen. The tiling algorithm is as follows:
+ *
+ * 1. Split the screen in half horizontally.
+ * 2. Place the first window in the top half of the screen.
+ * 3. For each subsequent window:
+ *    a. Find the window with the largest area.
+ *    b. Split that window in half, either horizontally or vertically,
+ *       depending on the previous split direction.
+ *    c. Place the new window in the newly created space.
+ *    d. Switch the split direction.
+ */
 void WindowManager::tile_windows() {
   int num_windows = windows.size();
   if (num_windows == 0)
@@ -160,7 +186,8 @@ void WindowManager::tile_windows() {
                          XCB_CONFIG_WINDOW_X | XCB_CONFIG_WINDOW_Y |
                              XCB_CONFIG_WINDOW_WIDTH | XCB_CONFIG_WINDOW_HEIGHT,
                          values);
-    set_window_border_color(windows[0], config.border.color);
+    xcb_set_input_focus(conn, XCB_INPUT_FOCUS_POINTER_ROOT, windows[0],
+                        XCB_CURRENT_TIME);
     xcb_flush(conn);
     return;
   }
@@ -172,7 +199,7 @@ void WindowManager::tile_windows() {
 
   window_rects[0] = {gap, gap, screen_width - 2 * gap, screen_height - 2 * gap};
 
-  bool split_horizontal = true; 
+  bool split_horizontal = false;
   for (int i = 1; i < num_windows; i++) {
 
     int largest_idx = i - 1;
@@ -202,7 +229,7 @@ void WindowManager::tile_windows() {
       to_split.width = new_width;
     }
 
-    split_horizontal = !split_horizontal; 
+    split_horizontal = !split_horizontal;
   }
 
   for (int i = 0; i < num_windows; i++) {
@@ -218,76 +245,105 @@ void WindowManager::tile_windows() {
                          XCB_CONFIG_WINDOW_X | XCB_CONFIG_WINDOW_Y |
                              XCB_CONFIG_WINDOW_WIDTH | XCB_CONFIG_WINDOW_HEIGHT,
                          values);
-    set_window_border_color(windows[i], config.border.color);
+    xcb_set_input_focus(conn, XCB_INPUT_FOCUS_POINTER_ROOT, windows[i],
+                        XCB_CURRENT_TIME);
   }
 
   xcb_flush(conn);
 }
 
+/**
+ * Sets the border color of a window.
+ *
+ * @param window The X window for which to set the border color.
+ * @param color The color to set the border to, in 32-bit ARGB format.
+ */
 void WindowManager::set_window_border_color(xcb_window_t window,
                                             uint32_t color) {
   xcb_change_window_attributes(conn, window, XCB_CW_BORDER_PIXEL, &color);
   xcb_flush(conn);
 }
 
+/**
+ * Sets the focus to a given window.
+ *
+ * @param window The window to set the focus to.
+ */
 void WindowManager::set_focus(xcb_window_t window) {
   xcb_set_input_focus(conn, XCB_INPUT_FOCUS_POINTER_ROOT, window,
                       XCB_CURRENT_TIME);
-
+  update_focus(window);
   xcb_flush(conn);
 }
 
-void WindowManager::switch_workspace(uint32_t i) {
-  uint32_t data[] = {i};
-  xcb_change_property(conn, XCB_PROP_MODE_REPLACE, screen->root,
-                      ewmh._NET_WM_DESKTOP, XCB_ATOM_CARDINAL, 32, 1, data);
-  xcb_flush(conn);
-}
-
-void WindowManager::handle_enter_notify(xcb_window_t window) {
-  xcb_get_input_focus_cookie_t focus_cookie = xcb_get_input_focus(conn);
-  xcb_get_input_focus_reply_t *focus_reply =
-      xcb_get_input_focus_reply(conn, focus_cookie, nullptr);
-  xcb_window_t old_focus = focus_reply ? focus_reply->focus : XCB_NONE;
-  free(focus_reply);
-
-  if (old_focus != XCB_NONE && old_focus != window) {
-    xcb_focus_out_event_t focus_out = {.response_type = XCB_FOCUS_OUT,
-                                       .detail = XCB_NOTIFY_DETAIL_NONLINEAR,
-                                       .event = old_focus,
-                                       .mode = XCB_NOTIFY_MODE_NORMAL};
-    xcb_send_event(conn, false, old_focus, XCB_EVENT_MASK_FOCUS_CHANGE,
-                   (char *)&focus_out);
+void WindowManager::update_focus(xcb_window_t window) {
+  if (current_window != XCB_NONE && current_window != window) {
+    set_window_border_color(current_window, config.border.inactive_color);
   }
 
-  xcb_focus_in_event_t focus_in = {
-      .response_type = XCB_FOCUS_IN,
-      .detail = XCB_NOTIFY_DETAIL_NONLINEAR,
-      .event = window,
-      .mode = XCB_NOTIFY_MODE_NORMAL,
-  };
+  if (window != XCB_NONE) {
+    current_window = window;
+    set_window_border_color(window, config.border.active_color);
+    xcb_set_input_focus(conn, XCB_INPUT_FOCUS_POINTER_ROOT, window,
+                        XCB_CURRENT_TIME);
+  }
+}
 
-  xcb_set_input_focus(conn, XCB_INPUT_FOCUS_POINTER_ROOT, window,
-                      XCB_CURRENT_TIME);
-
-  xcb_send_event(conn, false, window, XCB_EVENT_MASK_FOCUS_CHANGE,
-                 (char *)&focus_in);
-
-  xcb_ewmh_set_active_window(&ewmh, 0, window);
-
+/**
+ * Switches to the workspace with the given index.
+ *
+ * @param i The index of the workspace to switch to.
+ */
+void WindowManager::switch_workspace(uint32_t i) {
+  uint32_t data[] = {i};
+  xcb_ewmh_set_current_desktop(&ewmh, 0, data[0]);
   xcb_flush(conn);
 }
 
+/**
+ * @brief Handles an EnterNotify event.
+ *
+ * @param window The window which generated the EnterNotify event.
+ *
+ */
+void WindowManager::handle_enter_notify(xcb_window_t window) {
+  if (window == XCB_WINDOW_NONE)
+    return;
+
+  if (std::find(windows.begin(), windows.end(), window) == windows.end())
+    return;
+
+  if (current_window != window) {
+    update_focus(window);
+    xcb_flush(conn);
+  }
+}
+
+/**
+ * Handles a KeyPress event by switching to the workspace that corresponds
+ * to the number key that was pressed (0-9). If the key press is not a number
+ * key with the Mod4 modifier, the function does nothing.
+ *
+ * @param key_press The KeyPress event to handle.
+ */
 void WindowManager::handle_key_press(xcb_key_press_event_t *key_press) {
   for (int i = 0; i <= 9; ++i) {
-    if (key_press->state == 0xffe9 && key_press->detail == XK_0 + i) {
-      switch_workspace(i); 
+    if (key_press->state == XK_Alt_L && key_press->detail == XK_0 + i) {
+      switch_workspace(i);
       return;
     }
   }
 }
 
-void WindowManager::handle_map_request(xcb_window_t window) {
+/**
+ * Handles a MapRequest event by adding the window to the list of windows,
+ * mapping the window, setting the border width and color, setting the input
+ * focus to the window, and re-tiling the windows.
+ *
+ * @param window The window to handle.
+ */
+void WindowManager::handle_map_request(xcb_map_request_event_t *event) {
+  auto window = event->window;
   windows.push_back(window);
 
   auto cookie = xcb_get_window_attributes(conn, window);
@@ -295,10 +351,15 @@ void WindowManager::handle_map_request(xcb_window_t window) {
   auto _attr_reply = xcb_get_window_attributes_reply(conn, cookie, e);
 
   if (_attr_reply->override_redirect) {
+    delete _attr_reply;
+    delete e;
     return;
   }
 
-  delete e;
+  uint32_t values[] = {XCB_EVENT_MASK_ENTER_WINDOW |
+                       XCB_EVENT_MASK_FOCUS_CHANGE |
+                       XCB_EVENT_MASK_PROPERTY_CHANGE};
+  xcb_change_window_attributes(conn, window, XCB_CW_EVENT_MASK, values);
 
   xcb_map_window(conn, window);
 
@@ -307,32 +368,75 @@ void WindowManager::handle_map_request(xcb_window_t window) {
 
   xcb_configure_window(conn, window, XCB_CONFIG_WINDOW_BORDER_WIDTH,
                        border_values);
-  xcb_flush(conn);
 
-  set_window_border_color(window, config.border.color);
+  set_window_border_color(window, config.border.inactive_color);
 
-  xcb_set_input_focus(conn, XCB_INPUT_FOCUS_POINTER_ROOT, window,
-                      XCB_CURRENT_TIME);
+  update_focus(window);
+
   xcb_flush(conn);
   tile_windows();
+
+  delete _attr_reply;
+  delete e;
 }
 
-void WindowManager::handle_destroy_notify(xcb_window_t window) {
+/**
+ * Handles a DestroyNotify event by destroying the window, removing it from
+ * the list of windows, re-tiling the windows, and setting the input focus to
+ * the last window in the list.
+ *
+ * @param window The window to handle.
+ */
+void WindowManager::handle_destroy_notify(xcb_destroy_notify_event_t *event) {
+  auto window = event->window;
+
+  if (window == current_window) {
+    current_window = XCB_NONE;
+  }
+
   xcb_destroy_window(conn, window);
   auto new_end = std::remove(windows.begin(), windows.end(), window);
   windows.erase(new_end, windows.end());
+
+  if (!windows.empty()) {
+    update_focus(windows.back());
+  }
+
   xcb_flush(conn);
   tile_windows();
-  set_focus(windows.back());
 }
 
-void WindowManager::handle_unmap_request(xcb_window_t window) {
+/**
+ * Handles an UnmapNotify event by un-mapping the window, setting the input
+ * focus to the last window in the list, and re-tiling the windows.
+ *
+ * @param window The window to handle.
+ */
+void WindowManager::handle_unmap_request(xcb_unmap_notify_event_t *event) {
+  auto window = event->window;
+
+  if (window == current_window) {
+    current_window = XCB_NONE;
+  }
   xcb_unmap_window(conn, window);
+
+  if (!windows.empty()) {
+    update_focus(windows.back());
+  }
+
   xcb_flush(conn);
-  set_focus(windows.back());
   tile_windows();
 }
 
+/**
+ * Destructor for the WindowManager class.
+ *
+ * Cleans up and releases all resources associated with the window manager.
+ * This includes clearing supported atoms, destroying all managed windows,
+ * freeing the cursor, destroying the root window, disconnecting from the
+ * X server, and freeing the cursor context if it exists. Logs a message
+ * indicating that the window manager has stopped.
+ */
 WindowManager::~WindowManager() {
   supported_atoms.clear();
   for (auto wdow : windows) {
@@ -344,15 +448,34 @@ WindowManager::~WindowManager() {
   xcb_disconnect(conn);
 
   if (cursor_context) {
-    xcb_cursor_context_free(cursor_context); 
+    xcb_cursor_context_free(cursor_context);
   }
   logger->info("WM stopped");
 }
 
+/**
+ * The main loop of the window manager.
+ *
+ * Waits for events and handles them accordingly. Events are handled in the
+ * following order:
+ *  1. MapRequest - Maps the window and adds it to the list of managed windows.
+ *  2. UnmapNotify - Unmaps the window and removes it from the list of managed
+ *     windows.
+ *  3. DestroyNotify - Destroys the window and removes it from the list of
+ *     managed windows.
+ *  4. EnterNotify - Sets the input focus to the window that the pointer is
+ *     currently over.
+ *  5. KeyPress - Switches to the specified workspace when a number key with
+ *     the Mod4 modifier is pressed.
+ *
+ * If the event is not one of the above, the window manager will log an error
+ * message and break out of the main loop.
+ *
+ * The window manager will also log an error message if the event is invalid.
+ */
 void WindowManager::run() {
   for (;;) {
     xcb_generic_event_t *event = xcb_wait_for_event(conn);
-    logger->info("Event Happened!");
 
     if (!event) {
       logger->error("Event is invalid");
@@ -363,19 +486,19 @@ void WindowManager::run() {
     case XCB_MAP_REQUEST: {
       logger->info("found map-request event");
       auto *map_request = (xcb_map_request_event_t *)event;
-      handle_map_request(map_request->window);
+      handle_map_request(map_request);
       break;
     }
     case XCB_UNMAP_NOTIFY: {
       logger->info("found unmap-notify event");
       auto *unmap_notify = (xcb_unmap_notify_event_t *)event;
-      handle_unmap_request(unmap_notify->window);
+      handle_unmap_request(unmap_notify);
       break;
     }
     case XCB_DESTROY_NOTIFY: {
       logger->info("found destory-notify event");
       auto destroy_notify = (xcb_destroy_notify_event_t *)event;
-      handle_destroy_notify(destroy_notify->window);
+      handle_destroy_notify(destroy_notify);
       break;
     }
     case XCB_ENTER_NOTIFY: {
