@@ -1,5 +1,7 @@
 logs.txt
 build/
+docs/
+gh-pages/
 builddir/
 .cache/
 doc/xml
