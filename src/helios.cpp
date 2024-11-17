@@ -306,7 +306,9 @@ void WindowManager::switch_workspace(uint32_t i) {
  * @param window The window which generated the EnterNotify event.
  *
  */
-void WindowManager::handle_enter_notify(xcb_window_t window) {
+void WindowManager::handle_enter_notify(xcb_generic_event_t *ev) {
+  auto event = (xcb_enter_notify_event_t *)ev;
+  auto window = event->event;
   if (window == XCB_WINDOW_NONE)
     return;
 
@@ -326,7 +328,8 @@ void WindowManager::handle_enter_notify(xcb_window_t window) {
  *
  * @param key_press The KeyPress event to handle.
  */
-void WindowManager::handle_key_press(xcb_key_press_event_t *key_press) {
+void WindowManager::handle_key_press(xcb_generic_event_t *ev) {
+  auto key_press = (xcb_key_press_event_t *)ev;
   for (int i = 0; i <= 9; ++i) {
     if (key_press->state == XK_Alt_L && key_press->detail == XK_0 + i) {
       switch_workspace(i);
@@ -342,7 +345,8 @@ void WindowManager::handle_key_press(xcb_key_press_event_t *key_press) {
  *
  * @param window The window to handle.
  */
-void WindowManager::handle_map_request(xcb_map_request_event_t *event) {
+void WindowManager::handle_map_request(xcb_generic_event_t *ev) {
+  auto event = (xcb_map_request_event_t *)ev;
   auto window = event->window;
   windows.push_back(window);
 
@@ -387,7 +391,8 @@ void WindowManager::handle_map_request(xcb_map_request_event_t *event) {
  *
  * @param window The window to handle.
  */
-void WindowManager::handle_destroy_notify(xcb_destroy_notify_event_t *event) {
+void WindowManager::handle_destroy_notify(xcb_generic_event_t *ev) {
+  auto event = (xcb_destroy_notify_event_t *)ev;
   auto window = event->window;
 
   if (window == current_window) {
@@ -412,7 +417,8 @@ void WindowManager::handle_destroy_notify(xcb_destroy_notify_event_t *event) {
  *
  * @param window The window to handle.
  */
-void WindowManager::handle_unmap_request(xcb_unmap_notify_event_t *event) {
+void WindowManager::handle_unmap_request(xcb_generic_event_t *ev) {
+  auto event = (xcb_unmap_notify_event_t *)ev;
   auto window = event->window;
 
   if (window == current_window) {
@@ -482,40 +488,13 @@ void WindowManager::run() {
       break;
     }
 
-    switch (event->response_type & ~0x80) {
-    case XCB_MAP_REQUEST: {
-      logger->info("found map-request event");
-      auto *map_request = (xcb_map_request_event_t *)event;
-      handle_map_request(map_request);
-      break;
+    auto ev = event->response_type & ~0x80;
+    auto handler = evH.find(ev);
+    if (handler != evH.end()) {
+      handler->second((xcb_generic_event_t *)event);
+    } else {
+      logger->error("Invalid Event Type!");
     }
-    case XCB_UNMAP_NOTIFY: {
-      logger->info("found unmap-notify event");
-      auto *unmap_notify = (xcb_unmap_notify_event_t *)event;
-      handle_unmap_request(unmap_notify);
-      break;
-    }
-    case XCB_DESTROY_NOTIFY: {
-      logger->info("found destory-notify event");
-      auto destroy_notify = (xcb_destroy_notify_event_t *)event;
-      handle_destroy_notify(destroy_notify);
-      break;
-    }
-    case XCB_ENTER_NOTIFY: {
-      logger->info("found enter-notify event");
-      auto enter_notify = (xcb_enter_notify_event_t *)event;
-      handle_enter_notify(enter_notify->event);
-      break;
-    }
-    case XCB_KEY_PRESS: {
-      logger->info("found key-press event");
-      auto key_press = (xcb_key_press_event_t *)event;
-      handle_key_press(key_press);
-      break;
-    }
-    }
-
-    free(event);
-    xcb_flush(conn);
+    delete event;
   }
 }

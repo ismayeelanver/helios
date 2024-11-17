@@ -3,9 +3,11 @@
 
 #include <cerrno>
 #include <cstdint>
+#include <functional>
 #include <memory>
 #include <spdlog/sinks/basic_file_sink.h>
 #include <spdlog/spdlog.h>
+#include <unordered_map>
 #include <vector>
 #include <xcb/shape.h>
 #include <xcb/xcb.h>
@@ -20,6 +22,8 @@
 #include "config.h"
 #include "key.h"
 #include "spawn.h"
+
+using EventHandler = std::function<void(xcb_generic_event_t *)>;
 
 /**
  * @class WindowManager
@@ -197,35 +201,35 @@ private:
    *
    * @param event The event to be handled.
    */
-  void handle_map_request(xcb_map_request_event_t *event);
+  void handle_map_request(xcb_generic_event_t *event);
 
   /**
    * @brief Handles an unmap request event for the given window.
    *
    * @param event The event to be handled.
    */
-  void handle_unmap_request(xcb_unmap_notify_event_t *event);
+  void handle_unmap_request(xcb_generic_event_t *event);
 
   /**
    * @brief Handles a destroy notify event for the given window.
    *
    * @param event The event to be handled.
    */
-  void handle_destroy_notify(xcb_destroy_notify_event_t *event);
+  void handle_destroy_notify(xcb_generic_event_t *event);
 
   /**
    * @brief Handles an enter notify event for the given window.
    *
    * @param event The event to be handled.
    */
-  void handle_enter_notify(xcb_window_t window);
+  void handle_enter_notify(xcb_generic_event_t *event);
 
   /**
    * @brief Handles a key press event for the given key press event.
    *
    * @param event The event to be handled.
    */
-  void handle_key_press(xcb_key_press_event_t *event);
+  void handle_key_press(xcb_generic_event_t *event);
 
   /**
    * @brief Sets the border color of the window to the given color.
@@ -253,6 +257,19 @@ private:
    * @brief Tiles all windows in the current workspace.
    */
   void tile_windows();
+
+  std::unordered_map<uint32_t, EventHandler> evH = {
+      {XCB_MAP_REQUEST,
+       [this](xcb_generic_event_t *event) { handle_map_request(event); }},
+      {XCB_UNMAP_NOTIFY,
+       [this](xcb_generic_event_t *event) { handle_unmap_request(event); }},
+      {XCB_DESTROY_NOTIFY,
+       [this](xcb_generic_event_t *event) { handle_destroy_notify(event); }},
+      {XCB_ENTER_NOTIFY,
+       [this](xcb_generic_event_t *event) { handle_enter_notify(event); }},
+      {XCB_KEY_PRESS,
+       [this](xcb_generic_event_t *event) { handle_key_press(event); }},
+  };
 };
 
 #endif
