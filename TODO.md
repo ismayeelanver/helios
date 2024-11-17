@@ -8,7 +8,7 @@
 
 
 - [ ] Events:
-  - [ ] Enter Notify
+  - [x] Enter Notify
   - [ ] Key Press 
   - [x] Map Request
   - [x] Unmap Notify
