@@ -1,6 +1,5 @@
 var searchData=
 [
-  ['main_0',['main',['../a00002.html#ae66f6b31b5ad750f1fe042a706a4e3d4',1,'main.cpp']]],
-  ['main_2ecpp_1',['main.cpp',['../a00002.html',1,'']]],
-  ['mod_2',['mod',['../a00039.html#a5c65d3c09f3a19ba3d2d66ce3c97291b',1,'WMConfig::Keybind']]]
+  ['loadconfig_0',['loadconfig',['../a00020.html#adeb02e3cf4b470272f59f74f7ba517d5',1,'loadConfig(const std::string &amp;filename):&#160;config.cpp'],['../a00017.html#adeb02e3cf4b470272f59f74f7ba517d5',1,'loadConfig(const std::string &amp;filename):&#160;config.cpp']]],
+  ['logger_1',['logger',['../a00047.html#ab62afbcac79e798dc7a2b64d0e5d6f88',1,'WindowManager']]]
 ];

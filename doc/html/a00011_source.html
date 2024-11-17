@@ -90,30 +90,30 @@ $(document).ready(function() { init_codefold(0); });
 <div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span> </div>
 <div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="preprocessor">#include &lt;iostream&gt;</span></div>
 <div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span> </div>
-<div class="foldopen" id="foldopen00040" data-start="{" data-end="}">
-<div class="line"><a id="l00040" name="l00040"></a><span class="lineno"><a class="line" href="a00011.html#a5f32436c8d62ad23dac4766401b3b450">   40</a></span><span class="keyword">inline</span> <span class="keywordtype">void</span> <a class="code hl_function" href="a00011.html#a5f32436c8d62ad23dac4766401b3b450">grab_key</a>(xcb_connection_t *conn, uint16_t mod, uint32_t keysym,</div>
-<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span>                     xcb_window_t window) {</div>
-<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>  <span class="keyword">auto</span> *keysyms = xcb_key_symbols_alloc(conn);</div>
-<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span>  <span class="keyword">auto</span> *keycode = xcb_key_symbols_get_keycode(keysyms, keysym);</div>
-<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span> </div>
-<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span>  <span class="keywordflow">if</span> (keycode) {</div>
-<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span>    xcb_grab_key(conn, 1, window, mod, *keycode, XCB_GRAB_MODE_ASYNC,</div>
-<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span>                 XCB_GRAB_MODE_ASYNC);</div>
-<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span>    xcb_flush(conn);</div>
-<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span>    free(keycode);</div>
-<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span>  } <span class="keywordflow">else</span> {</div>
-<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span>    std::cerr &lt;&lt; <span class="stringliteral">&quot;Unable to find keycode for the given keysym.&quot;</span> &lt;&lt; std::endl;</div>
-<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>    exit(EXIT_FAILURE);</div>
-<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span>  }</div>
-<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span> </div>
-<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span>  xcb_key_symbols_free(keysyms);</div>
-<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>}</div>
+<div class="foldopen" id="foldopen00041" data-start="{" data-end="}">
+<div class="line"><a id="l00041" name="l00041"></a><span class="lineno"><a class="line" href="a00011.html#a5f32436c8d62ad23dac4766401b3b450">   41</a></span><span class="keyword">inline</span> <span class="keywordtype">void</span> <a class="code hl_function" href="a00011.html#a5f32436c8d62ad23dac4766401b3b450">grab_key</a>(xcb_connection_t *conn, uint16_t mod, uint32_t keysym,</div>
+<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>                     xcb_window_t window) {</div>
+<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span>  <span class="keyword">auto</span> *keysyms = xcb_key_symbols_alloc(conn);</div>
+<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span>  <span class="keyword">auto</span> *keycode = xcb_key_symbols_get_keycode(keysyms, keysym);</div>
+<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span> </div>
+<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span>  <span class="keywordflow">if</span> (keycode) {</div>
+<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span>    xcb_grab_key(conn, 1, window, mod, *keycode, XCB_GRAB_MODE_ASYNC,</div>
+<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span>                 XCB_GRAB_MODE_ASYNC);</div>
+<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span>    xcb_flush(conn);</div>
+<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span>    free(keycode);</div>
+<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span>  } <span class="keywordflow">else</span> {</div>
+<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>    std::cerr &lt;&lt; <span class="stringliteral">&quot;Unable to find keycode for the given keysym.&quot;</span> &lt;&lt; std::endl;</div>
+<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span>    exit(EXIT_FAILURE);</div>
+<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span>  }</div>
+<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span> </div>
+<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>  xcb_key_symbols_free(keysyms);</div>
+<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span>}</div>
 </div>
-<div class="ttc" id="aa00011_html_a5f32436c8d62ad23dac4766401b3b450"><div class="ttname"><a href="a00011.html#a5f32436c8d62ad23dac4766401b3b450">grab_key</a></div><div class="ttdeci">void grab_key(xcb_connection_t *conn, uint16_t mod, uint32_t keysym, xcb_window_t window)</div><div class="ttdoc">Grabs a key so that it will not be passed to other X clients.</div><div class="ttdef"><b>Definition</b> <a href="a00011_source.html#l00040">key.h:40</a></div></div>
+<div class="ttc" id="aa00011_html_a5f32436c8d62ad23dac4766401b3b450"><div class="ttname"><a href="a00011.html#a5f32436c8d62ad23dac4766401b3b450">grab_key</a></div><div class="ttdeci">void grab_key(xcb_connection_t *conn, uint16_t mod, uint32_t keysym, xcb_window_t window)</div><div class="ttdoc">Grabs a key so that it will not be passed to other X clients.</div><div class="ttdef"><b>Definition</b> <a href="a00011_source.html#l00041">key.h:41</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Sat Nov 16 2024 11:43:28 for Helios by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.8
+Generated on Sun Nov 17 2024 17:58:43 for Helios by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.8
 </small></address>
 </body>
 </html>

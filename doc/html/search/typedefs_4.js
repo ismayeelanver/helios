@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['keybind_0',['Keybind',['../a00023.html#a8f9faf7466307887700a4e4f8de4c31d',1,'WMConfig']]]
+  ['general_0',['General',['../a00023.html#a265bac0de54ce6f7557f423cf084ac50',1,'WMConfig']]]
 ];

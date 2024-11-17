@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['keysym_0',['keysym',['../a00039.html#add7b8627d3b15281df80fd9a82494dd7',1,'WMConfig::Keybind']]]
+  ['inactive_5fcolor_0',['inactive_color',['../a00027.html#a22e4cb620ab9b34d96208ab78c4988c0',1,'WMConfig::Border']]]
 ];

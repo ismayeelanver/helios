@@ -1,6 +1,5 @@
 var searchData=
 [
-  ['screen_0',['screen',['../a00047.html#a7269169f4599c496c5ddfd9ea69ff5d0',1,'WindowManager']]],
-  ['startup_1',['startup',['../a00043.html#a9f4ab506e541a05eb84d99123447f5db',1,'WMConfig::General']]],
-  ['supported_5fatoms_2',['supported_atoms',['../a00047.html#a2342631ea44794f224e6946df4888305',1,'WindowManager']]]
+  ['radius_0',['radius',['../a00027.html#ae57654cfccb724ad07d174b5b4b4ef67',1,'WMConfig::Border']]],
+  ['root_1',['root',['../a00047.html#aa99f6f34aacae8a7cae0725c013f312a',1,'WindowManager']]]
 ];

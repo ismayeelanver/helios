@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['logger_0',['logger',['../a00047.html#ab62afbcac79e798dc7a2b64d0e5d6f88',1,'WindowManager']]]
+  ['keysym_0',['keysym',['../a00039.html#add7b8627d3b15281df80fd9a82494dd7',1,'WMConfig::Keybind']]]
 ];

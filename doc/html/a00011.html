@@ -155,33 +155,39 @@ Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">exit(EXIT_FAILURE)</td><td>if the system is unable to find keycode for a given keysym </td></tr>
+  </table>
+  </dd>
+</dl>
 
-<p class="definition">Definition at line <a class="el" href="a00011_source.html#l00040">40</a> of file <a class="el" href="a00011_source.html">key.h</a>.</p>
-<div class="fragment"><div class="line"><span class="lineno">   41</span>                                          {</div>
-<div class="line"><span class="lineno">   42</span>  <span class="keyword">auto</span> *keysyms = xcb_key_symbols_alloc(conn);</div>
-<div class="line"><span class="lineno">   43</span>  <span class="keyword">auto</span> *keycode = xcb_key_symbols_get_keycode(keysyms, keysym);</div>
-<div class="line"><span class="lineno">   44</span> </div>
-<div class="line"><span class="lineno">   45</span>  <span class="keywordflow">if</span> (keycode) {</div>
-<div class="line"><span class="lineno">   46</span>    xcb_grab_key(conn, 1, window, mod, *keycode, XCB_GRAB_MODE_ASYNC,</div>
-<div class="line"><span class="lineno">   47</span>                 XCB_GRAB_MODE_ASYNC);</div>
-<div class="line"><span class="lineno">   48</span>    xcb_flush(conn);</div>
-<div class="line"><span class="lineno">   49</span>    free(keycode);</div>
-<div class="line"><span class="lineno">   50</span>  } <span class="keywordflow">else</span> {</div>
-<div class="line"><span class="lineno">   51</span>    std::cerr &lt;&lt; <span class="stringliteral">&quot;Unable to find keycode for the given keysym.&quot;</span> &lt;&lt; std::endl;</div>
-<div class="line"><span class="lineno">   52</span>    exit(EXIT_FAILURE);</div>
-<div class="line"><span class="lineno">   53</span>  }</div>
-<div class="line"><span class="lineno">   54</span> </div>
-<div class="line"><span class="lineno">   55</span>  xcb_key_symbols_free(keysyms);</div>
-<div class="line"><span class="lineno">   56</span>}</div>
+<p class="definition">Definition at line <a class="el" href="a00011_source.html#l00041">41</a> of file <a class="el" href="a00011_source.html">key.h</a>.</p>
+<div class="fragment"><div class="line"><span class="lineno">   42</span>                                          {</div>
+<div class="line"><span class="lineno">   43</span>  <span class="keyword">auto</span> *keysyms = xcb_key_symbols_alloc(conn);</div>
+<div class="line"><span class="lineno">   44</span>  <span class="keyword">auto</span> *keycode = xcb_key_symbols_get_keycode(keysyms, keysym);</div>
+<div class="line"><span class="lineno">   45</span> </div>
+<div class="line"><span class="lineno">   46</span>  <span class="keywordflow">if</span> (keycode) {</div>
+<div class="line"><span class="lineno">   47</span>    xcb_grab_key(conn, 1, window, mod, *keycode, XCB_GRAB_MODE_ASYNC,</div>
+<div class="line"><span class="lineno">   48</span>                 XCB_GRAB_MODE_ASYNC);</div>
+<div class="line"><span class="lineno">   49</span>    xcb_flush(conn);</div>
+<div class="line"><span class="lineno">   50</span>    free(keycode);</div>
+<div class="line"><span class="lineno">   51</span>  } <span class="keywordflow">else</span> {</div>
+<div class="line"><span class="lineno">   52</span>    std::cerr &lt;&lt; <span class="stringliteral">&quot;Unable to find keycode for the given keysym.&quot;</span> &lt;&lt; std::endl;</div>
+<div class="line"><span class="lineno">   53</span>    exit(EXIT_FAILURE);</div>
+<div class="line"><span class="lineno">   54</span>  }</div>
+<div class="line"><span class="lineno">   55</span> </div>
+<div class="line"><span class="lineno">   56</span>  xcb_key_symbols_free(keysyms);</div>
+<div class="line"><span class="lineno">   57</span>}</div>
 </div><!-- fragment -->
-<p class="reference">Referenced by <a class="el" href="a00005_source.html#l00017">WindowManager::WindowManager()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="a00005_source.html#l00019">WindowManager::WindowManager()</a>.</p>
 
 </div>
 </div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Sat Nov 16 2024 11:43:28 for Helios by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.8
+Generated on Sun Nov 17 2024 17:58:43 for Helios by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.8
 </small></address>
 </body>
 </html>

@@ -83,438 +83,472 @@ $(document).ready(function() { init_codefold(0); });
 </div><!--header-->
 <div class="contents">
 <a href="a00005.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="preprocessor">#include &quot;<a class="code" href="a00008.html">include/helios.h</a>&quot;</span></div>
-<div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span> </div>
-<div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span> </div>
-<div class="foldopen" id="foldopen00017" data-start="{" data-end="}">
-<div class="line"><a id="l00017" name="l00017"></a><span class="lineno"><a class="line" href="a00047.html#a3a283b34c19aaa20296befaabad4d29b">   17</a></span><a class="code hl_function" href="a00047.html#a3a283b34c19aaa20296befaabad4d29b">WindowManager::WindowManager</a>()</div>
-<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span>    : values(std::make_unique&lt;uint32_t[]&gt;(1)), atoms(nullptr) {</div>
-<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span>  <a class="code hl_variable" href="a00047.html#ab62afbcac79e798dc7a2b64d0e5d6f88">logger</a>-&gt;flush_on(spdlog::level::info);</div>
-<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span>  <span class="keywordflow">if</span> (!(<a class="code hl_variable" href="a00047.html#a63ab96867bfa785c967ece50fcf833a3">conn</a> = xcb_connect(<span class="keyword">nullptr</span>, <span class="keyword">nullptr</span>))) {</div>
-<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span>    <a class="code hl_variable" href="a00047.html#ab62afbcac79e798dc7a2b64d0e5d6f88">logger</a>-&gt;error(<span class="stringliteral">&quot;Could not connect to the X server&quot;</span>);</div>
-<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span>    <span class="keywordflow">throw</span> std::runtime_error(<span class="stringliteral">&quot;X server connection failed&quot;</span>);</div>
-<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span>  }</div>
-<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span> </div>
-<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span>  <a class="code hl_variable" href="a00047.html#ab2f747f430112a6a69113ea547f0166d">config</a> = <a class="code hl_function" href="a00020.html#adeb02e3cf4b470272f59f74f7ba517d5">loadConfig</a>(<span class="stringliteral">&quot;config.toml&quot;</span>);</div>
+<div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span><span class="preprocessor">#include &lt;sys/types.h&gt;</span></div>
+<div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span><span class="preprocessor">#include &lt;xcb/xcb.h&gt;</span></div>
+<div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span><span class="preprocessor">#include &lt;xcb/xproto.h&gt;</span></div>
+<div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span> </div>
+<div class="foldopen" id="foldopen00019" data-start="{" data-end="}">
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno"><a class="line" href="a00047.html#a3a283b34c19aaa20296befaabad4d29b">   19</a></span><a class="code hl_function" href="a00047.html#a3a283b34c19aaa20296befaabad4d29b">WindowManager::WindowManager</a>()</div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span>    : values(std::make_unique&lt;uint32_t[]&gt;(1)), atoms(nullptr) {</div>
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span>  <a class="code hl_variable" href="a00047.html#ab62afbcac79e798dc7a2b64d0e5d6f88">logger</a>-&gt;flush_on(spdlog::level::info);</div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span>  <span class="keywordflow">if</span> (!(<a class="code hl_variable" href="a00047.html#a63ab96867bfa785c967ece50fcf833a3">conn</a> = xcb_connect(<span class="keyword">nullptr</span>, <span class="keyword">nullptr</span>))) {</div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span>    <a class="code hl_variable" href="a00047.html#ab62afbcac79e798dc7a2b64d0e5d6f88">logger</a>-&gt;error(<span class="stringliteral">&quot;Could not connect to the X server&quot;</span>);</div>
+<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span>    <span class="keywordflow">throw</span> std::runtime_error(<span class="stringliteral">&quot;X server connection failed&quot;</span>);</div>
+<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span>  }</div>
 <div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span> </div>
-<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span>  <span class="keyword">const</span> xcb_setup_t *setup = xcb_get_setup(<a class="code hl_variable" href="a00047.html#a63ab96867bfa785c967ece50fcf833a3">conn</a>);</div>
+<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span>  <a class="code hl_variable" href="a00047.html#ab2f747f430112a6a69113ea547f0166d">config</a> = <a class="code hl_function" href="a00020.html#adeb02e3cf4b470272f59f74f7ba517d5">loadConfig</a>(<span class="stringliteral">&quot;config.toml&quot;</span>);</div>
 <div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span> </div>
-<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span>  <span class="keywordflow">if</span> (xcb_connection_has_error(<a class="code hl_variable" href="a00047.html#a63ab96867bfa785c967ece50fcf833a3">conn</a>)) {</div>
-<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span>    <a class="code hl_variable" href="a00047.html#ab62afbcac79e798dc7a2b64d0e5d6f88">logger</a>-&gt;error(</div>
-<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span>        <span class="stringliteral">&quot;The Connection has an error and other stuff could not be proceeded&quot;</span>);</div>
-<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span>    exit(EXIT_FAILURE);</div>
-<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span>  }</div>
-<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span> </div>
-<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span>  xcb_screen_iterator_t iter = xcb_setup_roots_iterator(setup);</div>
-<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span>  <span class="keywordflow">if</span> (!(<a class="code hl_variable" href="a00047.html#a7269169f4599c496c5ddfd9ea69ff5d0">screen</a> = iter.data)) {</div>
-<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span>    <a class="code hl_variable" href="a00047.html#ab62afbcac79e798dc7a2b64d0e5d6f88">logger</a>-&gt;error(<span class="stringliteral">&quot;Unable to access screen information. Ensure the X server is &quot;</span></div>
-<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span>                  <span class="stringliteral">&quot;running and is accessible&quot;</span>);</div>
-<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span>  }</div>
-<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span> </div>
-<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span>  xcb_flush(<a class="code hl_variable" href="a00047.html#a63ab96867bfa785c967ece50fcf833a3">conn</a>);</div>
-<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>  <a class="code hl_variable" href="a00047.html#aa99f6f34aacae8a7cae0725c013f312a">root</a> = <a class="code hl_variable" href="a00047.html#a7269169f4599c496c5ddfd9ea69ff5d0">screen</a>-&gt;root;</div>
-<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span> </div>
-<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span>  xcb_intern_atom_cookie_t *ewmh_cookie = <span class="keyword">new</span> xcb_intern_atom_cookie_t;</div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span>  <span class="keyword">const</span> xcb_setup_t *setup = xcb_get_setup(<a class="code hl_variable" href="a00047.html#a63ab96867bfa785c967ece50fcf833a3">conn</a>);</div>
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span> </div>
+<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span>  <span class="keywordflow">if</span> (xcb_connection_has_error(<a class="code hl_variable" href="a00047.html#a63ab96867bfa785c967ece50fcf833a3">conn</a>)) {</div>
+<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span>    <a class="code hl_variable" href="a00047.html#ab62afbcac79e798dc7a2b64d0e5d6f88">logger</a>-&gt;error(</div>
+<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span>        <span class="stringliteral">&quot;The Connection has an error and other stuff could not be proceeded&quot;</span>);</div>
+<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span>    exit(EXIT_FAILURE);</div>
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span>  }</div>
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span> </div>
+<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span>  xcb_screen_iterator_t iter = xcb_setup_roots_iterator(setup);</div>
+<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span>  <span class="keywordflow">if</span> (!(<a class="code hl_variable" href="a00047.html#a7269169f4599c496c5ddfd9ea69ff5d0">screen</a> = iter.data)) {</div>
+<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span>    <a class="code hl_variable" href="a00047.html#ab62afbcac79e798dc7a2b64d0e5d6f88">logger</a>-&gt;error(<span class="stringliteral">&quot;Unable to access screen information. Ensure the X server is &quot;</span></div>
+<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span>                  <span class="stringliteral">&quot;running and is accessible&quot;</span>);</div>
+<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span>  }</div>
+<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span> </div>
+<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span>  xcb_flush(<a class="code hl_variable" href="a00047.html#a63ab96867bfa785c967ece50fcf833a3">conn</a>);</div>
+<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span>  <a class="code hl_variable" href="a00047.html#aa99f6f34aacae8a7cae0725c013f312a">root</a> = <a class="code hl_variable" href="a00047.html#a7269169f4599c496c5ddfd9ea69ff5d0">screen</a>-&gt;root;</div>
 <div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span> </div>
-<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span>  ewmh_cookie = xcb_ewmh_init_atoms(<a class="code hl_variable" href="a00047.html#a63ab96867bfa785c967ece50fcf833a3">conn</a>, &amp;<a class="code hl_variable" href="a00047.html#a6ef7ac05aa24b3b6b7a5f796e342772d">ewmh</a>);</div>
-<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span>  <span class="keywordflow">if</span> (!ewmh_cookie) {</div>
-<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span>    <a class="code hl_variable" href="a00047.html#ab62afbcac79e798dc7a2b64d0e5d6f88">logger</a>-&gt;error(<span class="stringliteral">&quot;EWMH cookie initialization failed&quot;</span>);</div>
-<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span>    <span class="keywordflow">throw</span> std::runtime_error(<span class="stringliteral">&quot;EWMH cookie initialization failed&quot;</span>);</div>
-<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span>  }</div>
-<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span> </div>
-<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>  xcb_generic_error_t *error = <span class="keyword">nullptr</span>;</div>
-<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span>  <span class="keywordflow">if</span> (!xcb_ewmh_init_atoms_replies(&amp;<a class="code hl_variable" href="a00047.html#a6ef7ac05aa24b3b6b7a5f796e342772d">ewmh</a>, ewmh_cookie, &amp;error)) {</div>
-<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span>    <span class="keywordflow">if</span> (error) {</div>
-<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span>      <a class="code hl_variable" href="a00047.html#ab62afbcac79e798dc7a2b64d0e5d6f88">logger</a>-&gt;error(<span class="stringliteral">&quot;EWMH initialization failed: {}&quot;</span>, error-&gt;major_code);</div>
-<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>      free(error);</div>
-<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span>    } <span class="keywordflow">else</span> {</div>
-<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span>      <a class="code hl_variable" href="a00047.html#ab62afbcac79e798dc7a2b64d0e5d6f88">logger</a>-&gt;error(</div>
-<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span>          <span class="stringliteral">&quot;EWMH initialization failed with no error details available&quot;</span>);</div>
-<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span>    }</div>
-<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span>    <span class="keywordflow">throw</span> std::runtime_error(<span class="stringliteral">&quot;EWMH connection initialization failed&quot;</span>);</div>
-<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span>  }</div>
-<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span> </div>
-<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span>  <a class="code hl_variable" href="a00047.html#a2342631ea44794f224e6946df4888305">supported_atoms</a> = {<a class="code hl_variable" href="a00047.html#a6ef7ac05aa24b3b6b7a5f796e342772d">ewmh</a>._NET_SUPPORTED,</div>
-<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span>                     <a class="code hl_variable" href="a00047.html#a6ef7ac05aa24b3b6b7a5f796e342772d">ewmh</a>._NET_SUPPORTING_WM_CHECK,</div>
-<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span>                     <a class="code hl_variable" href="a00047.html#a6ef7ac05aa24b3b6b7a5f796e342772d">ewmh</a>._NET_ACTIVE_WINDOW,</div>
-<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span>                     <a class="code hl_variable" href="a00047.html#a6ef7ac05aa24b3b6b7a5f796e342772d">ewmh</a>._NET_CLIENT_LIST,</div>
-<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span>                     <a class="code hl_variable" href="a00047.html#a6ef7ac05aa24b3b6b7a5f796e342772d">ewmh</a>._NET_CURRENT_DESKTOP,</div>
-<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span>                     <a class="code hl_variable" href="a00047.html#a6ef7ac05aa24b3b6b7a5f796e342772d">ewmh</a>._NET_DESKTOP_NAMES,</div>
-<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span>                     <a class="code hl_variable" href="a00047.html#a6ef7ac05aa24b3b6b7a5f796e342772d">ewmh</a>._NET_NUMBER_OF_DESKTOPS,</div>
-<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span>                     <a class="code hl_variable" href="a00047.html#a6ef7ac05aa24b3b6b7a5f796e342772d">ewmh</a>._NET_WM_NAME,</div>
-<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span>                     <a class="code hl_variable" href="a00047.html#a6ef7ac05aa24b3b6b7a5f796e342772d">ewmh</a>._NET_WM_STATE,</div>
-<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span>                     <a class="code hl_variable" href="a00047.html#a6ef7ac05aa24b3b6b7a5f796e342772d">ewmh</a>._NET_WM_STATE_FULLSCREEN,</div>
-<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span>                     <a class="code hl_variable" href="a00047.html#a6ef7ac05aa24b3b6b7a5f796e342772d">ewmh</a>._NET_WM_WINDOW_TYPE,</div>
-<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span>                     <a class="code hl_variable" href="a00047.html#a6ef7ac05aa24b3b6b7a5f796e342772d">ewmh</a>._NET_WM_WINDOW_TYPE_DIALOG,</div>
-<div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span>                     <a class="code hl_variable" href="a00047.html#a6ef7ac05aa24b3b6b7a5f796e342772d">ewmh</a>._NET_WM_WINDOW_TYPE_DOCK,</div>
-<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span>                     <a class="code hl_variable" href="a00047.html#a6ef7ac05aa24b3b6b7a5f796e342772d">ewmh</a>._NET_WM_WINDOW_TYPE_DESKTOP};</div>
-<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span> </div>
-<div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span>  <a class="code hl_variable" href="a00047.html#a9c0700a61bfdc47388d017340e4df115">atoms</a> = std::make_unique&lt;xcb_atom_t[]&gt;(<a class="code hl_variable" href="a00047.html#a2342631ea44794f224e6946df4888305">supported_atoms</a>.size());</div>
+<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span>  xcb_intern_atom_cookie_t *ewmh_cookie = <span class="keyword">new</span> xcb_intern_atom_cookie_t;</div>
+<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span> </div>
+<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span>  ewmh_cookie = xcb_ewmh_init_atoms(<a class="code hl_variable" href="a00047.html#a63ab96867bfa785c967ece50fcf833a3">conn</a>, &amp;<a class="code hl_variable" href="a00047.html#a6ef7ac05aa24b3b6b7a5f796e342772d">ewmh</a>);</div>
+<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span>  <span class="keywordflow">if</span> (!ewmh_cookie) {</div>
+<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span>    <a class="code hl_variable" href="a00047.html#ab62afbcac79e798dc7a2b64d0e5d6f88">logger</a>-&gt;error(<span class="stringliteral">&quot;EWMH cookie initialization failed&quot;</span>);</div>
+<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span>    <span class="keywordflow">throw</span> std::runtime_error(<span class="stringliteral">&quot;EWMH cookie initialization failed&quot;</span>);</div>
+<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>  }</div>
+<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span> </div>
+<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span>  xcb_generic_error_t *error = <span class="keyword">nullptr</span>;</div>
+<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span>  <span class="keywordflow">if</span> (!xcb_ewmh_init_atoms_replies(&amp;<a class="code hl_variable" href="a00047.html#a6ef7ac05aa24b3b6b7a5f796e342772d">ewmh</a>, ewmh_cookie, &amp;error)) {</div>
+<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>    <span class="keywordflow">if</span> (error) {</div>
+<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span>      <a class="code hl_variable" href="a00047.html#ab62afbcac79e798dc7a2b64d0e5d6f88">logger</a>-&gt;error(<span class="stringliteral">&quot;EWMH initialization failed: {}&quot;</span>, error-&gt;major_code);</div>
+<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span>      free(error);</div>
+<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span>    } <span class="keywordflow">else</span> {</div>
+<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span>      <a class="code hl_variable" href="a00047.html#ab62afbcac79e798dc7a2b64d0e5d6f88">logger</a>-&gt;error(</div>
+<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span>          <span class="stringliteral">&quot;EWMH initialization failed with no error details available&quot;</span>);</div>
+<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span>    }</div>
+<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span>    <span class="keywordflow">throw</span> std::runtime_error(<span class="stringliteral">&quot;EWMH connection initialization failed&quot;</span>);</div>
+<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span>  }</div>
+<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span> </div>
+<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span>  <a class="code hl_variable" href="a00047.html#a2342631ea44794f224e6946df4888305">supported_atoms</a> = {<a class="code hl_variable" href="a00047.html#a6ef7ac05aa24b3b6b7a5f796e342772d">ewmh</a>._NET_SUPPORTED,</div>
+<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span>                     <a class="code hl_variable" href="a00047.html#a6ef7ac05aa24b3b6b7a5f796e342772d">ewmh</a>._NET_SUPPORTING_WM_CHECK,</div>
+<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span>                     <a class="code hl_variable" href="a00047.html#a6ef7ac05aa24b3b6b7a5f796e342772d">ewmh</a>._NET_ACTIVE_WINDOW,</div>
+<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span>                     <a class="code hl_variable" href="a00047.html#a6ef7ac05aa24b3b6b7a5f796e342772d">ewmh</a>._NET_CLIENT_LIST,</div>
+<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span>                     <a class="code hl_variable" href="a00047.html#a6ef7ac05aa24b3b6b7a5f796e342772d">ewmh</a>._NET_CURRENT_DESKTOP,</div>
+<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span>                     <a class="code hl_variable" href="a00047.html#a6ef7ac05aa24b3b6b7a5f796e342772d">ewmh</a>._NET_DESKTOP_NAMES,</div>
+<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span>                     <a class="code hl_variable" href="a00047.html#a6ef7ac05aa24b3b6b7a5f796e342772d">ewmh</a>._NET_NUMBER_OF_DESKTOPS,</div>
+<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span>                     <a class="code hl_variable" href="a00047.html#a6ef7ac05aa24b3b6b7a5f796e342772d">ewmh</a>._NET_WM_NAME,</div>
+<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span>                     <a class="code hl_variable" href="a00047.html#a6ef7ac05aa24b3b6b7a5f796e342772d">ewmh</a>._NET_WM_STATE,</div>
+<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span>                     <a class="code hl_variable" href="a00047.html#a6ef7ac05aa24b3b6b7a5f796e342772d">ewmh</a>._NET_WM_STATE_FULLSCREEN,</div>
+<div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span>                     <a class="code hl_variable" href="a00047.html#a6ef7ac05aa24b3b6b7a5f796e342772d">ewmh</a>._NET_WM_WINDOW_TYPE,</div>
+<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span>                     <a class="code hl_variable" href="a00047.html#a6ef7ac05aa24b3b6b7a5f796e342772d">ewmh</a>._NET_WM_WINDOW_TYPE_DIALOG,</div>
+<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span>                     <a class="code hl_variable" href="a00047.html#a6ef7ac05aa24b3b6b7a5f796e342772d">ewmh</a>._NET_WM_WINDOW_TYPE_DOCK,</div>
+<div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span>                     <a class="code hl_variable" href="a00047.html#a6ef7ac05aa24b3b6b7a5f796e342772d">ewmh</a>._NET_WM_WINDOW_TYPE_DESKTOP};</div>
 <div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span> </div>
-<div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span>  std::copy(<a class="code hl_variable" href="a00047.html#a2342631ea44794f224e6946df4888305">supported_atoms</a>.begin(), <a class="code hl_variable" href="a00047.html#a2342631ea44794f224e6946df4888305">supported_atoms</a>.end(), <a class="code hl_variable" href="a00047.html#a9c0700a61bfdc47388d017340e4df115">atoms</a>.get());</div>
+<div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span>  <a class="code hl_variable" href="a00047.html#a9c0700a61bfdc47388d017340e4df115">atoms</a> = std::make_unique&lt;xcb_atom_t[]&gt;(<a class="code hl_variable" href="a00047.html#a2342631ea44794f224e6946df4888305">supported_atoms</a>.size());</div>
 <div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span> </div>
-<div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span>  <span class="keyword">auto</span> window = xcb_generate_id(<a class="code hl_variable" href="a00047.html#a63ab96867bfa785c967ece50fcf833a3">conn</a>);</div>
+<div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span>  std::copy(<a class="code hl_variable" href="a00047.html#a2342631ea44794f224e6946df4888305">supported_atoms</a>.begin(), <a class="code hl_variable" href="a00047.html#a2342631ea44794f224e6946df4888305">supported_atoms</a>.end(), <a class="code hl_variable" href="a00047.html#a9c0700a61bfdc47388d017340e4df115">atoms</a>.get());</div>
 <div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span> </div>
-<div class="line"><a id="l00085" name="l00085"></a><span class="lineno">   85</span>  xcb_create_window(<a class="code hl_variable" href="a00047.html#a63ab96867bfa785c967ece50fcf833a3">conn</a>, XCB_WINDOW_CLASS_COPY_FROM_PARENT, window, <a class="code hl_variable" href="a00047.html#aa99f6f34aacae8a7cae0725c013f312a">root</a>, 0, 0,</div>
-<div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span>                    1, 1, 0, XCB_WINDOW_CLASS_INPUT_OUTPUT, <a class="code hl_variable" href="a00047.html#a7269169f4599c496c5ddfd9ea69ff5d0">screen</a>-&gt;root_visual,</div>
-<div class="line"><a id="l00087" name="l00087"></a><span class="lineno">   87</span>                    {}, {});</div>
-<div class="line"><a id="l00088" name="l00088"></a><span class="lineno">   88</span> </div>
-<div class="line"><a id="l00089" name="l00089"></a><span class="lineno">   89</span>  xcb_ewmh_set_supported(&amp;<a class="code hl_variable" href="a00047.html#a6ef7ac05aa24b3b6b7a5f796e342772d">ewmh</a>, 0, <a class="code hl_variable" href="a00047.html#a2342631ea44794f224e6946df4888305">supported_atoms</a>.size(), <a class="code hl_variable" href="a00047.html#a9c0700a61bfdc47388d017340e4df115">atoms</a>.get());</div>
-<div class="line"><a id="l00090" name="l00090"></a><span class="lineno">   90</span>  xcb_ewmh_set_supporting_wm_check(&amp;<a class="code hl_variable" href="a00047.html#a6ef7ac05aa24b3b6b7a5f796e342772d">ewmh</a>, <a class="code hl_variable" href="a00047.html#aa99f6f34aacae8a7cae0725c013f312a">root</a>, window);</div>
-<div class="line"><a id="l00091" name="l00091"></a><span class="lineno">   91</span>  xcb_ewmh_set_wm_name(&amp;<a class="code hl_variable" href="a00047.html#a6ef7ac05aa24b3b6b7a5f796e342772d">ewmh</a>, <a class="code hl_variable" href="a00047.html#aa99f6f34aacae8a7cae0725c013f312a">root</a>, strlen(<span class="stringliteral">&quot;Helios&quot;</span>), <span class="stringliteral">&quot;Helios&quot;</span>);</div>
-<div class="line"><a id="l00092" name="l00092"></a><span class="lineno">   92</span>  xcb_ewmh_set_supporting_wm_check(&amp;<a class="code hl_variable" href="a00047.html#a6ef7ac05aa24b3b6b7a5f796e342772d">ewmh</a>, <a class="code hl_variable" href="a00047.html#aa99f6f34aacae8a7cae0725c013f312a">root</a>, <a class="code hl_variable" href="a00047.html#aa99f6f34aacae8a7cae0725c013f312a">root</a>);</div>
-<div class="line"><a id="l00093" name="l00093"></a><span class="lineno">   93</span>  xcb_ewmh_set_number_of_desktops(&amp;<a class="code hl_variable" href="a00047.html#a6ef7ac05aa24b3b6b7a5f796e342772d">ewmh</a>, 0, 9);</div>
-<div class="line"><a id="l00094" name="l00094"></a><span class="lineno">   94</span>  xcb_ewmh_set_current_desktop(&amp;<a class="code hl_variable" href="a00047.html#a6ef7ac05aa24b3b6b7a5f796e342772d">ewmh</a>, 0, 1);</div>
-<div class="line"><a id="l00095" name="l00095"></a><span class="lineno">   95</span>  xcb_ewmh_set_active_window(&amp;<a class="code hl_variable" href="a00047.html#a6ef7ac05aa24b3b6b7a5f796e342772d">ewmh</a>, 0, <a class="code hl_variable" href="a00047.html#aa99f6f34aacae8a7cae0725c013f312a">root</a>);</div>
-<div class="line"><a id="l00096" name="l00096"></a><span class="lineno">   96</span> </div>
-<div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span>  <a class="code hl_variable" href="a00047.html#a62b2b46f13fe775c8713174c31cbe0dd">windows</a> = {};</div>
+<div class="line"><a id="l00085" name="l00085"></a><span class="lineno">   85</span>  <span class="keyword">auto</span> window = xcb_generate_id(<a class="code hl_variable" href="a00047.html#a63ab96867bfa785c967ece50fcf833a3">conn</a>);</div>
+<div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span> </div>
+<div class="line"><a id="l00087" name="l00087"></a><span class="lineno">   87</span>  xcb_create_window(<a class="code hl_variable" href="a00047.html#a63ab96867bfa785c967ece50fcf833a3">conn</a>, XCB_WINDOW_CLASS_COPY_FROM_PARENT, window, <a class="code hl_variable" href="a00047.html#aa99f6f34aacae8a7cae0725c013f312a">root</a>, 0, 0,</div>
+<div class="line"><a id="l00088" name="l00088"></a><span class="lineno">   88</span>                    1, 1, 0, XCB_WINDOW_CLASS_INPUT_OUTPUT, <a class="code hl_variable" href="a00047.html#a7269169f4599c496c5ddfd9ea69ff5d0">screen</a>-&gt;root_visual,</div>
+<div class="line"><a id="l00089" name="l00089"></a><span class="lineno">   89</span>                    {}, {});</div>
+<div class="line"><a id="l00090" name="l00090"></a><span class="lineno">   90</span> </div>
+<div class="line"><a id="l00091" name="l00091"></a><span class="lineno">   91</span>  xcb_ewmh_set_supported(&amp;<a class="code hl_variable" href="a00047.html#a6ef7ac05aa24b3b6b7a5f796e342772d">ewmh</a>, 0, <a class="code hl_variable" href="a00047.html#a2342631ea44794f224e6946df4888305">supported_atoms</a>.size(), <a class="code hl_variable" href="a00047.html#a9c0700a61bfdc47388d017340e4df115">atoms</a>.get());</div>
+<div class="line"><a id="l00092" name="l00092"></a><span class="lineno">   92</span>  xcb_ewmh_set_supporting_wm_check(&amp;<a class="code hl_variable" href="a00047.html#a6ef7ac05aa24b3b6b7a5f796e342772d">ewmh</a>, <a class="code hl_variable" href="a00047.html#aa99f6f34aacae8a7cae0725c013f312a">root</a>, window);</div>
+<div class="line"><a id="l00093" name="l00093"></a><span class="lineno">   93</span>  xcb_ewmh_set_wm_name(&amp;<a class="code hl_variable" href="a00047.html#a6ef7ac05aa24b3b6b7a5f796e342772d">ewmh</a>, <a class="code hl_variable" href="a00047.html#aa99f6f34aacae8a7cae0725c013f312a">root</a>, strlen(WM_NAME), <span class="stringliteral">&quot;&quot;</span> WM_NAME);</div>
+<div class="line"><a id="l00094" name="l00094"></a><span class="lineno">   94</span>  xcb_ewmh_set_supporting_wm_check(&amp;<a class="code hl_variable" href="a00047.html#a6ef7ac05aa24b3b6b7a5f796e342772d">ewmh</a>, <a class="code hl_variable" href="a00047.html#aa99f6f34aacae8a7cae0725c013f312a">root</a>, <a class="code hl_variable" href="a00047.html#aa99f6f34aacae8a7cae0725c013f312a">root</a>);</div>
+<div class="line"><a id="l00095" name="l00095"></a><span class="lineno">   95</span>  xcb_ewmh_set_number_of_desktops(&amp;<a class="code hl_variable" href="a00047.html#a6ef7ac05aa24b3b6b7a5f796e342772d">ewmh</a>, 0, 9);</div>
+<div class="line"><a id="l00096" name="l00096"></a><span class="lineno">   96</span>  xcb_ewmh_set_current_desktop(&amp;<a class="code hl_variable" href="a00047.html#a6ef7ac05aa24b3b6b7a5f796e342772d">ewmh</a>, 0, 1);</div>
+<div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span>  xcb_ewmh_set_active_window(&amp;<a class="code hl_variable" href="a00047.html#a6ef7ac05aa24b3b6b7a5f796e342772d">ewmh</a>, 0, <a class="code hl_variable" href="a00047.html#aa99f6f34aacae8a7cae0725c013f312a">root</a>);</div>
 <div class="line"><a id="l00098" name="l00098"></a><span class="lineno">   98</span> </div>
-<div class="line"><a id="l00099" name="l00099"></a><span class="lineno">   99</span>  <span class="keywordflow">for</span> (<span class="keyword">auto</span> kbd : <a class="code hl_variable" href="a00047.html#ab2f747f430112a6a69113ea547f0166d">config</a>.<a class="code hl_variable" href="a00043.html#a02e7fcddc4b8e7aa19210c026b74f568">bindings</a>) {</div>
-<div class="line"><a id="l00100" name="l00100"></a><span class="lineno">  100</span>    <a class="code hl_function" href="a00011.html#a5f32436c8d62ad23dac4766401b3b450">grab_key</a>(<a class="code hl_variable" href="a00047.html#a63ab96867bfa785c967ece50fcf833a3">conn</a>, kbd.mod, kbd.keysym, <a class="code hl_variable" href="a00047.html#aa99f6f34aacae8a7cae0725c013f312a">root</a>);</div>
-<div class="line"><a id="l00101" name="l00101"></a><span class="lineno">  101</span>  }</div>
-<div class="line"><a id="l00102" name="l00102"></a><span class="lineno">  102</span> </div>
-<div class="line"><a id="l00103" name="l00103"></a><span class="lineno">  103</span>  <span class="keywordflow">for</span> (<span class="keyword">auto</span> wrkspce = 0; wrkspce &lt; 10; ++wrkspce) {</div>
-<div class="line"><a id="l00104" name="l00104"></a><span class="lineno">  104</span>    <a class="code hl_function" href="a00011.html#a5f32436c8d62ad23dac4766401b3b450">grab_key</a>(<a class="code hl_variable" href="a00047.html#a63ab96867bfa785c967ece50fcf833a3">conn</a>, XK_Super_L, XK_0 + wrkspce, <a class="code hl_variable" href="a00047.html#aa99f6f34aacae8a7cae0725c013f312a">root</a>);</div>
-<div class="line"><a id="l00105" name="l00105"></a><span class="lineno">  105</span>  }</div>
-<div class="line"><a id="l00106" name="l00106"></a><span class="lineno">  106</span> </div>
-<div class="line"><a id="l00107" name="l00107"></a><span class="lineno">  107</span>  *<a class="code hl_variable" href="a00047.html#ade2f3c410160c5cd7bdf250b37db5797">values</a>.get() = <a class="code hl_variable" href="a00047.html#a8f79417fa895a343e12e8989678fede8">event_mask</a>;</div>
-<div class="line"><a id="l00108" name="l00108"></a><span class="lineno">  108</span>  xcb_void_cookie_t event_mask_cookie =</div>
-<div class="line"><a id="l00109" name="l00109"></a><span class="lineno">  109</span>      xcb_change_window_attributes(<a class="code hl_variable" href="a00047.html#a63ab96867bfa785c967ece50fcf833a3">conn</a>, <a class="code hl_variable" href="a00047.html#aa99f6f34aacae8a7cae0725c013f312a">root</a>, XCB_CW_EVENT_MASK, <a class="code hl_variable" href="a00047.html#ade2f3c410160c5cd7bdf250b37db5797">values</a>.get());</div>
-<div class="line"><a id="l00110" name="l00110"></a><span class="lineno">  110</span>  xcb_generic_error_t *em_error = xcb_request_check(<a class="code hl_variable" href="a00047.html#a63ab96867bfa785c967ece50fcf833a3">conn</a>, event_mask_cookie);</div>
-<div class="line"><a id="l00111" name="l00111"></a><span class="lineno">  111</span>  <span class="keywordflow">if</span> (!em_error) {</div>
-<div class="line"><a id="l00112" name="l00112"></a><span class="lineno">  112</span>    <a class="code hl_variable" href="a00047.html#ab62afbcac79e798dc7a2b64d0e5d6f88">logger</a>-&gt;info(<span class="stringliteral">&quot;Request Completed Successfully&quot;</span>);</div>
-<div class="line"><a id="l00113" name="l00113"></a><span class="lineno">  113</span>  } <span class="keywordflow">else</span> {</div>
-<div class="line"><a id="l00114" name="l00114"></a><span class="lineno">  114</span>    <span class="keyword">auto</span> code = em_error-&gt;error_code;</div>
-<div class="line"><a id="l00115" name="l00115"></a><span class="lineno">  115</span>    <a class="code hl_variable" href="a00047.html#ab62afbcac79e798dc7a2b64d0e5d6f88">logger</a>-&gt;error(<span class="stringliteral">&quot;Error in Request: Code {}&quot;</span>, code);</div>
-<div class="line"><a id="l00116" name="l00116"></a><span class="lineno">  116</span>  }</div>
-<div class="line"><a id="l00117" name="l00117"></a><span class="lineno">  117</span>  xcb_flush(<a class="code hl_variable" href="a00047.html#a63ab96867bfa785c967ece50fcf833a3">conn</a>);</div>
-<div class="line"><a id="l00118" name="l00118"></a><span class="lineno">  118</span> </div>
-<div class="line"><a id="l00119" name="l00119"></a><span class="lineno">  119</span>  <a class="code hl_function" href="a00023.html#a8dff618f609eaac1f4a1ad722d21fad7">WMConfig::debugConfig</a>(<a class="code hl_variable" href="a00047.html#ab2f747f430112a6a69113ea547f0166d">config</a>);</div>
+<div class="line"><a id="l00099" name="l00099"></a><span class="lineno">   99</span>  <a class="code hl_variable" href="a00047.html#a62b2b46f13fe775c8713174c31cbe0dd">windows</a> = {};</div>
+<div class="line"><a id="l00100" name="l00100"></a><span class="lineno">  100</span> </div>
+<div class="line"><a id="l00101" name="l00101"></a><span class="lineno">  101</span>  <span class="keywordflow">for</span> (<span class="keyword">auto</span> kbd : <a class="code hl_variable" href="a00047.html#ab2f747f430112a6a69113ea547f0166d">config</a>.<a class="code hl_variable" href="a00043.html#a02e7fcddc4b8e7aa19210c026b74f568">bindings</a>) {</div>
+<div class="line"><a id="l00102" name="l00102"></a><span class="lineno">  102</span>    <a class="code hl_function" href="a00011.html#a5f32436c8d62ad23dac4766401b3b450">grab_key</a>(<a class="code hl_variable" href="a00047.html#a63ab96867bfa785c967ece50fcf833a3">conn</a>, kbd.mod, kbd.keysym, <a class="code hl_variable" href="a00047.html#aa99f6f34aacae8a7cae0725c013f312a">root</a>);</div>
+<div class="line"><a id="l00103" name="l00103"></a><span class="lineno">  103</span>  }</div>
+<div class="line"><a id="l00104" name="l00104"></a><span class="lineno">  104</span> </div>
+<div class="line"><a id="l00105" name="l00105"></a><span class="lineno">  105</span>  <span class="keywordflow">for</span> (<span class="keyword">auto</span> wrkspce = 0; wrkspce &lt; 10; ++wrkspce) {</div>
+<div class="line"><a id="l00106" name="l00106"></a><span class="lineno">  106</span>    <a class="code hl_function" href="a00011.html#a5f32436c8d62ad23dac4766401b3b450">grab_key</a>(<a class="code hl_variable" href="a00047.html#a63ab96867bfa785c967ece50fcf833a3">conn</a>, XK_Super_L, XK_0 + wrkspce, <a class="code hl_variable" href="a00047.html#aa99f6f34aacae8a7cae0725c013f312a">root</a>);</div>
+<div class="line"><a id="l00107" name="l00107"></a><span class="lineno">  107</span>  }</div>
+<div class="line"><a id="l00108" name="l00108"></a><span class="lineno">  108</span> </div>
+<div class="line"><a id="l00109" name="l00109"></a><span class="lineno">  109</span>  *<a class="code hl_variable" href="a00047.html#ade2f3c410160c5cd7bdf250b37db5797">values</a>.get() = <a class="code hl_variable" href="a00047.html#a3d7e7b08e3fbca85dfd5c2bc9f6392a1">event_mask</a>;</div>
+<div class="line"><a id="l00110" name="l00110"></a><span class="lineno">  110</span>  xcb_void_cookie_t event_mask_cookie =</div>
+<div class="line"><a id="l00111" name="l00111"></a><span class="lineno">  111</span>      xcb_change_window_attributes(<a class="code hl_variable" href="a00047.html#a63ab96867bfa785c967ece50fcf833a3">conn</a>, <a class="code hl_variable" href="a00047.html#aa99f6f34aacae8a7cae0725c013f312a">root</a>, XCB_CW_EVENT_MASK, <a class="code hl_variable" href="a00047.html#ade2f3c410160c5cd7bdf250b37db5797">values</a>.get());</div>
+<div class="line"><a id="l00112" name="l00112"></a><span class="lineno">  112</span>  xcb_generic_error_t *em_error = xcb_request_check(<a class="code hl_variable" href="a00047.html#a63ab96867bfa785c967ece50fcf833a3">conn</a>, event_mask_cookie);</div>
+<div class="line"><a id="l00113" name="l00113"></a><span class="lineno">  113</span>  <span class="keywordflow">if</span> (!em_error) {</div>
+<div class="line"><a id="l00114" name="l00114"></a><span class="lineno">  114</span>    <a class="code hl_variable" href="a00047.html#ab62afbcac79e798dc7a2b64d0e5d6f88">logger</a>-&gt;info(<span class="stringliteral">&quot;Request Completed Successfully&quot;</span>);</div>
+<div class="line"><a id="l00115" name="l00115"></a><span class="lineno">  115</span>  } <span class="keywordflow">else</span> {</div>
+<div class="line"><a id="l00116" name="l00116"></a><span class="lineno">  116</span>    <span class="keyword">auto</span> code = em_error-&gt;error_code;</div>
+<div class="line"><a id="l00117" name="l00117"></a><span class="lineno">  117</span>    <a class="code hl_variable" href="a00047.html#ab62afbcac79e798dc7a2b64d0e5d6f88">logger</a>-&gt;error(<span class="stringliteral">&quot;Error in Request: Code {}&quot;</span>, code);</div>
+<div class="line"><a id="l00118" name="l00118"></a><span class="lineno">  118</span>  }</div>
+<div class="line"><a id="l00119" name="l00119"></a><span class="lineno">  119</span>  xcb_flush(<a class="code hl_variable" href="a00047.html#a63ab96867bfa785c967ece50fcf833a3">conn</a>);</div>
 <div class="line"><a id="l00120" name="l00120"></a><span class="lineno">  120</span> </div>
-<div class="line"><a id="l00121" name="l00121"></a><span class="lineno">  121</span>  <span class="keywordflow">for</span> (std::string &amp;program : <a class="code hl_variable" href="a00047.html#ab2f747f430112a6a69113ea547f0166d">config</a>.<a class="code hl_variable" href="a00043.html#a9f4ab506e541a05eb84d99123447f5db">startup</a>) {</div>
-<div class="line"><a id="l00122" name="l00122"></a><span class="lineno">  122</span>    <a class="code hl_function" href="a00014.html#a4302b3031ced54c6df8e67d11c6894e3">spawn</a>(program.c_str());</div>
-<div class="line"><a id="l00123" name="l00123"></a><span class="lineno">  123</span>  }</div>
-<div class="line"><a id="l00124" name="l00124"></a><span class="lineno">  124</span> </div>
-<div class="line"><a id="l00125" name="l00125"></a><span class="lineno">  125</span>  <span class="keywordflow">if</span> (xcb_cursor_context_new(<a class="code hl_variable" href="a00047.html#a63ab96867bfa785c967ece50fcf833a3">conn</a>, <a class="code hl_variable" href="a00047.html#a7269169f4599c496c5ddfd9ea69ff5d0">screen</a>, &amp;<a class="code hl_variable" href="a00047.html#a32bf6a2ef76a2e44a1ad78cc2ace574a">cursor_context</a>) != 0) {</div>
-<div class="line"><a id="l00126" name="l00126"></a><span class="lineno">  126</span>    <a class="code hl_variable" href="a00047.html#ab62afbcac79e798dc7a2b64d0e5d6f88">logger</a>-&gt;error(<span class="stringliteral">&quot;Unable to create cursor context&quot;</span>);</div>
-<div class="line"><a id="l00127" name="l00127"></a><span class="lineno">  127</span>    <span class="keywordflow">throw</span> std::runtime_error(<span class="stringliteral">&quot;Cursor context creation failed&quot;</span>);</div>
-<div class="line"><a id="l00128" name="l00128"></a><span class="lineno">  128</span>  }</div>
-<div class="line"><a id="l00129" name="l00129"></a><span class="lineno">  129</span> </div>
-<div class="line"><a id="l00130" name="l00130"></a><span class="lineno">  130</span>  <a class="code hl_variable" href="a00047.html#a5d7f56179142f57adac06388efb3e7d5">cursor</a> = xcb_cursor_load_cursor(<a class="code hl_variable" href="a00047.html#a32bf6a2ef76a2e44a1ad78cc2ace574a">cursor_context</a>, <span class="stringliteral">&quot;left_ptr&quot;</span>);</div>
-<div class="line"><a id="l00131" name="l00131"></a><span class="lineno">  131</span>  <span class="keywordflow">if</span> (<a class="code hl_variable" href="a00047.html#a5d7f56179142f57adac06388efb3e7d5">cursor</a> == XCB_CURSOR_NONE) {</div>
-<div class="line"><a id="l00132" name="l00132"></a><span class="lineno">  132</span>    <a class="code hl_variable" href="a00047.html#ab62afbcac79e798dc7a2b64d0e5d6f88">logger</a>-&gt;error(<span class="stringliteral">&quot;Failed to load cursor&quot;</span>);</div>
-<div class="line"><a id="l00133" name="l00133"></a><span class="lineno">  133</span>    xcb_cursor_context_free(<a class="code hl_variable" href="a00047.html#a32bf6a2ef76a2e44a1ad78cc2ace574a">cursor_context</a>);</div>
-<div class="line"><a id="l00134" name="l00134"></a><span class="lineno">  134</span>    <span class="keywordflow">throw</span> std::runtime_error(<span class="stringliteral">&quot;Unable to create cursor context&quot;</span>);</div>
-<div class="line"><a id="l00135" name="l00135"></a><span class="lineno">  135</span>  }</div>
-<div class="line"><a id="l00136" name="l00136"></a><span class="lineno">  136</span> </div>
-<div class="line"><a id="l00137" name="l00137"></a><span class="lineno">  137</span>  xcb_void_cookie_t cursor_cookie =</div>
-<div class="line"><a id="l00138" name="l00138"></a><span class="lineno">  138</span>      xcb_change_window_attributes(<a class="code hl_variable" href="a00047.html#a63ab96867bfa785c967ece50fcf833a3">conn</a>, <a class="code hl_variable" href="a00047.html#aa99f6f34aacae8a7cae0725c013f312a">root</a>, XCB_CW_CURSOR, &amp;<a class="code hl_variable" href="a00047.html#a5d7f56179142f57adac06388efb3e7d5">cursor</a>);</div>
-<div class="line"><a id="l00139" name="l00139"></a><span class="lineno">  139</span>  xcb_generic_error_t *c_error = xcb_request_check(<a class="code hl_variable" href="a00047.html#a63ab96867bfa785c967ece50fcf833a3">conn</a>, cursor_cookie);</div>
-<div class="line"><a id="l00140" name="l00140"></a><span class="lineno">  140</span>  <span class="keywordflow">if</span> (!c_error) {</div>
-<div class="line"><a id="l00141" name="l00141"></a><span class="lineno">  141</span>    <a class="code hl_variable" href="a00047.html#ab62afbcac79e798dc7a2b64d0e5d6f88">logger</a>-&gt;info(<span class="stringliteral">&quot;Request Completed Successfully&quot;</span>);</div>
-<div class="line"><a id="l00142" name="l00142"></a><span class="lineno">  142</span>  } <span class="keywordflow">else</span> {</div>
-<div class="line"><a id="l00143" name="l00143"></a><span class="lineno">  143</span>    <span class="keyword">auto</span> code = c_error-&gt;error_code;</div>
-<div class="line"><a id="l00144" name="l00144"></a><span class="lineno">  144</span>    <a class="code hl_variable" href="a00047.html#ab62afbcac79e798dc7a2b64d0e5d6f88">logger</a>-&gt;error(<span class="stringliteral">&quot;Error in Request: Code {}&quot;</span>, code);</div>
-<div class="line"><a id="l00145" name="l00145"></a><span class="lineno">  145</span>  }</div>
-<div class="line"><a id="l00146" name="l00146"></a><span class="lineno">  146</span>  xcb_flush(<a class="code hl_variable" href="a00047.html#a63ab96867bfa785c967ece50fcf833a3">conn</a>);</div>
-<div class="line"><a id="l00147" name="l00147"></a><span class="lineno">  147</span> </div>
-<div class="line"><a id="l00148" name="l00148"></a><span class="lineno">  148</span>  <a class="code hl_variable" href="a00047.html#ab62afbcac79e798dc7a2b64d0e5d6f88">logger</a>-&gt;info(<span class="stringliteral">&quot;WM initialized, ready to go!&quot;</span>);</div>
-<div class="line"><a id="l00149" name="l00149"></a><span class="lineno">  149</span>}</div>
+<div class="line"><a id="l00121" name="l00121"></a><span class="lineno">  121</span>  <a class="code hl_function" href="a00023.html#a8dff618f609eaac1f4a1ad722d21fad7">WMConfig::debugConfig</a>(<a class="code hl_variable" href="a00047.html#ab2f747f430112a6a69113ea547f0166d">config</a>);</div>
+<div class="line"><a id="l00122" name="l00122"></a><span class="lineno">  122</span> </div>
+<div class="line"><a id="l00123" name="l00123"></a><span class="lineno">  123</span>  <span class="keywordflow">for</span> (std::string &amp;program : <a class="code hl_variable" href="a00047.html#ab2f747f430112a6a69113ea547f0166d">config</a>.<a class="code hl_variable" href="a00043.html#a9f4ab506e541a05eb84d99123447f5db">startup</a>) {</div>
+<div class="line"><a id="l00124" name="l00124"></a><span class="lineno">  124</span>    <a class="code hl_function" href="a00014.html#a4302b3031ced54c6df8e67d11c6894e3">spawn</a>(program.c_str());</div>
+<div class="line"><a id="l00125" name="l00125"></a><span class="lineno">  125</span>  }</div>
+<div class="line"><a id="l00126" name="l00126"></a><span class="lineno">  126</span> </div>
+<div class="line"><a id="l00127" name="l00127"></a><span class="lineno">  127</span>  <span class="keywordflow">if</span> (xcb_cursor_context_new(<a class="code hl_variable" href="a00047.html#a63ab96867bfa785c967ece50fcf833a3">conn</a>, <a class="code hl_variable" href="a00047.html#a7269169f4599c496c5ddfd9ea69ff5d0">screen</a>, &amp;<a class="code hl_variable" href="a00047.html#a32bf6a2ef76a2e44a1ad78cc2ace574a">cursor_context</a>) != 0) {</div>
+<div class="line"><a id="l00128" name="l00128"></a><span class="lineno">  128</span>    <a class="code hl_variable" href="a00047.html#ab62afbcac79e798dc7a2b64d0e5d6f88">logger</a>-&gt;error(<span class="stringliteral">&quot;Unable to create cursor context&quot;</span>);</div>
+<div class="line"><a id="l00129" name="l00129"></a><span class="lineno">  129</span>    <span class="keywordflow">throw</span> std::runtime_error(<span class="stringliteral">&quot;Cursor context creation failed&quot;</span>);</div>
+<div class="line"><a id="l00130" name="l00130"></a><span class="lineno">  130</span>  }</div>
+<div class="line"><a id="l00131" name="l00131"></a><span class="lineno">  131</span> </div>
+<div class="line"><a id="l00132" name="l00132"></a><span class="lineno">  132</span>  <a class="code hl_variable" href="a00047.html#a5d7f56179142f57adac06388efb3e7d5">cursor</a> = xcb_cursor_load_cursor(<a class="code hl_variable" href="a00047.html#a32bf6a2ef76a2e44a1ad78cc2ace574a">cursor_context</a>, <span class="stringliteral">&quot;left_ptr&quot;</span>);</div>
+<div class="line"><a id="l00133" name="l00133"></a><span class="lineno">  133</span>  <span class="keywordflow">if</span> (<a class="code hl_variable" href="a00047.html#a5d7f56179142f57adac06388efb3e7d5">cursor</a> == XCB_CURSOR_NONE) {</div>
+<div class="line"><a id="l00134" name="l00134"></a><span class="lineno">  134</span>    <a class="code hl_variable" href="a00047.html#ab62afbcac79e798dc7a2b64d0e5d6f88">logger</a>-&gt;error(<span class="stringliteral">&quot;Failed to load cursor&quot;</span>);</div>
+<div class="line"><a id="l00135" name="l00135"></a><span class="lineno">  135</span>    xcb_cursor_context_free(<a class="code hl_variable" href="a00047.html#a32bf6a2ef76a2e44a1ad78cc2ace574a">cursor_context</a>);</div>
+<div class="line"><a id="l00136" name="l00136"></a><span class="lineno">  136</span>    <span class="keywordflow">throw</span> std::runtime_error(<span class="stringliteral">&quot;Unable to create cursor context&quot;</span>);</div>
+<div class="line"><a id="l00137" name="l00137"></a><span class="lineno">  137</span>  }</div>
+<div class="line"><a id="l00138" name="l00138"></a><span class="lineno">  138</span> </div>
+<div class="line"><a id="l00139" name="l00139"></a><span class="lineno">  139</span>  xcb_void_cookie_t cursor_cookie =</div>
+<div class="line"><a id="l00140" name="l00140"></a><span class="lineno">  140</span>      xcb_change_window_attributes(<a class="code hl_variable" href="a00047.html#a63ab96867bfa785c967ece50fcf833a3">conn</a>, <a class="code hl_variable" href="a00047.html#aa99f6f34aacae8a7cae0725c013f312a">root</a>, XCB_CW_CURSOR, &amp;<a class="code hl_variable" href="a00047.html#a5d7f56179142f57adac06388efb3e7d5">cursor</a>);</div>
+<div class="line"><a id="l00141" name="l00141"></a><span class="lineno">  141</span>  xcb_generic_error_t *c_error = xcb_request_check(<a class="code hl_variable" href="a00047.html#a63ab96867bfa785c967ece50fcf833a3">conn</a>, cursor_cookie);</div>
+<div class="line"><a id="l00142" name="l00142"></a><span class="lineno">  142</span>  <span class="keywordflow">if</span> (!c_error) {</div>
+<div class="line"><a id="l00143" name="l00143"></a><span class="lineno">  143</span>    <a class="code hl_variable" href="a00047.html#ab62afbcac79e798dc7a2b64d0e5d6f88">logger</a>-&gt;info(<span class="stringliteral">&quot;Request Completed Successfully&quot;</span>);</div>
+<div class="line"><a id="l00144" name="l00144"></a><span class="lineno">  144</span>  } <span class="keywordflow">else</span> {</div>
+<div class="line"><a id="l00145" name="l00145"></a><span class="lineno">  145</span>    <span class="keyword">auto</span> code = c_error-&gt;error_code;</div>
+<div class="line"><a id="l00146" name="l00146"></a><span class="lineno">  146</span>    <a class="code hl_variable" href="a00047.html#ab62afbcac79e798dc7a2b64d0e5d6f88">logger</a>-&gt;error(<span class="stringliteral">&quot;Error in Request: Code {}&quot;</span>, code);</div>
+<div class="line"><a id="l00147" name="l00147"></a><span class="lineno">  147</span>  }</div>
+<div class="line"><a id="l00148" name="l00148"></a><span class="lineno">  148</span>  xcb_flush(<a class="code hl_variable" href="a00047.html#a63ab96867bfa785c967ece50fcf833a3">conn</a>);</div>
+<div class="line"><a id="l00149" name="l00149"></a><span class="lineno">  149</span> </div>
+<div class="line"><a id="l00150" name="l00150"></a><span class="lineno">  150</span>  <a class="code hl_variable" href="a00047.html#ab62afbcac79e798dc7a2b64d0e5d6f88">logger</a>-&gt;info(<span class="stringliteral">&quot;WM initialized, ready to go!&quot;</span>);</div>
+<div class="line"><a id="l00151" name="l00151"></a><span class="lineno">  151</span>}</div>
 </div>
-<div class="line"><a id="l00150" name="l00150"></a><span class="lineno">  150</span> </div>
-<div class="foldopen" id="foldopen00163" data-start="{" data-end="}">
-<div class="line"><a id="l00163" name="l00163"></a><span class="lineno"><a class="line" href="a00047.html#a034602ddebacb09dd0ae7ed262f20c57">  163</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="a00047.html#a034602ddebacb09dd0ae7ed262f20c57">WindowManager::tile_windows</a>() {</div>
-<div class="line"><a id="l00164" name="l00164"></a><span class="lineno">  164</span>  <span class="keywordtype">int</span> num_windows = <a class="code hl_variable" href="a00047.html#a62b2b46f13fe775c8713174c31cbe0dd">windows</a>.size();</div>
-<div class="line"><a id="l00165" name="l00165"></a><span class="lineno">  165</span>  <span class="keywordflow">if</span> (num_windows == 0)</div>
-<div class="line"><a id="l00166" name="l00166"></a><span class="lineno">  166</span>    <span class="keywordflow">return</span>;</div>
-<div class="line"><a id="l00167" name="l00167"></a><span class="lineno">  167</span> </div>
-<div class="line"><a id="l00168" name="l00168"></a><span class="lineno">  168</span>  <span class="keywordtype">int</span> screen_width = <a class="code hl_variable" href="a00047.html#a7269169f4599c496c5ddfd9ea69ff5d0">screen</a>-&gt;width_in_pixels;</div>
-<div class="line"><a id="l00169" name="l00169"></a><span class="lineno">  169</span>  <span class="keywordtype">int</span> screen_height = <a class="code hl_variable" href="a00047.html#a7269169f4599c496c5ddfd9ea69ff5d0">screen</a>-&gt;height_in_pixels;</div>
-<div class="line"><a id="l00170" name="l00170"></a><span class="lineno">  170</span>  <span class="keywordtype">int</span> gap = <a class="code hl_variable" href="a00047.html#ab2f747f430112a6a69113ea547f0166d">config</a>.<a class="code hl_variable" href="a00043.html#ad2ed246d0db6e3ebcd0b19b8a5167879">window</a>.<a class="code hl_variable" href="a00031.html#a8b4fa7a12dbeed84e6ceaa279fe81d6a">gap</a>;</div>
-<div class="line"><a id="l00171" name="l00171"></a><span class="lineno">  171</span>  <span class="keywordtype">int</span> border_width = <a class="code hl_variable" href="a00047.html#ab2f747f430112a6a69113ea547f0166d">config</a>.<a class="code hl_variable" href="a00043.html#a63bc0ad4b52799850a1a31cad3fa8d54">border</a>.<a class="code hl_variable" href="a00027.html#a5b0ab13bba1084b8c92a5663d5bbd35b">width</a>;</div>
-<div class="line"><a id="l00172" name="l00172"></a><span class="lineno">  172</span> </div>
-<div class="line"><a id="l00173" name="l00173"></a><span class="lineno">  173</span>  <span class="keywordflow">if</span> (num_windows == 1) {</div>
-<div class="line"><a id="l00174" name="l00174"></a><span class="lineno">  174</span>    uint32_t <a class="code hl_variable" href="a00047.html#ade2f3c410160c5cd7bdf250b37db5797">values</a>[4] = {<span class="keyword">static_cast&lt;</span>uint32_t<span class="keyword">&gt;</span>(gap),</div>
-<div class="line"><a id="l00175" name="l00175"></a><span class="lineno">  175</span>                          <span class="keyword">static_cast&lt;</span>uint32_t<span class="keyword">&gt;</span>(gap),</div>
-<div class="line"><a id="l00176" name="l00176"></a><span class="lineno">  176</span>                          <span class="keyword">static_cast&lt;</span>uint32_t<span class="keyword">&gt;</span>(screen_width - 2 * gap),</div>
-<div class="line"><a id="l00177" name="l00177"></a><span class="lineno">  177</span>                          <span class="keyword">static_cast&lt;</span>uint32_t<span class="keyword">&gt;</span>(screen_height - 2 * gap)};</div>
-<div class="line"><a id="l00178" name="l00178"></a><span class="lineno">  178</span> </div>
-<div class="line"><a id="l00179" name="l00179"></a><span class="lineno">  179</span>    uint32_t border_values[1] = {<span class="keyword">static_cast&lt;</span>uint32_t<span class="keyword">&gt;</span>(border_width)};</div>
-<div class="line"><a id="l00180" name="l00180"></a><span class="lineno">  180</span>    xcb_configure_window(<a class="code hl_variable" href="a00047.html#a63ab96867bfa785c967ece50fcf833a3">conn</a>, <a class="code hl_variable" href="a00047.html#a62b2b46f13fe775c8713174c31cbe0dd">windows</a>[0], XCB_CONFIG_WINDOW_BORDER_WIDTH,</div>
-<div class="line"><a id="l00181" name="l00181"></a><span class="lineno">  181</span>                         border_values);</div>
-<div class="line"><a id="l00182" name="l00182"></a><span class="lineno">  182</span>    xcb_configure_window(<a class="code hl_variable" href="a00047.html#a63ab96867bfa785c967ece50fcf833a3">conn</a>, <a class="code hl_variable" href="a00047.html#a62b2b46f13fe775c8713174c31cbe0dd">windows</a>[0],</div>
-<div class="line"><a id="l00183" name="l00183"></a><span class="lineno">  183</span>                         XCB_CONFIG_WINDOW_X | XCB_CONFIG_WINDOW_Y |</div>
-<div class="line"><a id="l00184" name="l00184"></a><span class="lineno">  184</span>                             XCB_CONFIG_WINDOW_WIDTH | XCB_CONFIG_WINDOW_HEIGHT,</div>
-<div class="line"><a id="l00185" name="l00185"></a><span class="lineno">  185</span>                         <a class="code hl_variable" href="a00047.html#ade2f3c410160c5cd7bdf250b37db5797">values</a>);</div>
-<div class="line"><a id="l00186" name="l00186"></a><span class="lineno">  186</span>    <a class="code hl_function" href="a00047.html#a6bcb4661cf62ac13a5b4def37f62d129">set_window_border_color</a>(<a class="code hl_variable" href="a00047.html#a62b2b46f13fe775c8713174c31cbe0dd">windows</a>[0], <a class="code hl_variable" href="a00047.html#ab2f747f430112a6a69113ea547f0166d">config</a>.<a class="code hl_variable" href="a00043.html#a63bc0ad4b52799850a1a31cad3fa8d54">border</a>.<a class="code hl_variable" href="a00027.html#a9e2e39f44af0f2ab73e605dfcc7c0af1">color</a>);</div>
-<div class="line"><a id="l00187" name="l00187"></a><span class="lineno">  187</span>    xcb_flush(<a class="code hl_variable" href="a00047.html#a63ab96867bfa785c967ece50fcf833a3">conn</a>);</div>
-<div class="line"><a id="l00188" name="l00188"></a><span class="lineno">  188</span>    <span class="keywordflow">return</span>;</div>
-<div class="line"><a id="l00189" name="l00189"></a><span class="lineno">  189</span>  }</div>
-<div class="line"><a id="l00190" name="l00190"></a><span class="lineno">  190</span> </div>
-<div class="line"><a id="l00191" name="l00191"></a><span class="lineno">  191</span>  <span class="keyword">struct </span>WindowRect {</div>
-<div class="line"><a id="l00192" name="l00192"></a><span class="lineno">  192</span>    <span class="keywordtype">int</span> x, y, width, height;</div>
-<div class="line"><a id="l00193" name="l00193"></a><span class="lineno">  193</span>  };</div>
-<div class="line"><a id="l00194" name="l00194"></a><span class="lineno">  194</span>  std::vector&lt;WindowRect&gt; window_rects(num_windows);</div>
-<div class="line"><a id="l00195" name="l00195"></a><span class="lineno">  195</span> </div>
-<div class="line"><a id="l00196" name="l00196"></a><span class="lineno">  196</span>  window_rects[0] = {gap, gap, screen_width - 2 * gap, screen_height - 2 * gap};</div>
-<div class="line"><a id="l00197" name="l00197"></a><span class="lineno">  197</span> </div>
-<div class="line"><a id="l00198" name="l00198"></a><span class="lineno">  198</span>  <span class="keywordtype">bool</span> split_horizontal = <span class="keyword">false</span>;</div>
-<div class="line"><a id="l00199" name="l00199"></a><span class="lineno">  199</span>  <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 1; i &lt; num_windows; i++) {</div>
-<div class="line"><a id="l00200" name="l00200"></a><span class="lineno">  200</span> </div>
-<div class="line"><a id="l00201" name="l00201"></a><span class="lineno">  201</span>    <span class="keywordtype">int</span> largest_idx = i - 1;</div>
-<div class="line"><a id="l00202" name="l00202"></a><span class="lineno">  202</span>    <span class="keywordtype">int</span> largest_area = 0;</div>
-<div class="line"><a id="l00203" name="l00203"></a><span class="lineno">  203</span>    <span class="keywordflow">for</span> (<span class="keywordtype">int</span> j = 0; j &lt; i; j++) {</div>
-<div class="line"><a id="l00204" name="l00204"></a><span class="lineno">  204</span>      <span class="keywordtype">int</span> area = window_rects[j].width * window_rects[j].height;</div>
-<div class="line"><a id="l00205" name="l00205"></a><span class="lineno">  205</span>      <span class="keywordflow">if</span> (area &gt; largest_area) {</div>
-<div class="line"><a id="l00206" name="l00206"></a><span class="lineno">  206</span>        largest_area = area;</div>
-<div class="line"><a id="l00207" name="l00207"></a><span class="lineno">  207</span>        largest_idx = j;</div>
-<div class="line"><a id="l00208" name="l00208"></a><span class="lineno">  208</span>      }</div>
-<div class="line"><a id="l00209" name="l00209"></a><span class="lineno">  209</span>    }</div>
-<div class="line"><a id="l00210" name="l00210"></a><span class="lineno">  210</span> </div>
-<div class="line"><a id="l00211" name="l00211"></a><span class="lineno">  211</span>    WindowRect &amp;to_split = window_rects[largest_idx];</div>
-<div class="line"><a id="l00212" name="l00212"></a><span class="lineno">  212</span>    WindowRect &amp;new_window = window_rects[i];</div>
-<div class="line"><a id="l00213" name="l00213"></a><span class="lineno">  213</span> </div>
-<div class="line"><a id="l00214" name="l00214"></a><span class="lineno">  214</span>    <span class="keywordflow">if</span> (split_horizontal) {</div>
-<div class="line"><a id="l00215" name="l00215"></a><span class="lineno">  215</span> </div>
-<div class="line"><a id="l00216" name="l00216"></a><span class="lineno">  216</span>      <span class="keywordtype">int</span> new_height = (to_split.height - gap) / 2;</div>
-<div class="line"><a id="l00217" name="l00217"></a><span class="lineno">  217</span>      new_window = {to_split.x, to_split.y + new_height + gap, to_split.width,</div>
-<div class="line"><a id="l00218" name="l00218"></a><span class="lineno">  218</span>                    to_split.height - new_height - gap};</div>
-<div class="line"><a id="l00219" name="l00219"></a><span class="lineno">  219</span>      to_split.height = new_height;</div>
-<div class="line"><a id="l00220" name="l00220"></a><span class="lineno">  220</span>    } <span class="keywordflow">else</span> {</div>
-<div class="line"><a id="l00221" name="l00221"></a><span class="lineno">  221</span> </div>
-<div class="line"><a id="l00222" name="l00222"></a><span class="lineno">  222</span>      <span class="keywordtype">int</span> new_width = (to_split.width - gap) / 2;</div>
-<div class="line"><a id="l00223" name="l00223"></a><span class="lineno">  223</span>      new_window = {to_split.x + new_width + gap, to_split.y,</div>
-<div class="line"><a id="l00224" name="l00224"></a><span class="lineno">  224</span>                    to_split.width - new_width - gap, to_split.height};</div>
-<div class="line"><a id="l00225" name="l00225"></a><span class="lineno">  225</span>      to_split.width = new_width;</div>
-<div class="line"><a id="l00226" name="l00226"></a><span class="lineno">  226</span>    }</div>
-<div class="line"><a id="l00227" name="l00227"></a><span class="lineno">  227</span> </div>
-<div class="line"><a id="l00228" name="l00228"></a><span class="lineno">  228</span>    split_horizontal = !split_horizontal;</div>
-<div class="line"><a id="l00229" name="l00229"></a><span class="lineno">  229</span>  }</div>
-<div class="line"><a id="l00230" name="l00230"></a><span class="lineno">  230</span> </div>
-<div class="line"><a id="l00231" name="l00231"></a><span class="lineno">  231</span>  <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; num_windows; i++) {</div>
-<div class="line"><a id="l00232" name="l00232"></a><span class="lineno">  232</span>    <span class="keyword">const</span> <span class="keyword">auto</span> &amp;rect = window_rects[i];</div>
-<div class="line"><a id="l00233" name="l00233"></a><span class="lineno">  233</span>    uint32_t <a class="code hl_variable" href="a00047.html#ade2f3c410160c5cd7bdf250b37db5797">values</a>[4] = {</div>
-<div class="line"><a id="l00234" name="l00234"></a><span class="lineno">  234</span>        <span class="keyword">static_cast&lt;</span>uint32_t<span class="keyword">&gt;</span>(rect.x), <span class="keyword">static_cast&lt;</span>uint32_t<span class="keyword">&gt;</span>(rect.y),</div>
-<div class="line"><a id="l00235" name="l00235"></a><span class="lineno">  235</span>        <span class="keyword">static_cast&lt;</span>uint32_t<span class="keyword">&gt;</span>(rect.width), <span class="keyword">static_cast&lt;</span>uint32_t<span class="keyword">&gt;</span>(rect.height)};</div>
-<div class="line"><a id="l00236" name="l00236"></a><span class="lineno">  236</span> </div>
-<div class="line"><a id="l00237" name="l00237"></a><span class="lineno">  237</span>    uint32_t border_values[1] = {<span class="keyword">static_cast&lt;</span>uint32_t<span class="keyword">&gt;</span>(border_width)};</div>
-<div class="line"><a id="l00238" name="l00238"></a><span class="lineno">  238</span>    xcb_configure_window(<a class="code hl_variable" href="a00047.html#a63ab96867bfa785c967ece50fcf833a3">conn</a>, <a class="code hl_variable" href="a00047.html#a62b2b46f13fe775c8713174c31cbe0dd">windows</a>[i], XCB_CONFIG_WINDOW_BORDER_WIDTH,</div>
-<div class="line"><a id="l00239" name="l00239"></a><span class="lineno">  239</span>                         border_values);</div>
-<div class="line"><a id="l00240" name="l00240"></a><span class="lineno">  240</span>    xcb_configure_window(<a class="code hl_variable" href="a00047.html#a63ab96867bfa785c967ece50fcf833a3">conn</a>, <a class="code hl_variable" href="a00047.html#a62b2b46f13fe775c8713174c31cbe0dd">windows</a>[i],</div>
-<div class="line"><a id="l00241" name="l00241"></a><span class="lineno">  241</span>                         XCB_CONFIG_WINDOW_X | XCB_CONFIG_WINDOW_Y |</div>
-<div class="line"><a id="l00242" name="l00242"></a><span class="lineno">  242</span>                             XCB_CONFIG_WINDOW_WIDTH | XCB_CONFIG_WINDOW_HEIGHT,</div>
-<div class="line"><a id="l00243" name="l00243"></a><span class="lineno">  243</span>                         <a class="code hl_variable" href="a00047.html#ade2f3c410160c5cd7bdf250b37db5797">values</a>);</div>
-<div class="line"><a id="l00244" name="l00244"></a><span class="lineno">  244</span>    <a class="code hl_function" href="a00047.html#a6bcb4661cf62ac13a5b4def37f62d129">set_window_border_color</a>(<a class="code hl_variable" href="a00047.html#a62b2b46f13fe775c8713174c31cbe0dd">windows</a>[i], <a class="code hl_variable" href="a00047.html#ab2f747f430112a6a69113ea547f0166d">config</a>.<a class="code hl_variable" href="a00043.html#a63bc0ad4b52799850a1a31cad3fa8d54">border</a>.<a class="code hl_variable" href="a00027.html#a9e2e39f44af0f2ab73e605dfcc7c0af1">color</a>);</div>
-<div class="line"><a id="l00245" name="l00245"></a><span class="lineno">  245</span>  }</div>
-<div class="line"><a id="l00246" name="l00246"></a><span class="lineno">  246</span> </div>
-<div class="line"><a id="l00247" name="l00247"></a><span class="lineno">  247</span>  xcb_flush(<a class="code hl_variable" href="a00047.html#a63ab96867bfa785c967ece50fcf833a3">conn</a>);</div>
-<div class="line"><a id="l00248" name="l00248"></a><span class="lineno">  248</span>}</div>
+<div class="line"><a id="l00152" name="l00152"></a><span class="lineno">  152</span> </div>
+<div class="foldopen" id="foldopen00166" data-start="{" data-end="}">
+<div class="line"><a id="l00166" name="l00166"></a><span class="lineno"><a class="line" href="a00047.html#a034602ddebacb09dd0ae7ed262f20c57">  166</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="a00047.html#a034602ddebacb09dd0ae7ed262f20c57">WindowManager::tile_windows</a>() {</div>
+<div class="line"><a id="l00167" name="l00167"></a><span class="lineno">  167</span>  <span class="keywordtype">int</span> num_windows = <a class="code hl_variable" href="a00047.html#a62b2b46f13fe775c8713174c31cbe0dd">windows</a>.size();</div>
+<div class="line"><a id="l00168" name="l00168"></a><span class="lineno">  168</span>  <span class="keywordflow">if</span> (num_windows == 0)</div>
+<div class="line"><a id="l00169" name="l00169"></a><span class="lineno">  169</span>    <span class="keywordflow">return</span>;</div>
+<div class="line"><a id="l00170" name="l00170"></a><span class="lineno">  170</span> </div>
+<div class="line"><a id="l00171" name="l00171"></a><span class="lineno">  171</span>  <span class="keywordtype">int</span> screen_width = <a class="code hl_variable" href="a00047.html#a7269169f4599c496c5ddfd9ea69ff5d0">screen</a>-&gt;width_in_pixels;</div>
+<div class="line"><a id="l00172" name="l00172"></a><span class="lineno">  172</span>  <span class="keywordtype">int</span> screen_height = <a class="code hl_variable" href="a00047.html#a7269169f4599c496c5ddfd9ea69ff5d0">screen</a>-&gt;height_in_pixels;</div>
+<div class="line"><a id="l00173" name="l00173"></a><span class="lineno">  173</span>  <span class="keywordtype">int</span> gap = <a class="code hl_variable" href="a00047.html#ab2f747f430112a6a69113ea547f0166d">config</a>.<a class="code hl_variable" href="a00043.html#ad2ed246d0db6e3ebcd0b19b8a5167879">window</a>.<a class="code hl_variable" href="a00031.html#a8b4fa7a12dbeed84e6ceaa279fe81d6a">gap</a>;</div>
+<div class="line"><a id="l00174" name="l00174"></a><span class="lineno">  174</span>  <span class="keywordtype">int</span> border_width = <a class="code hl_variable" href="a00047.html#ab2f747f430112a6a69113ea547f0166d">config</a>.<a class="code hl_variable" href="a00043.html#a63bc0ad4b52799850a1a31cad3fa8d54">border</a>.<a class="code hl_variable" href="a00027.html#a5b0ab13bba1084b8c92a5663d5bbd35b">width</a>;</div>
+<div class="line"><a id="l00175" name="l00175"></a><span class="lineno">  175</span> </div>
+<div class="line"><a id="l00176" name="l00176"></a><span class="lineno">  176</span>  <span class="keywordflow">if</span> (num_windows == 1) {</div>
+<div class="line"><a id="l00177" name="l00177"></a><span class="lineno">  177</span>    uint32_t <a class="code hl_variable" href="a00047.html#ade2f3c410160c5cd7bdf250b37db5797">values</a>[4] = {<span class="keyword">static_cast&lt;</span>uint32_t<span class="keyword">&gt;</span>(gap),</div>
+<div class="line"><a id="l00178" name="l00178"></a><span class="lineno">  178</span>                          <span class="keyword">static_cast&lt;</span>uint32_t<span class="keyword">&gt;</span>(gap),</div>
+<div class="line"><a id="l00179" name="l00179"></a><span class="lineno">  179</span>                          <span class="keyword">static_cast&lt;</span>uint32_t<span class="keyword">&gt;</span>(screen_width - 2 * gap),</div>
+<div class="line"><a id="l00180" name="l00180"></a><span class="lineno">  180</span>                          <span class="keyword">static_cast&lt;</span>uint32_t<span class="keyword">&gt;</span>(screen_height - 2 * gap)};</div>
+<div class="line"><a id="l00181" name="l00181"></a><span class="lineno">  181</span> </div>
+<div class="line"><a id="l00182" name="l00182"></a><span class="lineno">  182</span>    uint32_t border_values[1] = {<span class="keyword">static_cast&lt;</span>uint32_t<span class="keyword">&gt;</span>(border_width)};</div>
+<div class="line"><a id="l00183" name="l00183"></a><span class="lineno">  183</span>    xcb_configure_window(<a class="code hl_variable" href="a00047.html#a63ab96867bfa785c967ece50fcf833a3">conn</a>, <a class="code hl_variable" href="a00047.html#a62b2b46f13fe775c8713174c31cbe0dd">windows</a>[0], XCB_CONFIG_WINDOW_BORDER_WIDTH,</div>
+<div class="line"><a id="l00184" name="l00184"></a><span class="lineno">  184</span>                         border_values);</div>
+<div class="line"><a id="l00185" name="l00185"></a><span class="lineno">  185</span>    xcb_configure_window(<a class="code hl_variable" href="a00047.html#a63ab96867bfa785c967ece50fcf833a3">conn</a>, <a class="code hl_variable" href="a00047.html#a62b2b46f13fe775c8713174c31cbe0dd">windows</a>[0],</div>
+<div class="line"><a id="l00186" name="l00186"></a><span class="lineno">  186</span>                         XCB_CONFIG_WINDOW_X | XCB_CONFIG_WINDOW_Y |</div>
+<div class="line"><a id="l00187" name="l00187"></a><span class="lineno">  187</span>                             XCB_CONFIG_WINDOW_WIDTH | XCB_CONFIG_WINDOW_HEIGHT,</div>
+<div class="line"><a id="l00188" name="l00188"></a><span class="lineno">  188</span>                         <a class="code hl_variable" href="a00047.html#ade2f3c410160c5cd7bdf250b37db5797">values</a>);</div>
+<div class="line"><a id="l00189" name="l00189"></a><span class="lineno">  189</span>    xcb_set_input_focus(<a class="code hl_variable" href="a00047.html#a63ab96867bfa785c967ece50fcf833a3">conn</a>, XCB_INPUT_FOCUS_POINTER_ROOT, <a class="code hl_variable" href="a00047.html#a62b2b46f13fe775c8713174c31cbe0dd">windows</a>[0],</div>
+<div class="line"><a id="l00190" name="l00190"></a><span class="lineno">  190</span>                        XCB_CURRENT_TIME);</div>
+<div class="line"><a id="l00191" name="l00191"></a><span class="lineno">  191</span>    xcb_flush(<a class="code hl_variable" href="a00047.html#a63ab96867bfa785c967ece50fcf833a3">conn</a>);</div>
+<div class="line"><a id="l00192" name="l00192"></a><span class="lineno">  192</span>    <span class="keywordflow">return</span>;</div>
+<div class="line"><a id="l00193" name="l00193"></a><span class="lineno">  193</span>  }</div>
+<div class="line"><a id="l00194" name="l00194"></a><span class="lineno">  194</span> </div>
+<div class="line"><a id="l00195" name="l00195"></a><span class="lineno">  195</span>  <span class="keyword">struct </span>WindowRect {</div>
+<div class="line"><a id="l00196" name="l00196"></a><span class="lineno">  196</span>    <span class="keywordtype">int</span> x, y, width, height;</div>
+<div class="line"><a id="l00197" name="l00197"></a><span class="lineno">  197</span>  };</div>
+<div class="line"><a id="l00198" name="l00198"></a><span class="lineno">  198</span>  std::vector&lt;WindowRect&gt; window_rects(num_windows);</div>
+<div class="line"><a id="l00199" name="l00199"></a><span class="lineno">  199</span> </div>
+<div class="line"><a id="l00200" name="l00200"></a><span class="lineno">  200</span>  window_rects[0] = {gap, gap, screen_width - 2 * gap, screen_height - 2 * gap};</div>
+<div class="line"><a id="l00201" name="l00201"></a><span class="lineno">  201</span> </div>
+<div class="line"><a id="l00202" name="l00202"></a><span class="lineno">  202</span>  <span class="keywordtype">bool</span> split_horizontal = <span class="keyword">false</span>;</div>
+<div class="line"><a id="l00203" name="l00203"></a><span class="lineno">  203</span>  <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 1; i &lt; num_windows; i++) {</div>
+<div class="line"><a id="l00204" name="l00204"></a><span class="lineno">  204</span> </div>
+<div class="line"><a id="l00205" name="l00205"></a><span class="lineno">  205</span>    <span class="keywordtype">int</span> largest_idx = i - 1;</div>
+<div class="line"><a id="l00206" name="l00206"></a><span class="lineno">  206</span>    <span class="keywordtype">int</span> largest_area = 0;</div>
+<div class="line"><a id="l00207" name="l00207"></a><span class="lineno">  207</span>    <span class="keywordflow">for</span> (<span class="keywordtype">int</span> j = 0; j &lt; i; j++) {</div>
+<div class="line"><a id="l00208" name="l00208"></a><span class="lineno">  208</span>      <span class="keywordtype">int</span> area = window_rects[j].width * window_rects[j].height;</div>
+<div class="line"><a id="l00209" name="l00209"></a><span class="lineno">  209</span>      <span class="keywordflow">if</span> (area &gt; largest_area) {</div>
+<div class="line"><a id="l00210" name="l00210"></a><span class="lineno">  210</span>        largest_area = area;</div>
+<div class="line"><a id="l00211" name="l00211"></a><span class="lineno">  211</span>        largest_idx = j;</div>
+<div class="line"><a id="l00212" name="l00212"></a><span class="lineno">  212</span>      }</div>
+<div class="line"><a id="l00213" name="l00213"></a><span class="lineno">  213</span>    }</div>
+<div class="line"><a id="l00214" name="l00214"></a><span class="lineno">  214</span> </div>
+<div class="line"><a id="l00215" name="l00215"></a><span class="lineno">  215</span>    WindowRect &amp;to_split = window_rects[largest_idx];</div>
+<div class="line"><a id="l00216" name="l00216"></a><span class="lineno">  216</span>    WindowRect &amp;new_window = window_rects[i];</div>
+<div class="line"><a id="l00217" name="l00217"></a><span class="lineno">  217</span> </div>
+<div class="line"><a id="l00218" name="l00218"></a><span class="lineno">  218</span>    <span class="keywordflow">if</span> (split_horizontal) {</div>
+<div class="line"><a id="l00219" name="l00219"></a><span class="lineno">  219</span> </div>
+<div class="line"><a id="l00220" name="l00220"></a><span class="lineno">  220</span>      <span class="keywordtype">int</span> new_height = (to_split.height - gap) / 2;</div>
+<div class="line"><a id="l00221" name="l00221"></a><span class="lineno">  221</span>      new_window = {to_split.x, to_split.y + new_height + gap, to_split.width,</div>
+<div class="line"><a id="l00222" name="l00222"></a><span class="lineno">  222</span>                    to_split.height - new_height - gap};</div>
+<div class="line"><a id="l00223" name="l00223"></a><span class="lineno">  223</span>      to_split.height = new_height;</div>
+<div class="line"><a id="l00224" name="l00224"></a><span class="lineno">  224</span>    } <span class="keywordflow">else</span> {</div>
+<div class="line"><a id="l00225" name="l00225"></a><span class="lineno">  225</span> </div>
+<div class="line"><a id="l00226" name="l00226"></a><span class="lineno">  226</span>      <span class="keywordtype">int</span> new_width = (to_split.width - gap) / 2;</div>
+<div class="line"><a id="l00227" name="l00227"></a><span class="lineno">  227</span>      new_window = {to_split.x + new_width + gap, to_split.y,</div>
+<div class="line"><a id="l00228" name="l00228"></a><span class="lineno">  228</span>                    to_split.width - new_width - gap, to_split.height};</div>
+<div class="line"><a id="l00229" name="l00229"></a><span class="lineno">  229</span>      to_split.width = new_width;</div>
+<div class="line"><a id="l00230" name="l00230"></a><span class="lineno">  230</span>    }</div>
+<div class="line"><a id="l00231" name="l00231"></a><span class="lineno">  231</span> </div>
+<div class="line"><a id="l00232" name="l00232"></a><span class="lineno">  232</span>    split_horizontal = !split_horizontal;</div>
+<div class="line"><a id="l00233" name="l00233"></a><span class="lineno">  233</span>  }</div>
+<div class="line"><a id="l00234" name="l00234"></a><span class="lineno">  234</span> </div>
+<div class="line"><a id="l00235" name="l00235"></a><span class="lineno">  235</span>  <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; num_windows; i++) {</div>
+<div class="line"><a id="l00236" name="l00236"></a><span class="lineno">  236</span>    <span class="keyword">const</span> <span class="keyword">auto</span> &amp;rect = window_rects[i];</div>
+<div class="line"><a id="l00237" name="l00237"></a><span class="lineno">  237</span>    uint32_t <a class="code hl_variable" href="a00047.html#ade2f3c410160c5cd7bdf250b37db5797">values</a>[4] = {</div>
+<div class="line"><a id="l00238" name="l00238"></a><span class="lineno">  238</span>        <span class="keyword">static_cast&lt;</span>uint32_t<span class="keyword">&gt;</span>(rect.x), <span class="keyword">static_cast&lt;</span>uint32_t<span class="keyword">&gt;</span>(rect.y),</div>
+<div class="line"><a id="l00239" name="l00239"></a><span class="lineno">  239</span>        <span class="keyword">static_cast&lt;</span>uint32_t<span class="keyword">&gt;</span>(rect.width), <span class="keyword">static_cast&lt;</span>uint32_t<span class="keyword">&gt;</span>(rect.height)};</div>
+<div class="line"><a id="l00240" name="l00240"></a><span class="lineno">  240</span> </div>
+<div class="line"><a id="l00241" name="l00241"></a><span class="lineno">  241</span>    uint32_t border_values[1] = {<span class="keyword">static_cast&lt;</span>uint32_t<span class="keyword">&gt;</span>(border_width)};</div>
+<div class="line"><a id="l00242" name="l00242"></a><span class="lineno">  242</span>    xcb_configure_window(<a class="code hl_variable" href="a00047.html#a63ab96867bfa785c967ece50fcf833a3">conn</a>, <a class="code hl_variable" href="a00047.html#a62b2b46f13fe775c8713174c31cbe0dd">windows</a>[i], XCB_CONFIG_WINDOW_BORDER_WIDTH,</div>
+<div class="line"><a id="l00243" name="l00243"></a><span class="lineno">  243</span>                         border_values);</div>
+<div class="line"><a id="l00244" name="l00244"></a><span class="lineno">  244</span>    xcb_configure_window(<a class="code hl_variable" href="a00047.html#a63ab96867bfa785c967ece50fcf833a3">conn</a>, <a class="code hl_variable" href="a00047.html#a62b2b46f13fe775c8713174c31cbe0dd">windows</a>[i],</div>
+<div class="line"><a id="l00245" name="l00245"></a><span class="lineno">  245</span>                         XCB_CONFIG_WINDOW_X | XCB_CONFIG_WINDOW_Y |</div>
+<div class="line"><a id="l00246" name="l00246"></a><span class="lineno">  246</span>                             XCB_CONFIG_WINDOW_WIDTH | XCB_CONFIG_WINDOW_HEIGHT,</div>
+<div class="line"><a id="l00247" name="l00247"></a><span class="lineno">  247</span>                         <a class="code hl_variable" href="a00047.html#ade2f3c410160c5cd7bdf250b37db5797">values</a>);</div>
+<div class="line"><a id="l00248" name="l00248"></a><span class="lineno">  248</span>    xcb_set_input_focus(<a class="code hl_variable" href="a00047.html#a63ab96867bfa785c967ece50fcf833a3">conn</a>, XCB_INPUT_FOCUS_POINTER_ROOT, <a class="code hl_variable" href="a00047.html#a62b2b46f13fe775c8713174c31cbe0dd">windows</a>[i],</div>
+<div class="line"><a id="l00249" name="l00249"></a><span class="lineno">  249</span>                        XCB_CURRENT_TIME);</div>
+<div class="line"><a id="l00250" name="l00250"></a><span class="lineno">  250</span>  }</div>
+<div class="line"><a id="l00251" name="l00251"></a><span class="lineno">  251</span> </div>
+<div class="line"><a id="l00252" name="l00252"></a><span class="lineno">  252</span>  xcb_flush(<a class="code hl_variable" href="a00047.html#a63ab96867bfa785c967ece50fcf833a3">conn</a>);</div>
+<div class="line"><a id="l00253" name="l00253"></a><span class="lineno">  253</span>}</div>
 </div>
-<div class="line"><a id="l00249" name="l00249"></a><span class="lineno">  249</span> </div>
-<div class="foldopen" id="foldopen00256" data-start="{" data-end="}">
-<div class="line"><a id="l00256" name="l00256"></a><span class="lineno"><a class="line" href="a00047.html#a6bcb4661cf62ac13a5b4def37f62d129">  256</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="a00047.html#a6bcb4661cf62ac13a5b4def37f62d129">WindowManager::set_window_border_color</a>(xcb_window_t window,</div>
-<div class="line"><a id="l00257" name="l00257"></a><span class="lineno">  257</span>                                            uint32_t color) {</div>
-<div class="line"><a id="l00258" name="l00258"></a><span class="lineno">  258</span>  xcb_change_window_attributes(<a class="code hl_variable" href="a00047.html#a63ab96867bfa785c967ece50fcf833a3">conn</a>, window, XCB_CW_BORDER_PIXEL, &amp;color);</div>
-<div class="line"><a id="l00259" name="l00259"></a><span class="lineno">  259</span>  xcb_flush(<a class="code hl_variable" href="a00047.html#a63ab96867bfa785c967ece50fcf833a3">conn</a>);</div>
-<div class="line"><a id="l00260" name="l00260"></a><span class="lineno">  260</span>}</div>
+<div class="line"><a id="l00254" name="l00254"></a><span class="lineno">  254</span> </div>
+<div class="foldopen" id="foldopen00261" data-start="{" data-end="}">
+<div class="line"><a id="l00261" name="l00261"></a><span class="lineno"><a class="line" href="a00047.html#a6bcb4661cf62ac13a5b4def37f62d129">  261</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="a00047.html#a6bcb4661cf62ac13a5b4def37f62d129">WindowManager::set_window_border_color</a>(xcb_window_t window,</div>
+<div class="line"><a id="l00262" name="l00262"></a><span class="lineno">  262</span>                                            uint32_t color) {</div>
+<div class="line"><a id="l00263" name="l00263"></a><span class="lineno">  263</span>  xcb_change_window_attributes(<a class="code hl_variable" href="a00047.html#a63ab96867bfa785c967ece50fcf833a3">conn</a>, window, XCB_CW_BORDER_PIXEL, &amp;color);</div>
+<div class="line"><a id="l00264" name="l00264"></a><span class="lineno">  264</span>  xcb_flush(<a class="code hl_variable" href="a00047.html#a63ab96867bfa785c967ece50fcf833a3">conn</a>);</div>
+<div class="line"><a id="l00265" name="l00265"></a><span class="lineno">  265</span>}</div>
 </div>
-<div class="line"><a id="l00261" name="l00261"></a><span class="lineno">  261</span> </div>
-<div class="foldopen" id="foldopen00267" data-start="{" data-end="}">
-<div class="line"><a id="l00267" name="l00267"></a><span class="lineno"><a class="line" href="a00047.html#a7f05b2027ab6eba43c39955b94ba040d">  267</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="a00047.html#a7f05b2027ab6eba43c39955b94ba040d">WindowManager::set_focus</a>(xcb_window_t window) {</div>
-<div class="line"><a id="l00268" name="l00268"></a><span class="lineno">  268</span>  xcb_set_input_focus(<a class="code hl_variable" href="a00047.html#a63ab96867bfa785c967ece50fcf833a3">conn</a>, XCB_INPUT_FOCUS_POINTER_ROOT, window,</div>
-<div class="line"><a id="l00269" name="l00269"></a><span class="lineno">  269</span>                      XCB_CURRENT_TIME);</div>
-<div class="line"><a id="l00270" name="l00270"></a><span class="lineno">  270</span> </div>
-<div class="line"><a id="l00271" name="l00271"></a><span class="lineno">  271</span>  xcb_flush(<a class="code hl_variable" href="a00047.html#a63ab96867bfa785c967ece50fcf833a3">conn</a>);</div>
-<div class="line"><a id="l00272" name="l00272"></a><span class="lineno">  272</span>}</div>
+<div class="line"><a id="l00266" name="l00266"></a><span class="lineno">  266</span> </div>
+<div class="foldopen" id="foldopen00272" data-start="{" data-end="}">
+<div class="line"><a id="l00272" name="l00272"></a><span class="lineno"><a class="line" href="a00047.html#a7f05b2027ab6eba43c39955b94ba040d">  272</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="a00047.html#a7f05b2027ab6eba43c39955b94ba040d">WindowManager::set_focus</a>(xcb_window_t window) {</div>
+<div class="line"><a id="l00273" name="l00273"></a><span class="lineno">  273</span>  xcb_set_input_focus(<a class="code hl_variable" href="a00047.html#a63ab96867bfa785c967ece50fcf833a3">conn</a>, XCB_INPUT_FOCUS_POINTER_ROOT, window,</div>
+<div class="line"><a id="l00274" name="l00274"></a><span class="lineno">  274</span>                      XCB_CURRENT_TIME);</div>
+<div class="line"><a id="l00275" name="l00275"></a><span class="lineno">  275</span>  <a class="code hl_function" href="a00047.html#a9f7cfdc5da01e55276c24a97e90a737b">update_focus</a>(window);</div>
+<div class="line"><a id="l00276" name="l00276"></a><span class="lineno">  276</span>  xcb_flush(<a class="code hl_variable" href="a00047.html#a63ab96867bfa785c967ece50fcf833a3">conn</a>);</div>
+<div class="line"><a id="l00277" name="l00277"></a><span class="lineno">  277</span>}</div>
 </div>
-<div class="line"><a id="l00273" name="l00273"></a><span class="lineno">  273</span> </div>
+<div class="line"><a id="l00278" name="l00278"></a><span class="lineno">  278</span> </div>
 <div class="foldopen" id="foldopen00279" data-start="{" data-end="}">
-<div class="line"><a id="l00279" name="l00279"></a><span class="lineno"><a class="line" href="a00047.html#a6e05fc85dd1d6f0ed5615de55e8abb3f">  279</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="a00047.html#a6e05fc85dd1d6f0ed5615de55e8abb3f">WindowManager::switch_workspace</a>(uint32_t i) {</div>
-<div class="line"><a id="l00280" name="l00280"></a><span class="lineno">  280</span>  uint32_t data[] = {i};</div>
-<div class="line"><a id="l00281" name="l00281"></a><span class="lineno">  281</span>  xcb_change_property(<a class="code hl_variable" href="a00047.html#a63ab96867bfa785c967ece50fcf833a3">conn</a>, XCB_FOCUS_IN, <a class="code hl_variable" href="a00047.html#a7269169f4599c496c5ddfd9ea69ff5d0">screen</a>-&gt;root, <a class="code hl_variable" href="a00047.html#a6ef7ac05aa24b3b6b7a5f796e342772d">ewmh</a>._NET_WM_DESKTOP,</div>
-<div class="line"><a id="l00282" name="l00282"></a><span class="lineno">  282</span>                      XCB_ATOM_CARDINAL, 32, 1, data);</div>
-<div class="line"><a id="l00283" name="l00283"></a><span class="lineno">  283</span>  xcb_flush(<a class="code hl_variable" href="a00047.html#a63ab96867bfa785c967ece50fcf833a3">conn</a>);</div>
-<div class="line"><a id="l00284" name="l00284"></a><span class="lineno">  284</span>}</div>
+<div class="line"><a id="l00279" name="l00279"></a><span class="lineno"><a class="line" href="a00047.html#a9f7cfdc5da01e55276c24a97e90a737b">  279</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="a00047.html#a9f7cfdc5da01e55276c24a97e90a737b">WindowManager::update_focus</a>(xcb_window_t window) {</div>
+<div class="line"><a id="l00280" name="l00280"></a><span class="lineno">  280</span>  <span class="keywordflow">if</span> (<a class="code hl_variable" href="a00047.html#afa91e76fa675e4d2b3872c30d151635f">current_window</a> != XCB_NONE &amp;&amp; <a class="code hl_variable" href="a00047.html#afa91e76fa675e4d2b3872c30d151635f">current_window</a> != window) {</div>
+<div class="line"><a id="l00281" name="l00281"></a><span class="lineno">  281</span>    <a class="code hl_function" href="a00047.html#a6bcb4661cf62ac13a5b4def37f62d129">set_window_border_color</a>(<a class="code hl_variable" href="a00047.html#afa91e76fa675e4d2b3872c30d151635f">current_window</a>, <a class="code hl_variable" href="a00047.html#ab2f747f430112a6a69113ea547f0166d">config</a>.<a class="code hl_variable" href="a00043.html#a63bc0ad4b52799850a1a31cad3fa8d54">border</a>.<a class="code hl_variable" href="a00027.html#a22e4cb620ab9b34d96208ab78c4988c0">inactive_color</a>);</div>
+<div class="line"><a id="l00282" name="l00282"></a><span class="lineno">  282</span>  }</div>
+<div class="line"><a id="l00283" name="l00283"></a><span class="lineno">  283</span> </div>
+<div class="line"><a id="l00284" name="l00284"></a><span class="lineno">  284</span>  <span class="keywordflow">if</span> (window != XCB_NONE) {</div>
+<div class="line"><a id="l00285" name="l00285"></a><span class="lineno">  285</span>    <a class="code hl_variable" href="a00047.html#afa91e76fa675e4d2b3872c30d151635f">current_window</a> = window;</div>
+<div class="line"><a id="l00286" name="l00286"></a><span class="lineno">  286</span>    <a class="code hl_function" href="a00047.html#a6bcb4661cf62ac13a5b4def37f62d129">set_window_border_color</a>(window, <a class="code hl_variable" href="a00047.html#ab2f747f430112a6a69113ea547f0166d">config</a>.<a class="code hl_variable" href="a00043.html#a63bc0ad4b52799850a1a31cad3fa8d54">border</a>.<a class="code hl_variable" href="a00027.html#a220821e4302581794d6287f6e29d2289">active_color</a>);</div>
+<div class="line"><a id="l00287" name="l00287"></a><span class="lineno">  287</span>    xcb_set_input_focus(<a class="code hl_variable" href="a00047.html#a63ab96867bfa785c967ece50fcf833a3">conn</a>, XCB_INPUT_FOCUS_POINTER_ROOT, window,</div>
+<div class="line"><a id="l00288" name="l00288"></a><span class="lineno">  288</span>                        XCB_CURRENT_TIME);</div>
+<div class="line"><a id="l00289" name="l00289"></a><span class="lineno">  289</span>  }</div>
+<div class="line"><a id="l00290" name="l00290"></a><span class="lineno">  290</span>}</div>
 </div>
-<div class="line"><a id="l00285" name="l00285"></a><span class="lineno">  285</span> </div>
-<div class="foldopen" id="foldopen00295" data-start="{" data-end="}">
-<div class="line"><a id="l00295" name="l00295"></a><span class="lineno"><a class="line" href="a00047.html#a6092a9b49880301094266d1ae13b0d10">  295</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="a00047.html#a6092a9b49880301094266d1ae13b0d10">WindowManager::handle_enter_notify</a>(xcb_window_t window) {</div>
-<div class="line"><a id="l00296" name="l00296"></a><span class="lineno">  296</span>  xcb_set_input_focus(<a class="code hl_variable" href="a00047.html#a63ab96867bfa785c967ece50fcf833a3">conn</a>, XCB_INPUT_FOCUS_FOLLOW_KEYBOARD, window,</div>
-<div class="line"><a id="l00297" name="l00297"></a><span class="lineno">  297</span>                      XCB_CURRENT_TIME);</div>
-<div class="line"><a id="l00298" name="l00298"></a><span class="lineno">  298</span>  xcb_flush(<a class="code hl_variable" href="a00047.html#a63ab96867bfa785c967ece50fcf833a3">conn</a>);</div>
-<div class="line"><a id="l00299" name="l00299"></a><span class="lineno">  299</span>}</div>
+<div class="line"><a id="l00291" name="l00291"></a><span class="lineno">  291</span> </div>
+<div class="foldopen" id="foldopen00297" data-start="{" data-end="}">
+<div class="line"><a id="l00297" name="l00297"></a><span class="lineno"><a class="line" href="a00047.html#a6e05fc85dd1d6f0ed5615de55e8abb3f">  297</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="a00047.html#a6e05fc85dd1d6f0ed5615de55e8abb3f">WindowManager::switch_workspace</a>(uint32_t i) {</div>
+<div class="line"><a id="l00298" name="l00298"></a><span class="lineno">  298</span>  uint32_t data[] = {i};</div>
+<div class="line"><a id="l00299" name="l00299"></a><span class="lineno">  299</span>  xcb_ewmh_set_current_desktop(&amp;<a class="code hl_variable" href="a00047.html#a6ef7ac05aa24b3b6b7a5f796e342772d">ewmh</a>, 0, data[0]);</div>
+<div class="line"><a id="l00300" name="l00300"></a><span class="lineno">  300</span>  xcb_flush(<a class="code hl_variable" href="a00047.html#a63ab96867bfa785c967ece50fcf833a3">conn</a>);</div>
+<div class="line"><a id="l00301" name="l00301"></a><span class="lineno">  301</span>}</div>
 </div>
-<div class="line"><a id="l00300" name="l00300"></a><span class="lineno">  300</span> </div>
-<div class="foldopen" id="foldopen00308" data-start="{" data-end="}">
-<div class="line"><a id="l00308" name="l00308"></a><span class="lineno"><a class="line" href="a00047.html#a8a047d72e1ed505cf0d8ac59ddd5c203">  308</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="a00047.html#a8a047d72e1ed505cf0d8ac59ddd5c203">WindowManager::handle_key_press</a>(xcb_key_press_event_t *key_press) {</div>
-<div class="line"><a id="l00309" name="l00309"></a><span class="lineno">  309</span>  <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt;= 9; ++i) {</div>
-<div class="line"><a id="l00310" name="l00310"></a><span class="lineno">  310</span>    <span class="keywordflow">if</span> (key_press-&gt;state == XK_Alt_L &amp;&amp; key_press-&gt;detail == XK_0 + i) {</div>
-<div class="line"><a id="l00311" name="l00311"></a><span class="lineno">  311</span>      <a class="code hl_function" href="a00047.html#a6e05fc85dd1d6f0ed5615de55e8abb3f">switch_workspace</a>(i);</div>
-<div class="line"><a id="l00312" name="l00312"></a><span class="lineno">  312</span>      <span class="keywordflow">return</span>;</div>
-<div class="line"><a id="l00313" name="l00313"></a><span class="lineno">  313</span>    }</div>
-<div class="line"><a id="l00314" name="l00314"></a><span class="lineno">  314</span>  }</div>
-<div class="line"><a id="l00315" name="l00315"></a><span class="lineno">  315</span>}</div>
+<div class="line"><a id="l00302" name="l00302"></a><span class="lineno">  302</span> </div>
+<div class="foldopen" id="foldopen00309" data-start="{" data-end="}">
+<div class="line"><a id="l00309" name="l00309"></a><span class="lineno"><a class="line" href="a00047.html#ad14c625a550eee6932b7ccf1b8eec806">  309</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="a00047.html#ad14c625a550eee6932b7ccf1b8eec806">WindowManager::handle_enter_notify</a>(xcb_generic_event_t *ev) {</div>
+<div class="line"><a id="l00310" name="l00310"></a><span class="lineno">  310</span>  <span class="keyword">auto</span> <span class="keyword">event</span> = (xcb_enter_notify_event_t *)ev;</div>
+<div class="line"><a id="l00311" name="l00311"></a><span class="lineno">  311</span>  <span class="keyword">auto</span> window = <span class="keyword">event</span>-&gt;event;</div>
+<div class="line"><a id="l00312" name="l00312"></a><span class="lineno">  312</span>  <span class="keywordflow">if</span> (window == XCB_WINDOW_NONE)</div>
+<div class="line"><a id="l00313" name="l00313"></a><span class="lineno">  313</span>    <span class="keywordflow">return</span>;</div>
+<div class="line"><a id="l00314" name="l00314"></a><span class="lineno">  314</span> </div>
+<div class="line"><a id="l00315" name="l00315"></a><span class="lineno">  315</span>  <span class="keywordflow">if</span> (std::find(<a class="code hl_variable" href="a00047.html#a62b2b46f13fe775c8713174c31cbe0dd">windows</a>.begin(), <a class="code hl_variable" href="a00047.html#a62b2b46f13fe775c8713174c31cbe0dd">windows</a>.end(), window) == <a class="code hl_variable" href="a00047.html#a62b2b46f13fe775c8713174c31cbe0dd">windows</a>.end())</div>
+<div class="line"><a id="l00316" name="l00316"></a><span class="lineno">  316</span>    <span class="keywordflow">return</span>;</div>
+<div class="line"><a id="l00317" name="l00317"></a><span class="lineno">  317</span> </div>
+<div class="line"><a id="l00318" name="l00318"></a><span class="lineno">  318</span>  <span class="keywordflow">if</span> (<a class="code hl_variable" href="a00047.html#afa91e76fa675e4d2b3872c30d151635f">current_window</a> != window) {</div>
+<div class="line"><a id="l00319" name="l00319"></a><span class="lineno">  319</span>    <a class="code hl_function" href="a00047.html#a9f7cfdc5da01e55276c24a97e90a737b">update_focus</a>(window);</div>
+<div class="line"><a id="l00320" name="l00320"></a><span class="lineno">  320</span>    xcb_flush(<a class="code hl_variable" href="a00047.html#a63ab96867bfa785c967ece50fcf833a3">conn</a>);</div>
+<div class="line"><a id="l00321" name="l00321"></a><span class="lineno">  321</span>  }</div>
+<div class="line"><a id="l00322" name="l00322"></a><span class="lineno">  322</span>}</div>
 </div>
-<div class="line"><a id="l00316" name="l00316"></a><span class="lineno">  316</span> </div>
-<div class="foldopen" id="foldopen00324" data-start="{" data-end="}">
-<div class="line"><a id="l00324" name="l00324"></a><span class="lineno"><a class="line" href="a00047.html#a870d69df4759c05bd2944583887b0625">  324</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="a00047.html#a870d69df4759c05bd2944583887b0625">WindowManager::handle_map_request</a>(xcb_window_t window) {</div>
-<div class="line"><a id="l00325" name="l00325"></a><span class="lineno">  325</span>  <a class="code hl_variable" href="a00047.html#a62b2b46f13fe775c8713174c31cbe0dd">windows</a>.push_back(window);</div>
-<div class="line"><a id="l00326" name="l00326"></a><span class="lineno">  326</span> </div>
-<div class="line"><a id="l00327" name="l00327"></a><span class="lineno">  327</span>  <span class="keyword">auto</span> cookie = xcb_get_window_attributes(<a class="code hl_variable" href="a00047.html#a63ab96867bfa785c967ece50fcf833a3">conn</a>, window);</div>
-<div class="line"><a id="l00328" name="l00328"></a><span class="lineno">  328</span>  xcb_generic_error_t **e = <span class="keyword">nullptr</span>;</div>
-<div class="line"><a id="l00329" name="l00329"></a><span class="lineno">  329</span>  <span class="keyword">auto</span> _attr_reply = xcb_get_window_attributes_reply(<a class="code hl_variable" href="a00047.html#a63ab96867bfa785c967ece50fcf833a3">conn</a>, cookie, e);</div>
-<div class="line"><a id="l00330" name="l00330"></a><span class="lineno">  330</span> </div>
-<div class="line"><a id="l00331" name="l00331"></a><span class="lineno">  331</span>  <span class="keywordflow">if</span> (_attr_reply-&gt;override_redirect) {</div>
-<div class="line"><a id="l00332" name="l00332"></a><span class="lineno">  332</span>    <span class="keywordflow">return</span>;</div>
-<div class="line"><a id="l00333" name="l00333"></a><span class="lineno">  333</span>  }</div>
-<div class="line"><a id="l00334" name="l00334"></a><span class="lineno">  334</span> </div>
-<div class="line"><a id="l00335" name="l00335"></a><span class="lineno">  335</span>  <span class="keyword">delete</span> e;</div>
-<div class="line"><a id="l00336" name="l00336"></a><span class="lineno">  336</span> </div>
-<div class="line"><a id="l00337" name="l00337"></a><span class="lineno">  337</span>  xcb_map_window(<a class="code hl_variable" href="a00047.html#a63ab96867bfa785c967ece50fcf833a3">conn</a>, window);</div>
-<div class="line"><a id="l00338" name="l00338"></a><span class="lineno">  338</span> </div>
-<div class="line"><a id="l00339" name="l00339"></a><span class="lineno">  339</span>  <span class="keyword">auto</span> border_width = <span class="keyword">static_cast&lt;</span>uint32_t<span class="keyword">&gt;</span>(<a class="code hl_variable" href="a00047.html#ab2f747f430112a6a69113ea547f0166d">config</a>.<a class="code hl_variable" href="a00043.html#a63bc0ad4b52799850a1a31cad3fa8d54">border</a>.<a class="code hl_variable" href="a00027.html#a5b0ab13bba1084b8c92a5663d5bbd35b">width</a>);</div>
-<div class="line"><a id="l00340" name="l00340"></a><span class="lineno">  340</span>  uint32_t border_values[2] = {border_width, border_width};</div>
-<div class="line"><a id="l00341" name="l00341"></a><span class="lineno">  341</span> </div>
-<div class="line"><a id="l00342" name="l00342"></a><span class="lineno">  342</span>  xcb_configure_window(<a class="code hl_variable" href="a00047.html#a63ab96867bfa785c967ece50fcf833a3">conn</a>, window, XCB_CONFIG_WINDOW_BORDER_WIDTH,</div>
-<div class="line"><a id="l00343" name="l00343"></a><span class="lineno">  343</span>                       border_values);</div>
-<div class="line"><a id="l00344" name="l00344"></a><span class="lineno">  344</span>  xcb_flush(<a class="code hl_variable" href="a00047.html#a63ab96867bfa785c967ece50fcf833a3">conn</a>);</div>
-<div class="line"><a id="l00345" name="l00345"></a><span class="lineno">  345</span> </div>
-<div class="line"><a id="l00346" name="l00346"></a><span class="lineno">  346</span>  <a class="code hl_function" href="a00047.html#a6bcb4661cf62ac13a5b4def37f62d129">set_window_border_color</a>(window, <a class="code hl_variable" href="a00047.html#ab2f747f430112a6a69113ea547f0166d">config</a>.<a class="code hl_variable" href="a00043.html#a63bc0ad4b52799850a1a31cad3fa8d54">border</a>.<a class="code hl_variable" href="a00027.html#a9e2e39f44af0f2ab73e605dfcc7c0af1">color</a>);</div>
-<div class="line"><a id="l00347" name="l00347"></a><span class="lineno">  347</span> </div>
-<div class="line"><a id="l00348" name="l00348"></a><span class="lineno">  348</span>  xcb_set_input_focus(<a class="code hl_variable" href="a00047.html#a63ab96867bfa785c967ece50fcf833a3">conn</a>, XCB_INPUT_FOCUS_POINTER_ROOT, window,</div>
-<div class="line"><a id="l00349" name="l00349"></a><span class="lineno">  349</span>                      XCB_CURRENT_TIME);</div>
-<div class="line"><a id="l00350" name="l00350"></a><span class="lineno">  350</span>  xcb_flush(<a class="code hl_variable" href="a00047.html#a63ab96867bfa785c967ece50fcf833a3">conn</a>);</div>
-<div class="line"><a id="l00351" name="l00351"></a><span class="lineno">  351</span>  <a class="code hl_function" href="a00047.html#a034602ddebacb09dd0ae7ed262f20c57">tile_windows</a>();</div>
-<div class="line"><a id="l00352" name="l00352"></a><span class="lineno">  352</span>}</div>
+<div class="line"><a id="l00323" name="l00323"></a><span class="lineno">  323</span> </div>
+<div class="foldopen" id="foldopen00331" data-start="{" data-end="}">
+<div class="line"><a id="l00331" name="l00331"></a><span class="lineno"><a class="line" href="a00047.html#a4ab0b66be1ce0c22d396594d23f19c9d">  331</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="a00047.html#a4ab0b66be1ce0c22d396594d23f19c9d">WindowManager::handle_key_press</a>(xcb_generic_event_t *ev) {</div>
+<div class="line"><a id="l00332" name="l00332"></a><span class="lineno">  332</span>  <span class="keyword">auto</span> key_press = (xcb_key_press_event_t *)ev;</div>
+<div class="line"><a id="l00333" name="l00333"></a><span class="lineno">  333</span>  <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt;= 9; ++i) {</div>
+<div class="line"><a id="l00334" name="l00334"></a><span class="lineno">  334</span>    <span class="keywordflow">if</span> (key_press-&gt;state == XK_Alt_L &amp;&amp; key_press-&gt;detail == XK_0 + i) {</div>
+<div class="line"><a id="l00335" name="l00335"></a><span class="lineno">  335</span>      <a class="code hl_function" href="a00047.html#a6e05fc85dd1d6f0ed5615de55e8abb3f">switch_workspace</a>(i);</div>
+<div class="line"><a id="l00336" name="l00336"></a><span class="lineno">  336</span>      <span class="keywordflow">return</span>;</div>
+<div class="line"><a id="l00337" name="l00337"></a><span class="lineno">  337</span>    }</div>
+<div class="line"><a id="l00338" name="l00338"></a><span class="lineno">  338</span>  }</div>
+<div class="line"><a id="l00339" name="l00339"></a><span class="lineno">  339</span>}</div>
 </div>
-<div class="line"><a id="l00353" name="l00353"></a><span class="lineno">  353</span> </div>
-<div class="foldopen" id="foldopen00361" data-start="{" data-end="}">
-<div class="line"><a id="l00361" name="l00361"></a><span class="lineno"><a class="line" href="a00047.html#a01341329963f4665484332944e16d8cd">  361</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="a00047.html#a01341329963f4665484332944e16d8cd">WindowManager::handle_destroy_notify</a>(xcb_window_t window) {</div>
-<div class="line"><a id="l00362" name="l00362"></a><span class="lineno">  362</span>  xcb_destroy_window(<a class="code hl_variable" href="a00047.html#a63ab96867bfa785c967ece50fcf833a3">conn</a>, window);</div>
-<div class="line"><a id="l00363" name="l00363"></a><span class="lineno">  363</span>  <span class="keyword">auto</span> new_end = std::remove(<a class="code hl_variable" href="a00047.html#a62b2b46f13fe775c8713174c31cbe0dd">windows</a>.begin(), <a class="code hl_variable" href="a00047.html#a62b2b46f13fe775c8713174c31cbe0dd">windows</a>.end(), window);</div>
-<div class="line"><a id="l00364" name="l00364"></a><span class="lineno">  364</span>  <a class="code hl_variable" href="a00047.html#a62b2b46f13fe775c8713174c31cbe0dd">windows</a>.erase(new_end, <a class="code hl_variable" href="a00047.html#a62b2b46f13fe775c8713174c31cbe0dd">windows</a>.end());</div>
-<div class="line"><a id="l00365" name="l00365"></a><span class="lineno">  365</span>  xcb_flush(<a class="code hl_variable" href="a00047.html#a63ab96867bfa785c967ece50fcf833a3">conn</a>);</div>
-<div class="line"><a id="l00366" name="l00366"></a><span class="lineno">  366</span>  <a class="code hl_function" href="a00047.html#a034602ddebacb09dd0ae7ed262f20c57">tile_windows</a>();</div>
-<div class="line"><a id="l00367" name="l00367"></a><span class="lineno">  367</span>  <a class="code hl_function" href="a00047.html#a7f05b2027ab6eba43c39955b94ba040d">set_focus</a>(<a class="code hl_variable" href="a00047.html#a62b2b46f13fe775c8713174c31cbe0dd">windows</a>.back());</div>
-<div class="line"><a id="l00368" name="l00368"></a><span class="lineno">  368</span>}</div>
-</div>
+<div class="line"><a id="l00340" name="l00340"></a><span class="lineno">  340</span> </div>
+<div class="foldopen" id="foldopen00348" data-start="{" data-end="}">
+<div class="line"><a id="l00348" name="l00348"></a><span class="lineno"><a class="line" href="a00047.html#a816e578de7b02a7a479daf6e9ab1a7a4">  348</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="a00047.html#a816e578de7b02a7a479daf6e9ab1a7a4">WindowManager::handle_map_request</a>(xcb_generic_event_t *ev) {</div>
+<div class="line"><a id="l00349" name="l00349"></a><span class="lineno">  349</span>  <span class="keyword">auto</span> <span class="keyword">event</span> = (xcb_map_request_event_t *)ev;</div>
+<div class="line"><a id="l00350" name="l00350"></a><span class="lineno">  350</span>  <span class="keyword">auto</span> window = <span class="keyword">event</span>-&gt;window;</div>
+<div class="line"><a id="l00351" name="l00351"></a><span class="lineno">  351</span>  <a class="code hl_variable" href="a00047.html#a62b2b46f13fe775c8713174c31cbe0dd">windows</a>.push_back(window);</div>
+<div class="line"><a id="l00352" name="l00352"></a><span class="lineno">  352</span> </div>
+<div class="line"><a id="l00353" name="l00353"></a><span class="lineno">  353</span>  <span class="keyword">auto</span> cookie = xcb_get_window_attributes(<a class="code hl_variable" href="a00047.html#a63ab96867bfa785c967ece50fcf833a3">conn</a>, window);</div>
+<div class="line"><a id="l00354" name="l00354"></a><span class="lineno">  354</span>  xcb_generic_error_t **e = <span class="keyword">nullptr</span>;</div>
+<div class="line"><a id="l00355" name="l00355"></a><span class="lineno">  355</span>  <span class="keyword">auto</span> _attr_reply = xcb_get_window_attributes_reply(<a class="code hl_variable" href="a00047.html#a63ab96867bfa785c967ece50fcf833a3">conn</a>, cookie, e);</div>
+<div class="line"><a id="l00356" name="l00356"></a><span class="lineno">  356</span> </div>
+<div class="line"><a id="l00357" name="l00357"></a><span class="lineno">  357</span>  <span class="keywordflow">if</span> (_attr_reply-&gt;override_redirect) {</div>
+<div class="line"><a id="l00358" name="l00358"></a><span class="lineno">  358</span>    <span class="keyword">delete</span> _attr_reply;</div>
+<div class="line"><a id="l00359" name="l00359"></a><span class="lineno">  359</span>    <span class="keyword">delete</span> e;</div>
+<div class="line"><a id="l00360" name="l00360"></a><span class="lineno">  360</span>    <span class="keywordflow">return</span>;</div>
+<div class="line"><a id="l00361" name="l00361"></a><span class="lineno">  361</span>  }</div>
+<div class="line"><a id="l00362" name="l00362"></a><span class="lineno">  362</span> </div>
+<div class="line"><a id="l00363" name="l00363"></a><span class="lineno">  363</span>  uint32_t <a class="code hl_variable" href="a00047.html#ade2f3c410160c5cd7bdf250b37db5797">values</a>[] = {XCB_EVENT_MASK_ENTER_WINDOW |</div>
+<div class="line"><a id="l00364" name="l00364"></a><span class="lineno">  364</span>                       XCB_EVENT_MASK_FOCUS_CHANGE |</div>
+<div class="line"><a id="l00365" name="l00365"></a><span class="lineno">  365</span>                       XCB_EVENT_MASK_PROPERTY_CHANGE};</div>
+<div class="line"><a id="l00366" name="l00366"></a><span class="lineno">  366</span>  xcb_change_window_attributes(<a class="code hl_variable" href="a00047.html#a63ab96867bfa785c967ece50fcf833a3">conn</a>, window, XCB_CW_EVENT_MASK, <a class="code hl_variable" href="a00047.html#ade2f3c410160c5cd7bdf250b37db5797">values</a>);</div>
+<div class="line"><a id="l00367" name="l00367"></a><span class="lineno">  367</span> </div>
+<div class="line"><a id="l00368" name="l00368"></a><span class="lineno">  368</span>  xcb_map_window(<a class="code hl_variable" href="a00047.html#a63ab96867bfa785c967ece50fcf833a3">conn</a>, window);</div>
 <div class="line"><a id="l00369" name="l00369"></a><span class="lineno">  369</span> </div>
-<div class="foldopen" id="foldopen00376" data-start="{" data-end="}">
-<div class="line"><a id="l00376" name="l00376"></a><span class="lineno"><a class="line" href="a00047.html#aaadfd30f0cafed4c33c7485f60e72511">  376</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="a00047.html#aaadfd30f0cafed4c33c7485f60e72511">WindowManager::handle_unmap_request</a>(xcb_window_t window) {</div>
-<div class="line"><a id="l00377" name="l00377"></a><span class="lineno">  377</span>  xcb_unmap_window(<a class="code hl_variable" href="a00047.html#a63ab96867bfa785c967ece50fcf833a3">conn</a>, window);</div>
-<div class="line"><a id="l00378" name="l00378"></a><span class="lineno">  378</span>  xcb_flush(<a class="code hl_variable" href="a00047.html#a63ab96867bfa785c967ece50fcf833a3">conn</a>);</div>
-<div class="line"><a id="l00379" name="l00379"></a><span class="lineno">  379</span>  <a class="code hl_function" href="a00047.html#a7f05b2027ab6eba43c39955b94ba040d">set_focus</a>(<a class="code hl_variable" href="a00047.html#a62b2b46f13fe775c8713174c31cbe0dd">windows</a>.back());</div>
-<div class="line"><a id="l00380" name="l00380"></a><span class="lineno">  380</span>  <a class="code hl_function" href="a00047.html#a034602ddebacb09dd0ae7ed262f20c57">tile_windows</a>();</div>
-<div class="line"><a id="l00381" name="l00381"></a><span class="lineno">  381</span>}</div>
-</div>
+<div class="line"><a id="l00370" name="l00370"></a><span class="lineno">  370</span>  <span class="keyword">auto</span> border_width = <span class="keyword">static_cast&lt;</span>uint32_t<span class="keyword">&gt;</span>(<a class="code hl_variable" href="a00047.html#ab2f747f430112a6a69113ea547f0166d">config</a>.<a class="code hl_variable" href="a00043.html#a63bc0ad4b52799850a1a31cad3fa8d54">border</a>.<a class="code hl_variable" href="a00027.html#a5b0ab13bba1084b8c92a5663d5bbd35b">width</a>);</div>
+<div class="line"><a id="l00371" name="l00371"></a><span class="lineno">  371</span>  uint32_t border_values[2] = {border_width, border_width};</div>
+<div class="line"><a id="l00372" name="l00372"></a><span class="lineno">  372</span> </div>
+<div class="line"><a id="l00373" name="l00373"></a><span class="lineno">  373</span>  xcb_configure_window(<a class="code hl_variable" href="a00047.html#a63ab96867bfa785c967ece50fcf833a3">conn</a>, window, XCB_CONFIG_WINDOW_BORDER_WIDTH,</div>
+<div class="line"><a id="l00374" name="l00374"></a><span class="lineno">  374</span>                       border_values);</div>
+<div class="line"><a id="l00375" name="l00375"></a><span class="lineno">  375</span> </div>
+<div class="line"><a id="l00376" name="l00376"></a><span class="lineno">  376</span>  <a class="code hl_function" href="a00047.html#a6bcb4661cf62ac13a5b4def37f62d129">set_window_border_color</a>(window, <a class="code hl_variable" href="a00047.html#ab2f747f430112a6a69113ea547f0166d">config</a>.<a class="code hl_variable" href="a00043.html#a63bc0ad4b52799850a1a31cad3fa8d54">border</a>.<a class="code hl_variable" href="a00027.html#a22e4cb620ab9b34d96208ab78c4988c0">inactive_color</a>);</div>
+<div class="line"><a id="l00377" name="l00377"></a><span class="lineno">  377</span> </div>
+<div class="line"><a id="l00378" name="l00378"></a><span class="lineno">  378</span>  <a class="code hl_function" href="a00047.html#a9f7cfdc5da01e55276c24a97e90a737b">update_focus</a>(window);</div>
+<div class="line"><a id="l00379" name="l00379"></a><span class="lineno">  379</span> </div>
+<div class="line"><a id="l00380" name="l00380"></a><span class="lineno">  380</span>  xcb_flush(<a class="code hl_variable" href="a00047.html#a63ab96867bfa785c967ece50fcf833a3">conn</a>);</div>
+<div class="line"><a id="l00381" name="l00381"></a><span class="lineno">  381</span>  <a class="code hl_function" href="a00047.html#a034602ddebacb09dd0ae7ed262f20c57">tile_windows</a>();</div>
 <div class="line"><a id="l00382" name="l00382"></a><span class="lineno">  382</span> </div>
-<div class="foldopen" id="foldopen00392" data-start="{" data-end="}">
-<div class="line"><a id="l00392" name="l00392"></a><span class="lineno"><a class="line" href="a00047.html#a19fd6e41c42760af82460d9851780d82">  392</a></span><a class="code hl_function" href="a00047.html#a19fd6e41c42760af82460d9851780d82">WindowManager::~WindowManager</a>() {</div>
-<div class="line"><a id="l00393" name="l00393"></a><span class="lineno">  393</span>  <a class="code hl_variable" href="a00047.html#a2342631ea44794f224e6946df4888305">supported_atoms</a>.clear();</div>
-<div class="line"><a id="l00394" name="l00394"></a><span class="lineno">  394</span>  <span class="keywordflow">for</span> (<span class="keyword">auto</span> wdow : <a class="code hl_variable" href="a00047.html#a62b2b46f13fe775c8713174c31cbe0dd">windows</a>) {</div>
-<div class="line"><a id="l00395" name="l00395"></a><span class="lineno">  395</span>    xcb_destroy_window(<a class="code hl_variable" href="a00047.html#a63ab96867bfa785c967ece50fcf833a3">conn</a>, wdow);</div>
-<div class="line"><a id="l00396" name="l00396"></a><span class="lineno">  396</span>  }</div>
-<div class="line"><a id="l00397" name="l00397"></a><span class="lineno">  397</span>  <a class="code hl_variable" href="a00047.html#a62b2b46f13fe775c8713174c31cbe0dd">windows</a>.clear();</div>
-<div class="line"><a id="l00398" name="l00398"></a><span class="lineno">  398</span>  xcb_free_cursor(<a class="code hl_variable" href="a00047.html#a63ab96867bfa785c967ece50fcf833a3">conn</a>, <a class="code hl_variable" href="a00047.html#a5d7f56179142f57adac06388efb3e7d5">cursor</a>);</div>
-<div class="line"><a id="l00399" name="l00399"></a><span class="lineno">  399</span>  xcb_destroy_window(<a class="code hl_variable" href="a00047.html#a63ab96867bfa785c967ece50fcf833a3">conn</a>, <a class="code hl_variable" href="a00047.html#aa99f6f34aacae8a7cae0725c013f312a">root</a>);</div>
-<div class="line"><a id="l00400" name="l00400"></a><span class="lineno">  400</span>  xcb_disconnect(<a class="code hl_variable" href="a00047.html#a63ab96867bfa785c967ece50fcf833a3">conn</a>);</div>
-<div class="line"><a id="l00401" name="l00401"></a><span class="lineno">  401</span> </div>
-<div class="line"><a id="l00402" name="l00402"></a><span class="lineno">  402</span>  <span class="keywordflow">if</span> (<a class="code hl_variable" href="a00047.html#a32bf6a2ef76a2e44a1ad78cc2ace574a">cursor_context</a>) {</div>
-<div class="line"><a id="l00403" name="l00403"></a><span class="lineno">  403</span>    xcb_cursor_context_free(<a class="code hl_variable" href="a00047.html#a32bf6a2ef76a2e44a1ad78cc2ace574a">cursor_context</a>);</div>
-<div class="line"><a id="l00404" name="l00404"></a><span class="lineno">  404</span>  }</div>
-<div class="line"><a id="l00405" name="l00405"></a><span class="lineno">  405</span>  <a class="code hl_variable" href="a00047.html#ab62afbcac79e798dc7a2b64d0e5d6f88">logger</a>-&gt;info(<span class="stringliteral">&quot;WM stopped&quot;</span>);</div>
-<div class="line"><a id="l00406" name="l00406"></a><span class="lineno">  406</span>}</div>
+<div class="line"><a id="l00383" name="l00383"></a><span class="lineno">  383</span>  <span class="keyword">delete</span> _attr_reply;</div>
+<div class="line"><a id="l00384" name="l00384"></a><span class="lineno">  384</span>  <span class="keyword">delete</span> e;</div>
+<div class="line"><a id="l00385" name="l00385"></a><span class="lineno">  385</span>}</div>
 </div>
-<div class="line"><a id="l00407" name="l00407"></a><span class="lineno">  407</span> </div>
-<div class="foldopen" id="foldopen00428" data-start="{" data-end="}">
-<div class="line"><a id="l00428" name="l00428"></a><span class="lineno"><a class="line" href="a00047.html#a6eeae18d22a90e59af8081de73c06a87">  428</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="a00047.html#a6eeae18d22a90e59af8081de73c06a87">WindowManager::run</a>() {</div>
-<div class="line"><a id="l00429" name="l00429"></a><span class="lineno">  429</span>  <span class="keywordflow">for</span> (;;) {</div>
-<div class="line"><a id="l00430" name="l00430"></a><span class="lineno">  430</span>    xcb_generic_event_t *<span class="keyword">event</span> = xcb_wait_for_event(<a class="code hl_variable" href="a00047.html#a63ab96867bfa785c967ece50fcf833a3">conn</a>);</div>
-<div class="line"><a id="l00431" name="l00431"></a><span class="lineno">  431</span>    <a class="code hl_variable" href="a00047.html#ab62afbcac79e798dc7a2b64d0e5d6f88">logger</a>-&gt;info(<span class="stringliteral">&quot;Event Happened!&quot;</span>);</div>
+<div class="line"><a id="l00386" name="l00386"></a><span class="lineno">  386</span> </div>
+<div class="foldopen" id="foldopen00394" data-start="{" data-end="}">
+<div class="line"><a id="l00394" name="l00394"></a><span class="lineno"><a class="line" href="a00047.html#acabc8b666fa9a8dee934e2afc75b0b9c">  394</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="a00047.html#acabc8b666fa9a8dee934e2afc75b0b9c">WindowManager::handle_destroy_notify</a>(xcb_generic_event_t *ev) {</div>
+<div class="line"><a id="l00395" name="l00395"></a><span class="lineno">  395</span>  <span class="keyword">auto</span> <span class="keyword">event</span> = (xcb_destroy_notify_event_t *)ev;</div>
+<div class="line"><a id="l00396" name="l00396"></a><span class="lineno">  396</span>  <span class="keyword">auto</span> window = <span class="keyword">event</span>-&gt;window;</div>
+<div class="line"><a id="l00397" name="l00397"></a><span class="lineno">  397</span> </div>
+<div class="line"><a id="l00398" name="l00398"></a><span class="lineno">  398</span>  <span class="keywordflow">if</span> (window == <a class="code hl_variable" href="a00047.html#afa91e76fa675e4d2b3872c30d151635f">current_window</a>) {</div>
+<div class="line"><a id="l00399" name="l00399"></a><span class="lineno">  399</span>    <a class="code hl_variable" href="a00047.html#afa91e76fa675e4d2b3872c30d151635f">current_window</a> = XCB_NONE;</div>
+<div class="line"><a id="l00400" name="l00400"></a><span class="lineno">  400</span>  }</div>
+<div class="line"><a id="l00401" name="l00401"></a><span class="lineno">  401</span> </div>
+<div class="line"><a id="l00402" name="l00402"></a><span class="lineno">  402</span>  xcb_destroy_window(<a class="code hl_variable" href="a00047.html#a63ab96867bfa785c967ece50fcf833a3">conn</a>, window);</div>
+<div class="line"><a id="l00403" name="l00403"></a><span class="lineno">  403</span>  <span class="keyword">auto</span> new_end = std::remove(<a class="code hl_variable" href="a00047.html#a62b2b46f13fe775c8713174c31cbe0dd">windows</a>.begin(), <a class="code hl_variable" href="a00047.html#a62b2b46f13fe775c8713174c31cbe0dd">windows</a>.end(), window);</div>
+<div class="line"><a id="l00404" name="l00404"></a><span class="lineno">  404</span>  <a class="code hl_variable" href="a00047.html#a62b2b46f13fe775c8713174c31cbe0dd">windows</a>.erase(new_end, <a class="code hl_variable" href="a00047.html#a62b2b46f13fe775c8713174c31cbe0dd">windows</a>.end());</div>
+<div class="line"><a id="l00405" name="l00405"></a><span class="lineno">  405</span> </div>
+<div class="line"><a id="l00406" name="l00406"></a><span class="lineno">  406</span>  <span class="keywordflow">if</span> (!<a class="code hl_variable" href="a00047.html#a62b2b46f13fe775c8713174c31cbe0dd">windows</a>.empty()) {</div>
+<div class="line"><a id="l00407" name="l00407"></a><span class="lineno">  407</span>    <a class="code hl_function" href="a00047.html#a9f7cfdc5da01e55276c24a97e90a737b">update_focus</a>(<a class="code hl_variable" href="a00047.html#a62b2b46f13fe775c8713174c31cbe0dd">windows</a>.back());</div>
+<div class="line"><a id="l00408" name="l00408"></a><span class="lineno">  408</span>  }</div>
+<div class="line"><a id="l00409" name="l00409"></a><span class="lineno">  409</span> </div>
+<div class="line"><a id="l00410" name="l00410"></a><span class="lineno">  410</span>  xcb_flush(<a class="code hl_variable" href="a00047.html#a63ab96867bfa785c967ece50fcf833a3">conn</a>);</div>
+<div class="line"><a id="l00411" name="l00411"></a><span class="lineno">  411</span>  <a class="code hl_function" href="a00047.html#a034602ddebacb09dd0ae7ed262f20c57">tile_windows</a>();</div>
+<div class="line"><a id="l00412" name="l00412"></a><span class="lineno">  412</span>}</div>
+</div>
+<div class="line"><a id="l00413" name="l00413"></a><span class="lineno">  413</span> </div>
+<div class="foldopen" id="foldopen00420" data-start="{" data-end="}">
+<div class="line"><a id="l00420" name="l00420"></a><span class="lineno"><a class="line" href="a00047.html#a5589d5ec2b2ba152bb50887735968095">  420</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="a00047.html#a5589d5ec2b2ba152bb50887735968095">WindowManager::handle_unmap_request</a>(xcb_generic_event_t *ev) {</div>
+<div class="line"><a id="l00421" name="l00421"></a><span class="lineno">  421</span>  <span class="keyword">auto</span> <span class="keyword">event</span> = (xcb_unmap_notify_event_t *)ev;</div>
+<div class="line"><a id="l00422" name="l00422"></a><span class="lineno">  422</span>  <span class="keyword">auto</span> window = <span class="keyword">event</span>-&gt;window;</div>
+<div class="line"><a id="l00423" name="l00423"></a><span class="lineno">  423</span> </div>
+<div class="line"><a id="l00424" name="l00424"></a><span class="lineno">  424</span>  <span class="keywordflow">if</span> (window == <a class="code hl_variable" href="a00047.html#afa91e76fa675e4d2b3872c30d151635f">current_window</a>) {</div>
+<div class="line"><a id="l00425" name="l00425"></a><span class="lineno">  425</span>    <a class="code hl_variable" href="a00047.html#afa91e76fa675e4d2b3872c30d151635f">current_window</a> = XCB_NONE;</div>
+<div class="line"><a id="l00426" name="l00426"></a><span class="lineno">  426</span>  }</div>
+<div class="line"><a id="l00427" name="l00427"></a><span class="lineno">  427</span>  xcb_unmap_window(<a class="code hl_variable" href="a00047.html#a63ab96867bfa785c967ece50fcf833a3">conn</a>, window);</div>
+<div class="line"><a id="l00428" name="l00428"></a><span class="lineno">  428</span> </div>
+<div class="line"><a id="l00429" name="l00429"></a><span class="lineno">  429</span>  <span class="keywordflow">if</span> (!<a class="code hl_variable" href="a00047.html#a62b2b46f13fe775c8713174c31cbe0dd">windows</a>.empty()) {</div>
+<div class="line"><a id="l00430" name="l00430"></a><span class="lineno">  430</span>    <a class="code hl_function" href="a00047.html#a9f7cfdc5da01e55276c24a97e90a737b">update_focus</a>(<a class="code hl_variable" href="a00047.html#a62b2b46f13fe775c8713174c31cbe0dd">windows</a>.back());</div>
+<div class="line"><a id="l00431" name="l00431"></a><span class="lineno">  431</span>  }</div>
 <div class="line"><a id="l00432" name="l00432"></a><span class="lineno">  432</span> </div>
-<div class="line"><a id="l00433" name="l00433"></a><span class="lineno">  433</span>    <span class="keywordflow">if</span> (!event) {</div>
-<div class="line"><a id="l00434" name="l00434"></a><span class="lineno">  434</span>      <a class="code hl_variable" href="a00047.html#ab62afbcac79e798dc7a2b64d0e5d6f88">logger</a>-&gt;error(<span class="stringliteral">&quot;Event is invalid&quot;</span>);</div>
-<div class="line"><a id="l00435" name="l00435"></a><span class="lineno">  435</span>      <span class="keywordflow">break</span>;</div>
-<div class="line"><a id="l00436" name="l00436"></a><span class="lineno">  436</span>    }</div>
-<div class="line"><a id="l00437" name="l00437"></a><span class="lineno">  437</span> </div>
-<div class="line"><a id="l00438" name="l00438"></a><span class="lineno">  438</span>    <span class="keywordflow">switch</span> (event-&gt;response_type &amp; ~0x80) {</div>
-<div class="line"><a id="l00439" name="l00439"></a><span class="lineno">  439</span>    <span class="keywordflow">case</span> XCB_MAP_REQUEST: {</div>
-<div class="line"><a id="l00440" name="l00440"></a><span class="lineno">  440</span>      <a class="code hl_variable" href="a00047.html#ab62afbcac79e798dc7a2b64d0e5d6f88">logger</a>-&gt;info(<span class="stringliteral">&quot;found map-request event&quot;</span>);</div>
-<div class="line"><a id="l00441" name="l00441"></a><span class="lineno">  441</span>      <span class="keyword">auto</span> *map_request = (xcb_map_request_event_t *)event;</div>
-<div class="line"><a id="l00442" name="l00442"></a><span class="lineno">  442</span>      <a class="code hl_function" href="a00047.html#a870d69df4759c05bd2944583887b0625">handle_map_request</a>(map_request-&gt;window);</div>
-<div class="line"><a id="l00443" name="l00443"></a><span class="lineno">  443</span>      <span class="keywordflow">break</span>;</div>
-<div class="line"><a id="l00444" name="l00444"></a><span class="lineno">  444</span>    }</div>
-<div class="line"><a id="l00445" name="l00445"></a><span class="lineno">  445</span>    <span class="keywordflow">case</span> XCB_UNMAP_NOTIFY: {</div>
-<div class="line"><a id="l00446" name="l00446"></a><span class="lineno">  446</span>      <a class="code hl_variable" href="a00047.html#ab62afbcac79e798dc7a2b64d0e5d6f88">logger</a>-&gt;info(<span class="stringliteral">&quot;found unmap-notify event&quot;</span>);</div>
-<div class="line"><a id="l00447" name="l00447"></a><span class="lineno">  447</span>      <span class="keyword">auto</span> *unmap_notify = (xcb_unmap_notify_event_t *)event;</div>
-<div class="line"><a id="l00448" name="l00448"></a><span class="lineno">  448</span>      <a class="code hl_function" href="a00047.html#aaadfd30f0cafed4c33c7485f60e72511">handle_unmap_request</a>(unmap_notify-&gt;window);</div>
-<div class="line"><a id="l00449" name="l00449"></a><span class="lineno">  449</span>      <span class="keywordflow">break</span>;</div>
-<div class="line"><a id="l00450" name="l00450"></a><span class="lineno">  450</span>    }</div>
-<div class="line"><a id="l00451" name="l00451"></a><span class="lineno">  451</span>    <span class="keywordflow">case</span> XCB_DESTROY_NOTIFY: {</div>
-<div class="line"><a id="l00452" name="l00452"></a><span class="lineno">  452</span>      <a class="code hl_variable" href="a00047.html#ab62afbcac79e798dc7a2b64d0e5d6f88">logger</a>-&gt;info(<span class="stringliteral">&quot;found destory-notify event&quot;</span>);</div>
-<div class="line"><a id="l00453" name="l00453"></a><span class="lineno">  453</span>      <span class="keyword">auto</span> destroy_notify = (xcb_destroy_notify_event_t *)event;</div>
-<div class="line"><a id="l00454" name="l00454"></a><span class="lineno">  454</span>      <a class="code hl_function" href="a00047.html#a01341329963f4665484332944e16d8cd">handle_destroy_notify</a>(destroy_notify-&gt;window);</div>
-<div class="line"><a id="l00455" name="l00455"></a><span class="lineno">  455</span>      <span class="keywordflow">break</span>;</div>
-<div class="line"><a id="l00456" name="l00456"></a><span class="lineno">  456</span>    }</div>
-<div class="line"><a id="l00457" name="l00457"></a><span class="lineno">  457</span>    <span class="keywordflow">case</span> XCB_ENTER_NOTIFY: {</div>
-<div class="line"><a id="l00458" name="l00458"></a><span class="lineno">  458</span>      <a class="code hl_variable" href="a00047.html#ab62afbcac79e798dc7a2b64d0e5d6f88">logger</a>-&gt;info(<span class="stringliteral">&quot;found enter-notify event&quot;</span>);</div>
-<div class="line"><a id="l00459" name="l00459"></a><span class="lineno">  459</span>      <span class="keyword">auto</span> enter_notify = (xcb_enter_notify_event_t *)event;</div>
-<div class="line"><a id="l00460" name="l00460"></a><span class="lineno">  460</span>      <a class="code hl_function" href="a00047.html#a7f05b2027ab6eba43c39955b94ba040d">set_focus</a>(enter_notify-&gt;root);</div>
-<div class="line"><a id="l00461" name="l00461"></a><span class="lineno">  461</span>      <span class="keywordflow">break</span>;</div>
-<div class="line"><a id="l00462" name="l00462"></a><span class="lineno">  462</span>    }</div>
-<div class="line"><a id="l00463" name="l00463"></a><span class="lineno">  463</span>    <span class="keywordflow">case</span> XCB_KEY_PRESS: {</div>
-<div class="line"><a id="l00464" name="l00464"></a><span class="lineno">  464</span>      <a class="code hl_variable" href="a00047.html#ab62afbcac79e798dc7a2b64d0e5d6f88">logger</a>-&gt;info(<span class="stringliteral">&quot;found key-press event&quot;</span>);</div>
-<div class="line"><a id="l00465" name="l00465"></a><span class="lineno">  465</span>      <span class="keyword">auto</span> key_press = (xcb_key_press_event_t *)event;</div>
-<div class="line"><a id="l00466" name="l00466"></a><span class="lineno">  466</span>      <a class="code hl_function" href="a00047.html#a8a047d72e1ed505cf0d8ac59ddd5c203">handle_key_press</a>(key_press);</div>
-<div class="line"><a id="l00467" name="l00467"></a><span class="lineno">  467</span>      <span class="keywordflow">break</span>;</div>
-<div class="line"><a id="l00468" name="l00468"></a><span class="lineno">  468</span>    }</div>
-<div class="line"><a id="l00469" name="l00469"></a><span class="lineno">  469</span>    }</div>
-<div class="line"><a id="l00470" name="l00470"></a><span class="lineno">  470</span> </div>
-<div class="line"><a id="l00471" name="l00471"></a><span class="lineno">  471</span>    free(event);</div>
-<div class="line"><a id="l00472" name="l00472"></a><span class="lineno">  472</span>    xcb_flush(<a class="code hl_variable" href="a00047.html#a63ab96867bfa785c967ece50fcf833a3">conn</a>);</div>
-<div class="line"><a id="l00473" name="l00473"></a><span class="lineno">  473</span>  }</div>
-<div class="line"><a id="l00474" name="l00474"></a><span class="lineno">  474</span>}</div>
+<div class="line"><a id="l00433" name="l00433"></a><span class="lineno">  433</span>  xcb_flush(<a class="code hl_variable" href="a00047.html#a63ab96867bfa785c967ece50fcf833a3">conn</a>);</div>
+<div class="line"><a id="l00434" name="l00434"></a><span class="lineno">  434</span>  <a class="code hl_function" href="a00047.html#a034602ddebacb09dd0ae7ed262f20c57">tile_windows</a>();</div>
+<div class="line"><a id="l00435" name="l00435"></a><span class="lineno">  435</span>}</div>
+</div>
+<div class="line"><a id="l00436" name="l00436"></a><span class="lineno">  436</span> </div>
+<div class="foldopen" id="foldopen00446" data-start="{" data-end="}">
+<div class="line"><a id="l00446" name="l00446"></a><span class="lineno"><a class="line" href="a00047.html#a19fd6e41c42760af82460d9851780d82">  446</a></span><a class="code hl_function" href="a00047.html#a19fd6e41c42760af82460d9851780d82">WindowManager::~WindowManager</a>() {</div>
+<div class="line"><a id="l00447" name="l00447"></a><span class="lineno">  447</span>  <a class="code hl_variable" href="a00047.html#a2342631ea44794f224e6946df4888305">supported_atoms</a>.clear();</div>
+<div class="line"><a id="l00448" name="l00448"></a><span class="lineno">  448</span>  <span class="keywordflow">for</span> (<span class="keyword">auto</span> wdow : <a class="code hl_variable" href="a00047.html#a62b2b46f13fe775c8713174c31cbe0dd">windows</a>) {</div>
+<div class="line"><a id="l00449" name="l00449"></a><span class="lineno">  449</span>    xcb_destroy_window(<a class="code hl_variable" href="a00047.html#a63ab96867bfa785c967ece50fcf833a3">conn</a>, wdow);</div>
+<div class="line"><a id="l00450" name="l00450"></a><span class="lineno">  450</span>  }</div>
+<div class="line"><a id="l00451" name="l00451"></a><span class="lineno">  451</span>  <a class="code hl_variable" href="a00047.html#a62b2b46f13fe775c8713174c31cbe0dd">windows</a>.clear();</div>
+<div class="line"><a id="l00452" name="l00452"></a><span class="lineno">  452</span>  xcb_free_cursor(<a class="code hl_variable" href="a00047.html#a63ab96867bfa785c967ece50fcf833a3">conn</a>, <a class="code hl_variable" href="a00047.html#a5d7f56179142f57adac06388efb3e7d5">cursor</a>);</div>
+<div class="line"><a id="l00453" name="l00453"></a><span class="lineno">  453</span>  xcb_destroy_window(<a class="code hl_variable" href="a00047.html#a63ab96867bfa785c967ece50fcf833a3">conn</a>, <a class="code hl_variable" href="a00047.html#aa99f6f34aacae8a7cae0725c013f312a">root</a>);</div>
+<div class="line"><a id="l00454" name="l00454"></a><span class="lineno">  454</span>  xcb_disconnect(<a class="code hl_variable" href="a00047.html#a63ab96867bfa785c967ece50fcf833a3">conn</a>);</div>
+<div class="line"><a id="l00455" name="l00455"></a><span class="lineno">  455</span> </div>
+<div class="line"><a id="l00456" name="l00456"></a><span class="lineno">  456</span>  <span class="keywordflow">if</span> (<a class="code hl_variable" href="a00047.html#a32bf6a2ef76a2e44a1ad78cc2ace574a">cursor_context</a>) {</div>
+<div class="line"><a id="l00457" name="l00457"></a><span class="lineno">  457</span>    xcb_cursor_context_free(<a class="code hl_variable" href="a00047.html#a32bf6a2ef76a2e44a1ad78cc2ace574a">cursor_context</a>);</div>
+<div class="line"><a id="l00458" name="l00458"></a><span class="lineno">  458</span>  }</div>
+<div class="line"><a id="l00459" name="l00459"></a><span class="lineno">  459</span>  <a class="code hl_variable" href="a00047.html#ab62afbcac79e798dc7a2b64d0e5d6f88">logger</a>-&gt;info(<span class="stringliteral">&quot;WM stopped&quot;</span>);</div>
+<div class="line"><a id="l00460" name="l00460"></a><span class="lineno">  460</span>}</div>
+</div>
+<div class="line"><a id="l00461" name="l00461"></a><span class="lineno">  461</span> </div>
+<div class="foldopen" id="foldopen00482" data-start="{" data-end="}">
+<div class="line"><a id="l00482" name="l00482"></a><span class="lineno"><a class="line" href="a00047.html#a6eeae18d22a90e59af8081de73c06a87">  482</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="a00047.html#a6eeae18d22a90e59af8081de73c06a87">WindowManager::run</a>() {</div>
+<div class="line"><a id="l00483" name="l00483"></a><span class="lineno">  483</span>  <span class="keywordflow">for</span> (;;) {</div>
+<div class="line"><a id="l00484" name="l00484"></a><span class="lineno">  484</span>    xcb_generic_event_t *<span class="keyword">event</span> = xcb_wait_for_event(<a class="code hl_variable" href="a00047.html#a63ab96867bfa785c967ece50fcf833a3">conn</a>);</div>
+<div class="line"><a id="l00485" name="l00485"></a><span class="lineno">  485</span> </div>
+<div class="line"><a id="l00486" name="l00486"></a><span class="lineno">  486</span>    <span class="keywordflow">if</span> (!event) {</div>
+<div class="line"><a id="l00487" name="l00487"></a><span class="lineno">  487</span>      <a class="code hl_variable" href="a00047.html#ab62afbcac79e798dc7a2b64d0e5d6f88">logger</a>-&gt;error(<span class="stringliteral">&quot;Event is invalid&quot;</span>);</div>
+<div class="line"><a id="l00488" name="l00488"></a><span class="lineno">  488</span>      <span class="keywordflow">break</span>;</div>
+<div class="line"><a id="l00489" name="l00489"></a><span class="lineno">  489</span>    }</div>
+<div class="line"><a id="l00490" name="l00490"></a><span class="lineno">  490</span> </div>
+<div class="line"><a id="l00491" name="l00491"></a><span class="lineno">  491</span>    <span class="keyword">auto</span> ev = <span class="keyword">event</span>-&gt;response_type &amp; ~0x80;</div>
+<div class="line"><a id="l00492" name="l00492"></a><span class="lineno">  492</span>    <span class="keyword">auto</span> handler = <a class="code hl_variable" href="a00047.html#a20bfde3817dcc188d8ed689726039b05">evH</a>.find(ev);</div>
+<div class="line"><a id="l00493" name="l00493"></a><span class="lineno">  493</span>    <span class="keywordflow">if</span> (handler != <a class="code hl_variable" href="a00047.html#a20bfde3817dcc188d8ed689726039b05">evH</a>.end()) {</div>
+<div class="line"><a id="l00494" name="l00494"></a><span class="lineno">  494</span>      handler-&gt;second((xcb_generic_event_t *)event);</div>
+<div class="line"><a id="l00495" name="l00495"></a><span class="lineno">  495</span>    } <span class="keywordflow">else</span> {</div>
+<div class="line"><a id="l00496" name="l00496"></a><span class="lineno">  496</span>      <a class="code hl_variable" href="a00047.html#ab62afbcac79e798dc7a2b64d0e5d6f88">logger</a>-&gt;error(<span class="stringliteral">&quot;Invalid Event Type!&quot;</span>);</div>
+<div class="line"><a id="l00497" name="l00497"></a><span class="lineno">  497</span>    }</div>
+<div class="line"><a id="l00498" name="l00498"></a><span class="lineno">  498</span>    <span class="keyword">delete</span> event;</div>
+<div class="line"><a id="l00499" name="l00499"></a><span class="lineno">  499</span>  }</div>
+<div class="line"><a id="l00500" name="l00500"></a><span class="lineno">  500</span>}</div>
 </div>
 <div class="ttc" id="aa00008_html"><div class="ttname"><a href="a00008.html">helios.h</a></div></div>
-<div class="ttc" id="aa00011_html_a5f32436c8d62ad23dac4766401b3b450"><div class="ttname"><a href="a00011.html#a5f32436c8d62ad23dac4766401b3b450">grab_key</a></div><div class="ttdeci">void grab_key(xcb_connection_t *conn, uint16_t mod, uint32_t keysym, xcb_window_t window)</div><div class="ttdoc">Grabs a key so that it will not be passed to other X clients.</div><div class="ttdef"><b>Definition</b> <a href="a00011_source.html#l00040">key.h:40</a></div></div>
+<div class="ttc" id="aa00011_html_a5f32436c8d62ad23dac4766401b3b450"><div class="ttname"><a href="a00011.html#a5f32436c8d62ad23dac4766401b3b450">grab_key</a></div><div class="ttdeci">void grab_key(xcb_connection_t *conn, uint16_t mod, uint32_t keysym, xcb_window_t window)</div><div class="ttdoc">Grabs a key so that it will not be passed to other X clients.</div><div class="ttdef"><b>Definition</b> <a href="a00011_source.html#l00041">key.h:41</a></div></div>
 <div class="ttc" id="aa00014_html_a4302b3031ced54c6df8e67d11c6894e3"><div class="ttname"><a href="a00014.html#a4302b3031ced54c6df8e67d11c6894e3">spawn</a></div><div class="ttdeci">auto spawn(const char *program)</div><div class="ttdoc">Spawn a new process from a given string.</div><div class="ttdef"><b>Definition</b> <a href="a00014_source.html#l00025">spawn.h:25</a></div></div>
 <div class="ttc" id="aa00020_html_adeb02e3cf4b470272f59f74f7ba517d5"><div class="ttname"><a href="a00020.html#adeb02e3cf4b470272f59f74f7ba517d5">loadConfig</a></div><div class="ttdeci">Config loadConfig(const std::string &amp;filename)</div><div class="ttdoc">Load the configuration from a file and return it as a General struct.</div><div class="ttdef"><b>Definition</b> <a href="a00020_source.html#l00011">config.cpp:11</a></div></div>
-<div class="ttc" id="aa00023_html_a8dff618f609eaac1f4a1ad722d21fad7"><div class="ttname"><a href="a00023.html#a8dff618f609eaac1f4a1ad722d21fad7">WMConfig::debugConfig</a></div><div class="ttdeci">void debugConfig(const General &amp;config)</div><div class="ttdoc">Function for showing the config.</div><div class="ttdef"><b>Definition</b> <a href="a00020_source.html#l00082">config.cpp:82</a></div></div>
+<div class="ttc" id="aa00023_html_a8dff618f609eaac1f4a1ad722d21fad7"><div class="ttname"><a href="a00023.html#a8dff618f609eaac1f4a1ad722d21fad7">WMConfig::debugConfig</a></div><div class="ttdeci">void debugConfig(const General &amp;config)</div><div class="ttdoc">Function for showing the config.</div><div class="ttdef"><b>Definition</b> <a href="a00020_source.html#l00083">config.cpp:83</a></div></div>
+<div class="ttc" id="aa00027_html_a220821e4302581794d6287f6e29d2289"><div class="ttname"><a href="a00027.html#a220821e4302581794d6287f6e29d2289">WMConfig::Border::active_color</a></div><div class="ttdeci">uint32_t active_color</div><div class="ttdef"><b>Definition</b> <a href="a00017_source.html#l00020">config.h:20</a></div></div>
+<div class="ttc" id="aa00027_html_a22e4cb620ab9b34d96208ab78c4988c0"><div class="ttname"><a href="a00027.html#a22e4cb620ab9b34d96208ab78c4988c0">WMConfig::Border::inactive_color</a></div><div class="ttdeci">uint32_t inactive_color</div><div class="ttdef"><b>Definition</b> <a href="a00017_source.html#l00021">config.h:21</a></div></div>
 <div class="ttc" id="aa00027_html_a5b0ab13bba1084b8c92a5663d5bbd35b"><div class="ttname"><a href="a00027.html#a5b0ab13bba1084b8c92a5663d5bbd35b">WMConfig::Border::width</a></div><div class="ttdeci">int width</div><div class="ttdef"><b>Definition</b> <a href="a00017_source.html#l00019">config.h:19</a></div></div>
-<div class="ttc" id="aa00027_html_a9e2e39f44af0f2ab73e605dfcc7c0af1"><div class="ttname"><a href="a00027.html#a9e2e39f44af0f2ab73e605dfcc7c0af1">WMConfig::Border::color</a></div><div class="ttdeci">uint32_t color</div><div class="ttdef"><b>Definition</b> <a href="a00017_source.html#l00020">config.h:20</a></div></div>
 <div class="ttc" id="aa00031_html_a8b4fa7a12dbeed84e6ceaa279fe81d6a"><div class="ttname"><a href="a00031.html#a8b4fa7a12dbeed84e6ceaa279fe81d6a">WMConfig::Window::gap</a></div><div class="ttdeci">int gap</div><div class="ttdef"><b>Definition</b> <a href="a00017_source.html#l00030">config.h:30</a></div></div>
 <div class="ttc" id="aa00043_html_a02e7fcddc4b8e7aa19210c026b74f568"><div class="ttname"><a href="a00043.html#a02e7fcddc4b8e7aa19210c026b74f568">WMConfig::General::bindings</a></div><div class="ttdeci">std::vector&lt; Keybind &gt; bindings</div><div class="ttdef"><b>Definition</b> <a href="a00017_source.html#l00086">config.h:86</a></div></div>
 <div class="ttc" id="aa00043_html_a63bc0ad4b52799850a1a31cad3fa8d54"><div class="ttname"><a href="a00043.html#a63bc0ad4b52799850a1a31cad3fa8d54">WMConfig::General::border</a></div><div class="ttdeci">Border border</div><div class="ttdef"><b>Definition</b> <a href="a00017_source.html#l00083">config.h:83</a></div></div>
 <div class="ttc" id="aa00043_html_a9f4ab506e541a05eb84d99123447f5db"><div class="ttname"><a href="a00043.html#a9f4ab506e541a05eb84d99123447f5db">WMConfig::General::startup</a></div><div class="ttdeci">std::vector&lt; std::string &gt; startup</div><div class="ttdef"><b>Definition</b> <a href="a00017_source.html#l00081">config.h:81</a></div></div>
 <div class="ttc" id="aa00043_html_ad2ed246d0db6e3ebcd0b19b8a5167879"><div class="ttname"><a href="a00043.html#ad2ed246d0db6e3ebcd0b19b8a5167879">WMConfig::General::window</a></div><div class="ttdeci">Window window</div><div class="ttdef"><b>Definition</b> <a href="a00017_source.html#l00084">config.h:84</a></div></div>
-<div class="ttc" id="aa00047_html_a01341329963f4665484332944e16d8cd"><div class="ttname"><a href="a00047.html#a01341329963f4665484332944e16d8cd">WindowManager::handle_destroy_notify</a></div><div class="ttdeci">void handle_destroy_notify(xcb_window_t window)</div><div class="ttdoc">Handles a destroy notify event for the given window.</div><div class="ttdef"><b>Definition</b> <a href="a00005_source.html#l00361">helios.cpp:361</a></div></div>
-<div class="ttc" id="aa00047_html_a034602ddebacb09dd0ae7ed262f20c57"><div class="ttname"><a href="a00047.html#a034602ddebacb09dd0ae7ed262f20c57">WindowManager::tile_windows</a></div><div class="ttdeci">void tile_windows()</div><div class="ttdoc">Tiles all windows in the current workspace.</div><div class="ttdef"><b>Definition</b> <a href="a00005_source.html#l00163">helios.cpp:163</a></div></div>
-<div class="ttc" id="aa00047_html_a19fd6e41c42760af82460d9851780d82"><div class="ttname"><a href="a00047.html#a19fd6e41c42760af82460d9851780d82">WindowManager::~WindowManager</a></div><div class="ttdeci">~WindowManager()</div><div class="ttdoc">Destructs the WindowManager instance.</div><div class="ttdef"><b>Definition</b> <a href="a00005_source.html#l00392">helios.cpp:392</a></div></div>
-<div class="ttc" id="aa00047_html_a2342631ea44794f224e6946df4888305"><div class="ttname"><a href="a00047.html#a2342631ea44794f224e6946df4888305">WindowManager::supported_atoms</a></div><div class="ttdeci">std::vector&lt; xcb_atom_t &gt; supported_atoms</div><div class="ttdoc">A vector of supported atoms for the window manager.</div><div class="ttdef"><b>Definition</b> <a href="a00008_source.html#l00131">helios.h:131</a></div></div>
-<div class="ttc" id="aa00047_html_a32bf6a2ef76a2e44a1ad78cc2ace574a"><div class="ttname"><a href="a00047.html#a32bf6a2ef76a2e44a1ad78cc2ace574a">WindowManager::cursor_context</a></div><div class="ttdeci">xcb_cursor_context_t * cursor_context</div><div class="ttdoc">The context for the window manager's cursor.</div><div class="ttdef"><b>Definition</b> <a href="a00008_source.html#l00104">helios.h:104</a></div></div>
-<div class="ttc" id="aa00047_html_a3a283b34c19aaa20296befaabad4d29b"><div class="ttname"><a href="a00047.html#a3a283b34c19aaa20296befaabad4d29b">WindowManager::WindowManager</a></div><div class="ttdeci">WindowManager()</div><div class="ttdoc">Constructs a new WindowManager instance.</div><div class="ttdef"><b>Definition</b> <a href="a00005_source.html#l00017">helios.cpp:17</a></div></div>
-<div class="ttc" id="aa00047_html_a5d7f56179142f57adac06388efb3e7d5"><div class="ttname"><a href="a00047.html#a5d7f56179142f57adac06388efb3e7d5">WindowManager::cursor</a></div><div class="ttdeci">xcb_cursor_t cursor</div><div class="ttdoc">The cursor ID for the window manager's cursor.</div><div class="ttdef"><b>Definition</b> <a href="a00008_source.html#l00096">helios.h:96</a></div></div>
-<div class="ttc" id="aa00047_html_a6092a9b49880301094266d1ae13b0d10"><div class="ttname"><a href="a00047.html#a6092a9b49880301094266d1ae13b0d10">WindowManager::handle_enter_notify</a></div><div class="ttdeci">void handle_enter_notify(xcb_window_t window)</div><div class="ttdoc">Handles an enter notify event for the given window.</div><div class="ttdef"><b>Definition</b> <a href="a00005_source.html#l00295">helios.cpp:295</a></div></div>
-<div class="ttc" id="aa00047_html_a62b2b46f13fe775c8713174c31cbe0dd"><div class="ttname"><a href="a00047.html#a62b2b46f13fe775c8713174c31cbe0dd">WindowManager::windows</a></div><div class="ttdeci">std::vector&lt; xcb_window_t &gt; windows</div><div class="ttdoc">A vector of window IDs that the window manager is currently managing.</div><div class="ttdef"><b>Definition</b> <a href="a00008_source.html#l00063">helios.h:63</a></div></div>
-<div class="ttc" id="aa00047_html_a63ab96867bfa785c967ece50fcf833a3"><div class="ttname"><a href="a00047.html#a63ab96867bfa785c967ece50fcf833a3">WindowManager::conn</a></div><div class="ttdeci">xcb_connection_t * conn</div><div class="ttdoc">The XCB connection to the X server.</div><div class="ttdef"><b>Definition</b> <a href="a00008_source.html#l00037">helios.h:37</a></div></div>
-<div class="ttc" id="aa00047_html_a6bcb4661cf62ac13a5b4def37f62d129"><div class="ttname"><a href="a00047.html#a6bcb4661cf62ac13a5b4def37f62d129">WindowManager::set_window_border_color</a></div><div class="ttdeci">void set_window_border_color(xcb_window_t window, uint32_t color)</div><div class="ttdoc">Sets the border color of the window to the given color.</div><div class="ttdef"><b>Definition</b> <a href="a00005_source.html#l00256">helios.cpp:256</a></div></div>
-<div class="ttc" id="aa00047_html_a6e05fc85dd1d6f0ed5615de55e8abb3f"><div class="ttname"><a href="a00047.html#a6e05fc85dd1d6f0ed5615de55e8abb3f">WindowManager::switch_workspace</a></div><div class="ttdeci">void switch_workspace(uint32_t i)</div><div class="ttdoc">Switches the workspace of the window manager to the given workspace.</div><div class="ttdef"><b>Definition</b> <a href="a00005_source.html#l00279">helios.cpp:279</a></div></div>
-<div class="ttc" id="aa00047_html_a6eeae18d22a90e59af8081de73c06a87"><div class="ttname"><a href="a00047.html#a6eeae18d22a90e59af8081de73c06a87">WindowManager::run</a></div><div class="ttdeci">void run()</div><div class="ttdoc">Starts the window manager.</div><div class="ttdef"><b>Definition</b> <a href="a00005_source.html#l00428">helios.cpp:428</a></div></div>
-<div class="ttc" id="aa00047_html_a6ef7ac05aa24b3b6b7a5f796e342772d"><div class="ttname"><a href="a00047.html#a6ef7ac05aa24b3b6b7a5f796e342772d">WindowManager::ewmh</a></div><div class="ttdeci">xcb_ewmh_connection_t ewmh</div><div class="ttdoc">The EWMH connection for the window manager.</div><div class="ttdef"><b>Definition</b> <a href="a00008_source.html#l00146">helios.h:146</a></div></div>
-<div class="ttc" id="aa00047_html_a7269169f4599c496c5ddfd9ea69ff5d0"><div class="ttname"><a href="a00047.html#a7269169f4599c496c5ddfd9ea69ff5d0">WindowManager::screen</a></div><div class="ttdeci">xcb_screen_t * screen</div><div class="ttdoc">The screen structure for the screen that the window manager is managing.</div><div class="ttdef"><b>Definition</b> <a href="a00008_source.html#l00046">helios.h:46</a></div></div>
-<div class="ttc" id="aa00047_html_a7f05b2027ab6eba43c39955b94ba040d"><div class="ttname"><a href="a00047.html#a7f05b2027ab6eba43c39955b94ba040d">WindowManager::set_focus</a></div><div class="ttdeci">void set_focus(xcb_window_t window)</div><div class="ttdoc">Sets the focus of the window manager to the given window.</div><div class="ttdef"><b>Definition</b> <a href="a00005_source.html#l00267">helios.cpp:267</a></div></div>
-<div class="ttc" id="aa00047_html_a870d69df4759c05bd2944583887b0625"><div class="ttname"><a href="a00047.html#a870d69df4759c05bd2944583887b0625">WindowManager::handle_map_request</a></div><div class="ttdeci">void handle_map_request(xcb_window_t window)</div><div class="ttdoc">Handles a map request event for the given window.</div><div class="ttdef"><b>Definition</b> <a href="a00005_source.html#l00324">helios.cpp:324</a></div></div>
-<div class="ttc" id="aa00047_html_a8a047d72e1ed505cf0d8ac59ddd5c203"><div class="ttname"><a href="a00047.html#a8a047d72e1ed505cf0d8ac59ddd5c203">WindowManager::handle_key_press</a></div><div class="ttdeci">void handle_key_press(xcb_key_press_event_t *key_press)</div><div class="ttdoc">Handles a key press event for the given key press event.</div><div class="ttdef"><b>Definition</b> <a href="a00005_source.html#l00308">helios.cpp:308</a></div></div>
-<div class="ttc" id="aa00047_html_a8f79417fa895a343e12e8989678fede8"><div class="ttname"><a href="a00047.html#a8f79417fa895a343e12e8989678fede8">WindowManager::event_mask</a></div><div class="ttdeci">uint32_t event_mask</div><div class="ttdoc">The event mask for the window manager.</div><div class="ttdef"><b>Definition</b> <a href="a00008_source.html#l00113">helios.h:113</a></div></div>
-<div class="ttc" id="aa00047_html_a9c0700a61bfdc47388d017340e4df115"><div class="ttname"><a href="a00047.html#a9c0700a61bfdc47388d017340e4df115">WindowManager::atoms</a></div><div class="ttdeci">std::unique_ptr&lt; xcb_atom_t[]&gt; atoms</div><div class="ttdoc">A unique pointer to an array of xcb_atom_t values.</div><div class="ttdef"><b>Definition</b> <a href="a00008_source.html#l00138">helios.h:138</a></div></div>
-<div class="ttc" id="aa00047_html_aa99f6f34aacae8a7cae0725c013f312a"><div class="ttname"><a href="a00047.html#aa99f6f34aacae8a7cae0725c013f312a">WindowManager::root</a></div><div class="ttdeci">xcb_window_t root</div><div class="ttdoc">The root window of the X server.</div><div class="ttdef"><b>Definition</b> <a href="a00008_source.html#l00053">helios.h:53</a></div></div>
-<div class="ttc" id="aa00047_html_aaadfd30f0cafed4c33c7485f60e72511"><div class="ttname"><a href="a00047.html#aaadfd30f0cafed4c33c7485f60e72511">WindowManager::handle_unmap_request</a></div><div class="ttdeci">void handle_unmap_request(xcb_window_t window)</div><div class="ttdoc">Handles an unmap request event for the given window.</div><div class="ttdef"><b>Definition</b> <a href="a00005_source.html#l00376">helios.cpp:376</a></div></div>
-<div class="ttc" id="aa00047_html_ab2f747f430112a6a69113ea547f0166d"><div class="ttname"><a href="a00047.html#ab2f747f430112a6a69113ea547f0166d">WindowManager::config</a></div><div class="ttdeci">Config config</div><div class="ttdoc">The configuration for the window manager.</div><div class="ttdef"><b>Definition</b> <a href="a00008_source.html#l00071">helios.h:71</a></div></div>
-<div class="ttc" id="aa00047_html_ab62afbcac79e798dc7a2b64d0e5d6f88"><div class="ttname"><a href="a00047.html#ab62afbcac79e798dc7a2b64d0e5d6f88">WindowManager::logger</a></div><div class="ttdeci">std::shared_ptr&lt; spdlog::logger &gt; logger</div><div class="ttdoc">The logger for the window manager.</div><div class="ttdef"><b>Definition</b> <a href="a00008_source.html#l00079">helios.h:79</a></div></div>
-<div class="ttc" id="aa00047_html_ade2f3c410160c5cd7bdf250b37db5797"><div class="ttname"><a href="a00047.html#ade2f3c410160c5cd7bdf250b37db5797">WindowManager::values</a></div><div class="ttdeci">std::unique_ptr&lt; uint32_t[]&gt; values</div><div class="ttdoc">A unique pointer to an array of uint32_t values.</div><div class="ttdef"><b>Definition</b> <a href="a00008_source.html#l00124">helios.h:124</a></div></div>
+<div class="ttc" id="aa00047_html_a034602ddebacb09dd0ae7ed262f20c57"><div class="ttname"><a href="a00047.html#a034602ddebacb09dd0ae7ed262f20c57">WindowManager::tile_windows</a></div><div class="ttdeci">void tile_windows()</div><div class="ttdoc">Tiles all windows in the current workspace.</div><div class="ttdef"><b>Definition</b> <a href="a00005_source.html#l00166">helios.cpp:166</a></div></div>
+<div class="ttc" id="aa00047_html_a19fd6e41c42760af82460d9851780d82"><div class="ttname"><a href="a00047.html#a19fd6e41c42760af82460d9851780d82">WindowManager::~WindowManager</a></div><div class="ttdeci">~WindowManager()</div><div class="ttdoc">Destructs the WindowManager instance.</div><div class="ttdef"><b>Definition</b> <a href="a00005_source.html#l00446">helios.cpp:446</a></div></div>
+<div class="ttc" id="aa00047_html_a20bfde3817dcc188d8ed689726039b05"><div class="ttname"><a href="a00047.html#a20bfde3817dcc188d8ed689726039b05">WindowManager::evH</a></div><div class="ttdeci">std::unordered_map&lt; uint32_t, EventHandler &gt; evH</div><div class="ttdef"><b>Definition</b> <a href="a00008_source.html#l00261">helios.h:261</a></div></div>
+<div class="ttc" id="aa00047_html_a2342631ea44794f224e6946df4888305"><div class="ttname"><a href="a00047.html#a2342631ea44794f224e6946df4888305">WindowManager::supported_atoms</a></div><div class="ttdeci">std::vector&lt; xcb_atom_t &gt; supported_atoms</div><div class="ttdoc">A vector of supported atoms for the window manager.</div><div class="ttdef"><b>Definition</b> <a href="a00008_source.html#l00138">helios.h:138</a></div></div>
+<div class="ttc" id="aa00047_html_a32bf6a2ef76a2e44a1ad78cc2ace574a"><div class="ttname"><a href="a00047.html#a32bf6a2ef76a2e44a1ad78cc2ace574a">WindowManager::cursor_context</a></div><div class="ttdeci">xcb_cursor_context_t * cursor_context</div><div class="ttdoc">The context for the window manager's cursor.</div><div class="ttdef"><b>Definition</b> <a href="a00008_source.html#l00109">helios.h:109</a></div></div>
+<div class="ttc" id="aa00047_html_a3a283b34c19aaa20296befaabad4d29b"><div class="ttname"><a href="a00047.html#a3a283b34c19aaa20296befaabad4d29b">WindowManager::WindowManager</a></div><div class="ttdeci">WindowManager()</div><div class="ttdoc">Constructs a new WindowManager instance.</div><div class="ttdef"><b>Definition</b> <a href="a00005_source.html#l00019">helios.cpp:19</a></div></div>
+<div class="ttc" id="aa00047_html_a3d7e7b08e3fbca85dfd5c2bc9f6392a1"><div class="ttname"><a href="a00047.html#a3d7e7b08e3fbca85dfd5c2bc9f6392a1">WindowManager::event_mask</a></div><div class="ttdeci">const uint32_t event_mask</div><div class="ttdoc">The event mask for the window manager.</div><div class="ttdef"><b>Definition</b> <a href="a00008_source.html#l00118">helios.h:118</a></div></div>
+<div class="ttc" id="aa00047_html_a4ab0b66be1ce0c22d396594d23f19c9d"><div class="ttname"><a href="a00047.html#a4ab0b66be1ce0c22d396594d23f19c9d">WindowManager::handle_key_press</a></div><div class="ttdeci">void handle_key_press(xcb_generic_event_t *event)</div><div class="ttdoc">Handles a key press event for the given key press event.</div><div class="ttdef"><b>Definition</b> <a href="a00005_source.html#l00331">helios.cpp:331</a></div></div>
+<div class="ttc" id="aa00047_html_a5589d5ec2b2ba152bb50887735968095"><div class="ttname"><a href="a00047.html#a5589d5ec2b2ba152bb50887735968095">WindowManager::handle_unmap_request</a></div><div class="ttdeci">void handle_unmap_request(xcb_generic_event_t *event)</div><div class="ttdoc">Handles an unmap request event for the given window.</div><div class="ttdef"><b>Definition</b> <a href="a00005_source.html#l00420">helios.cpp:420</a></div></div>
+<div class="ttc" id="aa00047_html_a5d7f56179142f57adac06388efb3e7d5"><div class="ttname"><a href="a00047.html#a5d7f56179142f57adac06388efb3e7d5">WindowManager::cursor</a></div><div class="ttdeci">xcb_cursor_t cursor</div><div class="ttdoc">The cursor ID for the window manager's cursor.</div><div class="ttdef"><b>Definition</b> <a href="a00008_source.html#l00101">helios.h:101</a></div></div>
+<div class="ttc" id="aa00047_html_a62b2b46f13fe775c8713174c31cbe0dd"><div class="ttname"><a href="a00047.html#a62b2b46f13fe775c8713174c31cbe0dd">WindowManager::windows</a></div><div class="ttdeci">std::vector&lt; xcb_window_t &gt; windows</div><div class="ttdoc">A vector of window IDs that the window manager is currently managing.</div><div class="ttdef"><b>Definition</b> <a href="a00008_source.html#l00068">helios.h:68</a></div></div>
+<div class="ttc" id="aa00047_html_a63ab96867bfa785c967ece50fcf833a3"><div class="ttname"><a href="a00047.html#a63ab96867bfa785c967ece50fcf833a3">WindowManager::conn</a></div><div class="ttdeci">xcb_connection_t * conn</div><div class="ttdoc">The XCB connection to the X server.</div><div class="ttdef"><b>Definition</b> <a href="a00008_source.html#l00042">helios.h:42</a></div></div>
+<div class="ttc" id="aa00047_html_a6bcb4661cf62ac13a5b4def37f62d129"><div class="ttname"><a href="a00047.html#a6bcb4661cf62ac13a5b4def37f62d129">WindowManager::set_window_border_color</a></div><div class="ttdeci">void set_window_border_color(xcb_window_t window, uint32_t color)</div><div class="ttdoc">Sets the border color of the window to the given color.</div><div class="ttdef"><b>Definition</b> <a href="a00005_source.html#l00261">helios.cpp:261</a></div></div>
+<div class="ttc" id="aa00047_html_a6e05fc85dd1d6f0ed5615de55e8abb3f"><div class="ttname"><a href="a00047.html#a6e05fc85dd1d6f0ed5615de55e8abb3f">WindowManager::switch_workspace</a></div><div class="ttdeci">void switch_workspace(uint32_t i)</div><div class="ttdoc">Switches the workspace of the window manager to the given workspace.</div><div class="ttdef"><b>Definition</b> <a href="a00005_source.html#l00297">helios.cpp:297</a></div></div>
+<div class="ttc" id="aa00047_html_a6eeae18d22a90e59af8081de73c06a87"><div class="ttname"><a href="a00047.html#a6eeae18d22a90e59af8081de73c06a87">WindowManager::run</a></div><div class="ttdeci">void run()</div><div class="ttdoc">Starts the window manager.</div><div class="ttdef"><b>Definition</b> <a href="a00005_source.html#l00482">helios.cpp:482</a></div></div>
+<div class="ttc" id="aa00047_html_a6ef7ac05aa24b3b6b7a5f796e342772d"><div class="ttname"><a href="a00047.html#a6ef7ac05aa24b3b6b7a5f796e342772d">WindowManager::ewmh</a></div><div class="ttdeci">xcb_ewmh_connection_t ewmh</div><div class="ttdoc">The EWMH connection for the window manager.</div><div class="ttdef"><b>Definition</b> <a href="a00008_source.html#l00153">helios.h:153</a></div></div>
+<div class="ttc" id="aa00047_html_a7269169f4599c496c5ddfd9ea69ff5d0"><div class="ttname"><a href="a00047.html#a7269169f4599c496c5ddfd9ea69ff5d0">WindowManager::screen</a></div><div class="ttdeci">xcb_screen_t * screen</div><div class="ttdoc">The screen structure for the screen that the window manager is managing.</div><div class="ttdef"><b>Definition</b> <a href="a00008_source.html#l00051">helios.h:51</a></div></div>
+<div class="ttc" id="aa00047_html_a7f05b2027ab6eba43c39955b94ba040d"><div class="ttname"><a href="a00047.html#a7f05b2027ab6eba43c39955b94ba040d">WindowManager::set_focus</a></div><div class="ttdeci">void set_focus(xcb_window_t window)</div><div class="ttdoc">Sets the focus of the window manager to the given window.</div><div class="ttdef"><b>Definition</b> <a href="a00005_source.html#l00272">helios.cpp:272</a></div></div>
+<div class="ttc" id="aa00047_html_a816e578de7b02a7a479daf6e9ab1a7a4"><div class="ttname"><a href="a00047.html#a816e578de7b02a7a479daf6e9ab1a7a4">WindowManager::handle_map_request</a></div><div class="ttdeci">void handle_map_request(xcb_generic_event_t *event)</div><div class="ttdoc">Handles a map request event for the given window.</div><div class="ttdef"><b>Definition</b> <a href="a00005_source.html#l00348">helios.cpp:348</a></div></div>
+<div class="ttc" id="aa00047_html_a9c0700a61bfdc47388d017340e4df115"><div class="ttname"><a href="a00047.html#a9c0700a61bfdc47388d017340e4df115">WindowManager::atoms</a></div><div class="ttdeci">std::unique_ptr&lt; xcb_atom_t[]&gt; atoms</div><div class="ttdoc">A unique pointer to an array of xcb_atom_t values.</div><div class="ttdef"><b>Definition</b> <a href="a00008_source.html#l00145">helios.h:145</a></div></div>
+<div class="ttc" id="aa00047_html_a9f7cfdc5da01e55276c24a97e90a737b"><div class="ttname"><a href="a00047.html#a9f7cfdc5da01e55276c24a97e90a737b">WindowManager::update_focus</a></div><div class="ttdeci">void update_focus(xcb_window_t window)</div><div class="ttdoc">@breif The function that updates the focus</div><div class="ttdef"><b>Definition</b> <a href="a00005_source.html#l00279">helios.cpp:279</a></div></div>
+<div class="ttc" id="aa00047_html_aa99f6f34aacae8a7cae0725c013f312a"><div class="ttname"><a href="a00047.html#aa99f6f34aacae8a7cae0725c013f312a">WindowManager::root</a></div><div class="ttdeci">xcb_window_t root</div><div class="ttdoc">The root window of the X server.</div><div class="ttdef"><b>Definition</b> <a href="a00008_source.html#l00058">helios.h:58</a></div></div>
+<div class="ttc" id="aa00047_html_ab2f747f430112a6a69113ea547f0166d"><div class="ttname"><a href="a00047.html#ab2f747f430112a6a69113ea547f0166d">WindowManager::config</a></div><div class="ttdeci">Config config</div><div class="ttdoc">The configuration for the window manager.</div><div class="ttdef"><b>Definition</b> <a href="a00008_source.html#l00076">helios.h:76</a></div></div>
+<div class="ttc" id="aa00047_html_ab62afbcac79e798dc7a2b64d0e5d6f88"><div class="ttname"><a href="a00047.html#ab62afbcac79e798dc7a2b64d0e5d6f88">WindowManager::logger</a></div><div class="ttdeci">std::shared_ptr&lt; spdlog::logger &gt; logger</div><div class="ttdoc">The logger for the window manager.</div><div class="ttdef"><b>Definition</b> <a href="a00008_source.html#l00084">helios.h:84</a></div></div>
+<div class="ttc" id="aa00047_html_acabc8b666fa9a8dee934e2afc75b0b9c"><div class="ttname"><a href="a00047.html#acabc8b666fa9a8dee934e2afc75b0b9c">WindowManager::handle_destroy_notify</a></div><div class="ttdeci">void handle_destroy_notify(xcb_generic_event_t *event)</div><div class="ttdoc">Handles a destroy notify event for the given window.</div><div class="ttdef"><b>Definition</b> <a href="a00005_source.html#l00394">helios.cpp:394</a></div></div>
+<div class="ttc" id="aa00047_html_ad14c625a550eee6932b7ccf1b8eec806"><div class="ttname"><a href="a00047.html#ad14c625a550eee6932b7ccf1b8eec806">WindowManager::handle_enter_notify</a></div><div class="ttdeci">void handle_enter_notify(xcb_generic_event_t *event)</div><div class="ttdoc">Handles an enter notify event for the given window.</div><div class="ttdef"><b>Definition</b> <a href="a00005_source.html#l00309">helios.cpp:309</a></div></div>
+<div class="ttc" id="aa00047_html_ade2f3c410160c5cd7bdf250b37db5797"><div class="ttname"><a href="a00047.html#ade2f3c410160c5cd7bdf250b37db5797">WindowManager::values</a></div><div class="ttdeci">std::unique_ptr&lt; uint32_t[]&gt; values</div><div class="ttdoc">A unique pointer to an array of uint32_t values.</div><div class="ttdef"><b>Definition</b> <a href="a00008_source.html#l00131">helios.h:131</a></div></div>
+<div class="ttc" id="aa00047_html_afa91e76fa675e4d2b3872c30d151635f"><div class="ttname"><a href="a00047.html#afa91e76fa675e4d2b3872c30d151635f">WindowManager::current_window</a></div><div class="ttdeci">xcb_window_t current_window</div><div class="ttdoc">The window that currently has focus.</div><div class="ttdef"><b>Definition</b> <a href="a00008_source.html#l00093">helios.h:93</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Sat Nov 16 2024 11:43:28 for Helios by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.8
+Generated on Sun Nov 17 2024 17:58:43 for Helios by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.8
 </small></address>
 </body>
 </html>

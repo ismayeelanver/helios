@@ -75,23 +75,27 @@ $(function() {
 </div><!-- top -->
 <div class="header">
   <div class="summary">
-<a href="#nested-classes">Classes</a>  </div>
+<a href="#nested-classes">Classes</a> &#124;
+<a href="#typedef-members">Typedefs</a>  </div>
   <div class="headertitle"><div class="title">helios.h File Reference</div></div>
 </div><!--header-->
 <div class="contents">
 <div class="textblock"><code>#include &lt;cerrno&gt;</code><br />
 <code>#include &lt;cstdint&gt;</code><br />
+<code>#include &lt;functional&gt;</code><br />
 <code>#include &lt;memory&gt;</code><br />
 <code>#include &lt;spdlog/sinks/basic_file_sink.h&gt;</code><br />
 <code>#include &lt;spdlog/spdlog.h&gt;</code><br />
+<code>#include &lt;unordered_map&gt;</code><br />
 <code>#include &lt;vector&gt;</code><br />
+<code>#include &lt;xcb/shape.h&gt;</code><br />
 <code>#include &lt;xcb/xcb.h&gt;</code><br />
 <code>#include &lt;xcb/xcb_cursor.h&gt;</code><br />
 <code>#include &lt;xcb/xcb_ewmh.h&gt;</code><br />
 <code>#include &lt;xcb/xcb_keysyms.h&gt;</code><br />
 <code>#include &lt;xcb/xproto.h&gt;</code><br />
-<code>#include &lt;xcb/shape.h&gt;</code><br />
 <code>#include &lt;X11/keysym.h&gt;</code><br />
+<code>#include &quot;../wm.def.h&quot;</code><br />
 <code>#include &quot;<a class="el" href="a00017_source.html">config.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="a00011_source.html">key.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="a00014_source.html">spawn.h</a>&quot;</code><br />
@@ -103,11 +107,33 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00047.html">WindowManager</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">This class implements a window manager.  <a href="a00047.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="typedef-members" name="typedef-members"></a>
+Typedefs</h2></td></tr>
+<tr class="memitem:a68475d10b7f8e6c5835ad2ed12763cb6" id="r_a68475d10b7f8e6c5835ad2ed12763cb6"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00008.html#a68475d10b7f8e6c5835ad2ed12763cb6">EventHandler</a> = std::function&lt; void(xcb_generic_event_t *)&gt;</td></tr>
+<tr class="separator:a68475d10b7f8e6c5835ad2ed12763cb6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<h2 class="groupheader">Typedef Documentation</h2>
+<a id="a68475d10b7f8e6c5835ad2ed12763cb6" name="a68475d10b7f8e6c5835ad2ed12763cb6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a68475d10b7f8e6c5835ad2ed12763cb6">&#9670;&#160;</a></span>EventHandler</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="a00008.html#a68475d10b7f8e6c5835ad2ed12763cb6">EventHandler</a> =  std::function&lt;void(xcb_generic_event_t *)&gt;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="a00008_source.html#l00026">26</a> of file <a class="el" href="a00008_source.html">helios.h</a>.</p>
+
+</div>
+</div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Sat Nov 16 2024 11:43:28 for Helios by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.8
+Generated on Sun Nov 17 2024 17:58:43 for Helios by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.8
 </small></address>
 </body>
 </html>

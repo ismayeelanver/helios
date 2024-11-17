@@ -88,8 +88,10 @@ $(function() {
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
-<tr class="memitem:a9e2e39f44af0f2ab73e605dfcc7c0af1" id="r_a9e2e39f44af0f2ab73e605dfcc7c0af1"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00027.html#a9e2e39f44af0f2ab73e605dfcc7c0af1">color</a></td></tr>
-<tr class="separator:a9e2e39f44af0f2ab73e605dfcc7c0af1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a220821e4302581794d6287f6e29d2289" id="r_a220821e4302581794d6287f6e29d2289"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00027.html#a220821e4302581794d6287f6e29d2289">active_color</a></td></tr>
+<tr class="separator:a220821e4302581794d6287f6e29d2289"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a22e4cb620ab9b34d96208ab78c4988c0" id="r_a22e4cb620ab9b34d96208ab78c4988c0"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00027.html#a22e4cb620ab9b34d96208ab78c4988c0">inactive_color</a></td></tr>
+<tr class="separator:a22e4cb620ab9b34d96208ab78c4988c0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae57654cfccb724ad07d174b5b4b4ef67" id="r_ae57654cfccb724ad07d174b5b4b4ef67"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00027.html#ae57654cfccb724ad07d174b5b4b4ef67">radius</a></td></tr>
 <tr class="separator:ae57654cfccb724ad07d174b5b4b4ef67"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5b0ab13bba1084b8c92a5663d5bbd35b" id="r_a5b0ab13bba1084b8c92a5663d5bbd35b"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00027.html#a5b0ab13bba1084b8c92a5663d5bbd35b">width</a></td></tr>
@@ -101,21 +103,39 @@ Public Attributes</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="a00017_source.html#l00018">18</a> of file <a class="el" href="a00017_source.html">config.h</a>.</p>
 </div><h2 class="groupheader">Member Data Documentation</h2>
-<a id="a9e2e39f44af0f2ab73e605dfcc7c0af1" name="a9e2e39f44af0f2ab73e605dfcc7c0af1"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9e2e39f44af0f2ab73e605dfcc7c0af1">&#9670;&#160;</a></span>color</h2>
+<a id="a220821e4302581794d6287f6e29d2289" name="a220821e4302581794d6287f6e29d2289"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a220821e4302581794d6287f6e29d2289">&#9670;&#160;</a></span>active_color</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">uint32_t WMConfig::Border::color</td>
+          <td class="memname">uint32_t WMConfig::Border::active_color</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
 <p class="definition">Definition at line <a class="el" href="a00017_source.html#l00020">20</a> of file <a class="el" href="a00017_source.html">config.h</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="a00020_source.html#l00082">WMConfig::debugConfig()</a>, <a class="el" href="a00005_source.html#l00324">WindowManager::handle_map_request()</a>, <a class="el" href="a00020_source.html#l00011">loadConfig()</a>, and <a class="el" href="a00005_source.html#l00163">WindowManager::tile_windows()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="a00020_source.html#l00083">WMConfig::debugConfig()</a>, <a class="el" href="a00020_source.html#l00011">loadConfig()</a>, and <a class="el" href="a00005_source.html#l00279">WindowManager::update_focus()</a>.</p>
+
+</div>
+</div>
+<a id="a22e4cb620ab9b34d96208ab78c4988c0" name="a22e4cb620ab9b34d96208ab78c4988c0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a22e4cb620ab9b34d96208ab78c4988c0">&#9670;&#160;</a></span>inactive_color</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint32_t WMConfig::Border::inactive_color</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="a00017_source.html#l00021">21</a> of file <a class="el" href="a00017_source.html">config.h</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="a00020_source.html#l00083">WMConfig::debugConfig()</a>, <a class="el" href="a00005_source.html#l00348">WindowManager::handle_map_request()</a>, <a class="el" href="a00020_source.html#l00011">loadConfig()</a>, and <a class="el" href="a00005_source.html#l00279">WindowManager::update_focus()</a>.</p>
 
 </div>
 </div>
@@ -133,7 +153,7 @@ Public Attributes</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="a00017_source.html#l00022">22</a> of file <a class="el" href="a00017_source.html">config.h</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="a00020_source.html#l00082">WMConfig::debugConfig()</a>, and <a class="el" href="a00020_source.html#l00011">loadConfig()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="a00020_source.html#l00083">WMConfig::debugConfig()</a>, and <a class="el" href="a00020_source.html#l00011">loadConfig()</a>.</p>
 
 </div>
 </div>
@@ -151,7 +171,7 @@ Public Attributes</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="a00017_source.html#l00019">19</a> of file <a class="el" href="a00017_source.html">config.h</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="a00020_source.html#l00082">WMConfig::debugConfig()</a>, <a class="el" href="a00005_source.html#l00324">WindowManager::handle_map_request()</a>, <a class="el" href="a00020_source.html#l00011">loadConfig()</a>, and <a class="el" href="a00005_source.html#l00163">WindowManager::tile_windows()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="a00020_source.html#l00083">WMConfig::debugConfig()</a>, <a class="el" href="a00005_source.html#l00348">WindowManager::handle_map_request()</a>, <a class="el" href="a00020_source.html#l00011">loadConfig()</a>, and <a class="el" href="a00005_source.html#l00166">WindowManager::tile_windows()</a>.</p>
 
 </div>
 </div>
@@ -161,7 +181,7 @@ Public Attributes</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Sat Nov 16 2024 11:43:28 for Helios by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.8
+Generated on Sun Nov 17 2024 17:58:43 for Helios by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.8
 </small></address>
 </body>
 </html>
